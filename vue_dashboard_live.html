@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuel2go - Live Dashboard</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .dashboard {
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(40, 167, 69, 0.2);
+            padding: 5px 12px;
+            border-radius: 15px;
+            border: 1px solid rgba(40, 167, 69, 0.3);
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #28a745;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.95);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 20px;
+            height: 600px;
+        }
+
+        .map-container {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .map-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            background: rgba(255,255,255,0.9);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+
+        .sidebar {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+
+        .route-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .route-card::after {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 8px;
+            height: 8px;
+            background: #28a745;
+            border-radius: 50%;
+            animation: pulse 3s infinite;
+        }
+
+        .route-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .route-card.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .route-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            font-size: 0.9rem;
+        }
+
+        .metric-value {
+            font-weight: bold;
+        }
+
+        .controls {
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn.active {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+
+        .refresh-btn {
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .refresh-btn.loading {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .refresh-icon {
+            transition: transform 0.5s ease;
+        }
+
+        .refresh-icon.spinning {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: bold;
+        }
+
+        .emission-high { color: #dc3545; }
+        .emission-medium { color: #ffc107; }
+        .emission-low { color: #28a745; }
+
+        .data-source {
+            background: rgba(23, 162, 184, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 4px solid #17a2b8;
+        }
+
+        .data-source h4 {
+            color: #17a2b8;
+            margin-bottom: 8px;
+        }
+
+        .data-source p {
+            font-size: 0.85rem;
+            color: #666;
+            margin: 4px 0;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
+        .fade-enter-active,
+        .fade-leave-active {
+            transition: opacity 0.5s ease;
+        }
+
+        .fade-enter-from,
+        .fade-leave-to {
+            opacity: 0;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+            
+            .map-container {
+                height: 400px;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="dashboard">
+            <div class="header">
+                <h1>🚗 Fuel2go Live Dashboard</h1>
+                <div class="live-indicator">
+                    <div class="live-dot"></div>
+                    <span>{{ currentTime }}</span>
+                </div>
+                <p style="margin-top: 10px;">{{ routes.length }} rota analiz edildi • {{ dataSource }}</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">{{ totalDistance }}km</div>
+                    <div class="stat-label">Toplam Mesafe</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">{{ totalSavings }}kg</div>
+                    <div class="stat-label">CO2 Tasarrufu</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">{{ averageEfficiency }}%</div>
+                    <div class="stat-label">Ortalama Verimlilik</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">{{ totalCostSavings }}₺</div>
+                    <div class="stat-label">Maliyet Tasarrufu</div>
+                </div>
+            </div>
+
+            <div class="main-content">
+                <div class="map-container">
+                    <div v-if="mapLoading" class="map-loading">
+                        <p>🗺️ Harita yükleniyor...</p>
+                    </div>
+                    <div id="map"></div>
+                </div>
+
+                <div class="sidebar">
+                    <div class="controls">
+                        <h3>🎛️ Kontroller</h3>
+                        <button 
+                            class="btn refresh-btn"
+                            :class="{ loading: dataLoading }"
+                            @click="loadData"
+                            :disabled="dataLoading"
+                        >
+                            <span class="refresh-icon" :class="{ spinning: dataLoading }">🔄</span>
+                            {{ dataLoading ? 'Yükleniyor...' : 'Veriyi Yenile' }}
+                        </button>
+                        
+                        <button 
+                            class="btn" 
+                            :class="{ active: viewMode === 'all' }"
+                            @click="setViewMode('all')"
+                        >
+                            Tüm Rotalar
+                        </button>
+                        <button 
+                            class="btn"
+                            :class="{ active: viewMode === 'best' }"
+                            @click="setViewMode('best')"
+                        >
+                            En İyi Rota
+                        </button>
+                        <button 
+                            class="btn"
+                            :class="{ active: emissionView }"
+                            @click="toggleEmissionView"
+                        >
+                            {{ emissionView ? 'Normal Görünüm' : 'Emisyon Görünümü' }}
+                        </button>
+                    </div>
+
+                    <div v-if="dataLoading" class="loading">
+                        <p>📡 Veri yükleniyor...</p>
+                    </div>
+
+                    <transition-group name="fade" tag="div" v-else>
+                        <div 
+                            v-for="route in routes" 
+                            :key="route.id"
+                            class="route-card"
+                            :class="{ active: activeRoute === route.id }"
+                            :style="{ borderLeftColor: route.color }"
+                            @click="selectRoute(route)"
+                        >
+                            <div class="route-title">{{ route.name }}</div>
+                            <div class="metric">
+                                <span>📏 Mesafe:</span>
+                                <span class="metric-value">{{ route.distance }}km</span>
+                            </div>
+                            <div class="metric">
+                                <span>⏱️ Süre:</span>
+                                <span class="metric-value">{{ formatDuration(route.duration) }}</span>
+                            </div>
+                            <div class="metric">
+                                <span>⛽ Benzinli CO2:</span>
+                                <span class="metric-value emission-high">{{ route.emissions.gasoline }}kg</span>
+                            </div>
+                            <div class="metric">
+                                <span>⚡ Elektrikli CO2:</span>
+                                <span class="metric-value emission-low">{{ route.emissions.electric }}kg</span>
+                            </div>
+                            <div class="metric">
+                                <span>🌱 Tasarruf:</span>
+                                <span class="metric-value emission-low">
+                                    {{ (route.emissions.gasoline - route.emissions.electric).toFixed(1) }}kg
+                                    ({{ Math.round(((route.emissions.gasoline - route.emissions.electric) / route.emissions.gasoline) * 100) }}%)
+                                </span>
+                            </div>
+                            <div class="metric">
+                                <span>💰 Maliyet:</span>
+                                <span class="metric-value">{{ route.fuel_cost - route.electric_cost }}₺</span>
+                            </div>
+                        </div>
+                    </transition-group>
+
+                    <div class="data-source">
+                        <h4>📊 Veri Kaynağı</h4>
+                        <p><strong>API:</strong> {{ metadata.api_source || 'Google Routes API' }}</p>
+                        <p><strong>Kalite:</strong> {{ metadata.data_quality || 'Gerçek zamanlı' }}</p>
+                        <p><strong>Son Güncellemme:</strong> {{ formatTime(metadata.collection_timestamp) }}</p>
+                        <p><strong>Versiyon:</strong> {{ metadata.version || '1.0' }}</p>
+                    </div>
+
+                    <div style="margin-top: 20px;">
+                        <h3>🌱 Araç Karşılaştırması</h3>
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Araç Tipi</th>
+                                    <th>Faktör</th>
+                                    <th>Örnek CO2</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>🚗 Benzinli</td>
+                                    <td>0.192 kg/km</td>
+                                    <td class="emission-high">85.5kg</td>
+                                </tr>
+                                <tr>
+                                    <td>🚛 Dizel</td>
+                                    <td>0.171 kg/km</td>
+                                    <td class="emission-medium">76.2kg</td>
+                                </tr>
+                                <tr>
+                                    <td>🔋 Hibrit</td>
+                                    <td>0.104 kg/km</td>
+                                    <td class="emission-medium">46.3kg</td>
+                                </tr>
+                                <tr>
+                                    <td>⚡ Elektrikli</td>
+                                    <td>0.067 kg/km</td>
+                                    <td class="emission-low">29.8kg</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { createApp, ref, computed, onMounted, watch } = Vue;
+
+        createApp({
+            setup() {
+                // Reactive data
+                const routes = ref([]);
+                const activeRoute = ref(null);
+                const viewMode = ref('all');
+                const emissionView = ref(false);
+                const dataLoading = ref(true);
+                const mapLoading = ref(true);
+                const currentTime = ref('');
+                const dataSource = ref('');
+                const metadata = ref({});
+                let map = null;
+                let routeLines = [];
+                let markers = [];
+
+                // Computed properties
+                const totalDistance = computed(() => {
+                    return routes.value.reduce((sum, route) => sum + route.distance, 0).toFixed(1);
+                });
+
+                const totalSavings = computed(() => {
+                    return routes.value.reduce((sum, route) => 
+                        sum + (route.emissions.gasoline - route.emissions.electric), 0
+                    ).toFixed(1);
+                });
+
+                const averageEfficiency = computed(() => {
+                    if (routes.value.length === 0) return 0;
+                    const avg = routes.value.reduce((sum, route) => {
+                        const efficiency = ((route.emissions.gasoline - route.emissions.electric) / route.emissions.gasoline) * 100;
+                        return sum + efficiency;
+                    }, 0) / routes.value.length;
+                    return Math.round(avg);
+                });
+
+                const totalCostSavings = computed(() => {
+                    return routes.value.reduce((sum, route) => 
+                        sum + (route.fuel_cost - route.electric_cost), 0
+                    ).toFixed(0);
+                });
+
+                // Methods
+                const loadData = async () => {
+                    dataLoading.value = true;
+                    
+                    try {
+                        // Try to load from JSON file
+                        const response = await fetch('./vue_data.json?t=' + Date.now());
+                        const data = await response.json();
+                        
+                        routes.value = data.routes || [];
+                        metadata.value = data.metadata || {};
+                        dataSource.value = data.metadata?.data_quality === 'demo' ? 'Demo Veri' : 'Canlı Veri';
+                        
+                        updateMap();
+                        
+                    } catch (error) {
+                        console.error('Veri yükleme hatası:', error);
+                        // Fallback data
+                        loadFallbackData();
+                    }
+                    
+                    dataLoading.value = false;
+                };
+
+                const loadFallbackData = () => {
+                    // Cities data
+                    const cities = {
+                        istanbul: { lat: 41.0082, lng: 28.9784, name: 'İstanbul' },
+                        ankara: { lat: 39.9334, lng: 32.8597, name: 'Ankara' },
+                        izmir: { lat: 38.4192, lng: 27.1287, name: 'İzmir' }
+                    };
+
+                    routes.value = [
+                        {
+                            id: 'istanbul_ankara',
+                            name: 'İstanbul → Ankara',
+                            origin: cities.istanbul,
+                            destination: cities.ankara,
+                            distance: 445.4,
+                            duration: 285,
+                            emissions: { gasoline: 85.5, diesel: 76.2, hybrid: 46.3, electric: 29.8 },
+                            fuel_cost: 1242,
+                            electric_cost: 223,
+                            color: '#e74c3c'
+                        },
+                        {
+                            id: 'istanbul_izmir',
+                            name: 'İstanbul → İzmir',
+                            origin: cities.istanbul,
+                            destination: cities.izmir,
+                            distance: 565,
+                            duration: 390,
+                            emissions: { gasoline: 108.5, diesel: 96.6, hybrid: 58.8, electric: 37.9 },
+                            fuel_cost: 1575,
+                            electric_cost: 283,
+                            color: '#3498db'
+                        }
+                    ];
+                    
+                    dataSource.value = 'Fallback Data';
+                    metadata.value = { api_source: 'Fallback', data_quality: 'static' };
+                };
+
+                const initializeMap = () => {
+                    map = L.map('map').setView([39.9334, 32.8597], 6);
+                    
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '© OpenStreetMap contributors'
+                    }).addTo(map);
+
+                    map.on('load', () => {
+                        mapLoading.value = false;
+                    });
+
+                    // Force map size update
+                    setTimeout(() => {
+                        map.invalidateSize();
+                        mapLoading.value = false;
+                    }, 1000);
+                };
+
+                const updateMap = () => {
+                    if (!map) return;
+
+                    // Clear existing markers and lines
+                    markers.forEach(marker => map.removeLayer(marker));
+                    routeLines.forEach(line => map.removeLayer(line));
+                    markers = [];
+                    routeLines = [];
+
+                    // Get unique cities from routes
+                    const cities = new Map();
+                    routes.value.forEach(route => {
+                        cities.set('origin_' + route.id, route.origin);
+                        cities.set('dest_' + route.id, route.destination);
+                    });
+
+                    // Add city markers
+                    cities.forEach(city => {
+                        const marker = L.marker([city.lat, city.lng])
+                            .bindPopup(`<b>${city.name || 'Şehir'}</b>`)
+                            .addTo(map);
+                        markers.push(marker);
+                    });
+
+                    // Add route lines
+                    routes.value.forEach(route => {
+                        const line = L.polyline([
+                            [route.origin.lat, route.origin.lng],
+                            [route.destination.lat, route.destination.lng]
+                        ], {
+                            color: route.color,
+                            weight: 4,
+                            opacity: 0.7
+                        }).addTo(map);
+
+                        line.bindPopup(`
+                            <div style="min-width: 200px;">
+                                <h4>${route.name}</h4>
+                                <p><strong>Mesafe:</strong> ${route.distance} km</p>
+                                <p><strong>Süre:</strong> ${formatDuration(route.duration)}</p>
+                                <p><strong>CO2 (Benzinli):</strong> ${route.emissions.gasoline} kg</p>
+                                <p><strong>CO2 (Elektrikli):</strong> ${route.emissions.electric} kg</p>
+                                <p><strong>Tasarruf:</strong> ${(route.emissions.gasoline - route.emissions.electric).toFixed(1)} kg</p>
+                            </div>
+                        `);
+
+                        routeLines.push(line);
+                    });
+                };
+
+                const formatDuration = (minutes) => {
+                    const hours = Math.floor(minutes / 60);
+                    const mins = minutes % 60;
+                    return `${hours}s ${mins}d`;
+                };
+
+                const formatTime = (timestamp) => {
+                    if (!timestamp) return 'Bilinmiyor';
+                    return new Date(timestamp).toLocaleString('tr-TR');
+                };
+
+                const selectRoute = (route) => {
+                    activeRoute.value = activeRoute.value === route.id ? null : route.id;
+                    
+                    if (activeRoute.value && map) {
+                        map.fitBounds([
+                            [route.origin.lat, route.origin.lng],
+                            [route.destination.lat, route.destination.lng]
+                        ], { padding: [20, 20] });
+                    }
+                };
+
+                const setViewMode = (mode) => {
+                    viewMode.value = mode;
+                    
+                    if (!map) return;
+                    
+                    if (mode === 'all' && routes.value.length > 0) {
+                        const bounds = routes.value.reduce((bounds, route) => {
+                            return bounds.extend([route.origin.lat, route.origin.lng])
+                                         .extend([route.destination.lat, route.destination.lng]);
+                        }, L.latLngBounds());
+                        map.fitBounds(bounds, { padding: [20, 20] });
+                    } else if (mode === 'best' && routes.value.length > 0) {
+                        const bestRoute = routes.value.reduce((best, current) => 
+                            current.emissions.electric < best.emissions.electric ? current : best
+                        );
+                        selectRoute(bestRoute);
+                    }
+                };
+
+                const toggleEmissionView = () => {
+                    emissionView.value = !emissionView.value;
+                    
+                    routeLines.forEach((line, index) => {
+                        const route = routes.value[index];
+                        if (emissionView.value) {
+                            const intensity = route.emissions.electric / 50;
+                            line.setStyle({
+                                color: intensity > 0.6 ? '#e74c3c' : intensity > 0.3 ? '#f39c12' : '#27ae60',
+                                weight: 6
+                            });
+                        } else {
+                            line.setStyle({
+                                color: route.color,
+                                weight: 4
+                            });
+                        }
+                    });
+                };
+
+                const updateTime = () => {
+                    const now = new Date();
+                    currentTime.value = `CANLI • ${now.toLocaleTimeString('tr-TR')}`;
+                };
+
+                // Lifecycle
+                onMounted(() => {
+                    initializeMap();
+                    loadData();
+                    updateTime();
+                    
+                    // Update time every 30 seconds
+                    setInterval(updateTime, 30000);
+                    
+                    // Auto refresh data every 5 minutes
+                    setInterval(loadData, 300000);
+                });
+
+                // Watch for route changes
+                watch(routes, () => {
+                    if (routes.value.length > 0) {
+                        updateMap();
+                    }
+                }, { deep: true });
+
+                return {
+                    routes,
+                    activeRoute,
+                    viewMode,
+                    emissionView,
+                    dataLoading,
+                    mapLoading,
+                    currentTime,
+                    dataSource,
+                    metadata,
+                    totalDistance,
+                    totalSavings,
+                    averageEfficiency,
+                    totalCostSavings,
+                    formatDuration,
+                    formatTime,
+                    selectRoute,
+                    setViewMode,
+                    toggleEmissionView,
+                    loadData
+                };
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>

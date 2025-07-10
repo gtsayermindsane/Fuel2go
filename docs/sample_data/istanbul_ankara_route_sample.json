@@ -1,0 +1,88 @@
+{
+  "request_info": {
+    "origin": {
+      "latitude": 41.0082,
+      "longitude": 28.9784
+    },
+    "destination": {
+      "latitude": 39.9334,
+      "longitude": 32.8597
+    },
+    "travel_mode": "DRIVE",
+    "routing_preference": "TRAFFIC_AWARE",
+    "timestamp": "2025-07-10T09:06:19.319695+00:00"
+  },
+  "route_response": {
+    "routes": [
+      {
+        "distanceMeters": 454000,
+        "duration": "18300s",
+        "polyline": {
+          "encodedPolyline": "sample_encoded_polyline_data"
+        },
+        "legs": [
+          {
+            "distanceMeters": 454000,
+            "duration": "18300s",
+            "startLocation": {
+              "latLng": {
+                "latitude": 41.0082,
+                "longitude": 28.9784
+              }
+            },
+            "endLocation": {
+              "latLng": {
+                "latitude": 39.9334,
+                "longitude": 32.8597
+              }
+            },
+            "steps": []
+          }
+        ]
+      }
+    ]
+  },
+  "processed_data": {
+    "route_details": {
+      "distance_meters": 454000,
+      "distance_km": 454.0,
+      "duration_seconds": 18300,
+      "duration_minutes": 305.0,
+      "polyline": "sample_encoded_polyline_data",
+      "legs": [
+        {
+          "distance_meters": 454000,
+          "distance_km": 454.0,
+          "duration_seconds": 18300,
+          "duration_minutes": 305.0,
+          "start_location": {
+            "latLng": {
+              "latitude": 41.0082,
+              "longitude": 28.9784
+            }
+          },
+          "end_location": {
+            "latLng": {
+              "latitude": 39.9334,
+              "longitude": 32.8597
+            }
+          },
+          "steps": 0
+        }
+      ]
+    },
+    "carbon_emission": {
+      "distance_km": 454.0,
+      "vehicle_type": "gasoline_car",
+      "emission_factor_kg_per_km": 0.192,
+      "total_emission_kg": 87.168,
+      "total_emission_tons": 0.087168
+    },
+    "traffic_conditions": {
+      "duration_in_traffic_seconds": 18300,
+      "duration_in_traffic_minutes": 305.0,
+      "has_traffic_data": true,
+      "route_computed_at": "2025-07-10T09:06:19.319797+00:00"
+    }
+  }
+}

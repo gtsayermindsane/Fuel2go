@@ -1,0 +1,109 @@
+{
+  "description": "Comparison of different route options for machine learning training",
+  "routes": [
+    {
+      "id": "istanbul_ankara_traffic_aware",
+      "origin": {"latitude": 41.0082, "longitude": 28.9784, "name": "Istanbul"},
+      "destination": {"latitude": 39.9334, "longitude": 32.8597, "name": "Ankara"},
+      "routing_preference": "TRAFFIC_AWARE",
+      "travel_mode": "DRIVE",
+      "metrics": {
+        "distance_km": 454.0,
+        "duration_minutes": 305.0,
+        "fuel_consumption_liters": 36.32,
+        "carbon_emission_kg": 87.168,
+        "traffic_delay_minutes": 45.0,
+        "toll_cost_try": 89.50
+      },
+      "weather_conditions": {
+        "temperature_celsius": 22,
+        "precipitation_mm": 0,
+        "wind_speed_kmh": 15,
+        "visibility_km": 10
+      },
+      "road_conditions": {
+        "construction_zones": 2,
+        "accident_reports": 1,
+        "average_speed_kmh": 89.5
+      }
+    },
+    {
+      "id": "istanbul_ankara_fuel_efficient",
+      "origin": {"latitude": 41.0082, "longitude": 28.9784, "name": "Istanbul"},
+      "destination": {"latitude": 39.9334, "longitude": 32.8597, "name": "Ankara"},
+      "routing_preference": "FUEL_EFFICIENT",
+      "travel_mode": "DRIVE",
+      "metrics": {
+        "distance_km": 467.2,
+        "duration_minutes": 325.0,
+        "fuel_consumption_liters": 34.85,
+        "carbon_emission_kg": 83.61,
+        "traffic_delay_minutes": 35.0,
+        "toll_cost_try": 76.25
+      },
+      "weather_conditions": {
+        "temperature_celsius": 22,
+        "precipitation_mm": 0,
+        "wind_speed_kmh": 15,
+        "visibility_km": 10
+      },
+      "road_conditions": {
+        "construction_zones": 1,
+        "accident_reports": 0,
+        "average_speed_kmh": 86.2
+      }
+    },
+    {
+      "id": "istanbul_izmir_coastal",
+      "origin": {"latitude": 41.0082, "longitude": 28.9784, "name": "Istanbul"},
+      "destination": {"latitude": 38.4192, "longitude": 27.1287, "name": "Izmir"},
+      "routing_preference": "TRAFFIC_AWARE",
+      "travel_mode": "DRIVE",
+      "metrics": {
+        "distance_km": 565.0,
+        "duration_minutes": 390.0,
+        "fuel_consumption_liters": 45.20,
+        "carbon_emission_kg": 108.384,
+        "traffic_delay_minutes": 60.0,
+        "toll_cost_try": 125.75
+      },
+      "weather_conditions": {
+        "temperature_celsius": 25,
+        "precipitation_mm": 2,
+        "wind_speed_kmh": 20,
+        "visibility_km": 8
+      },
+      "road_conditions": {
+        "construction_zones": 3,
+        "accident_reports": 2,
+        "average_speed_kmh": 86.9
+      }
+    }
+  ],
+  "training_features": [
+    "distance_km",
+    "duration_minutes",
+    "fuel_consumption_liters",
+    "carbon_emission_kg",
+    "traffic_delay_minutes",
+    "toll_cost_try",
+    "temperature_celsius",
+    "precipitation_mm",
+    "wind_speed_kmh",
+    "visibility_km",
+    "construction_zones",
+    "accident_reports",
+    "average_speed_kmh"
+  ],
+  "target_variables": [
+    "fuel_consumption_liters",
+    "carbon_emission_kg",
+    "duration_minutes"
+  ],
+  "data_collection_info": {
+    "timestamp": "2025-07-10T10:00:00Z",
+    "api_version": "v2",
+    "data_quality": "high",
+    "sample_size": 3
+  }
+}

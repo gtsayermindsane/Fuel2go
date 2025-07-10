@@ -1,0 +1,2621 @@
+{
+  "summary": {
+    "total_routes_collected": 2,
+    "total_stations_found": 121,
+    "collection_time": "2025-07-10T10:09:10.370559+00:00"
+  },
+  "routes": [
+    {
+      "id": "istanbul_ankara",
+      "name": "İstanbul → Ankara",
+      "origin": {
+        "latitude": 41.0082,
+        "longitude": 28.9784
+      },
+      "destination": {
+        "latitude": 39.9334,
+        "longitude": 32.8597
+      },
+      "distance_km": 445.4,
+      "duration_minutes": 303,
+      "polyline": "uuhyF_zzoDeAfBGBw@FCAs@z@mEbGSb@GbA@j@BL~CvCzAdAn@VfAZ~Bz@bEhAJABETKrAL`AT`APzDb@v@}@f@}@l@qAR]J_@h@oAJWp@Ql@LZ]ZLTT\\l@f@vBBHtAd@v@LbBNd@@TPDLR~@JlF?`@Ch@Il@a@pCIl@i@~Bm@fEUvDYrIAfDBdBEvIIdCY`Dq@nG_@zDCf@SlCIfCCnDD`DLnBFj@x@|DjAxDf@pAj@lBp@`Df@hD@fAb@zEx@jLA^RlGAxBBxAHb@JVXRXB\\MVYHUHm@_@oE[}B]aDK]eA{NQs@]{DOsAa@eBi@aBKS{CeJe@sBU}AMwBCqD@mBN_FVmD`AoIZwDHoB^mQAm@~@yPJuAb@}DvCaNT}AJ{B@}BIiDmA_Z{@gLo@uGyBuQsCkQsDaT_B{JeAeJoAsMK{BIuIVmK^sKtDmp@HeD@oBCmDU{GOgCu@{GkBwNq@yGIwD@aBFwAj@eFvB}Qd@cFNmB|CwYr@{F~@mJjAuL@[N}@XkC~@yHT_C`@aD|AoNnA{KN{@V}@r@}EfAoGl@}CrBcJbAuDBUV[PMVGjAF`@?h@GhAk@`@_@d@}@VmARqBKeAOw@g@iAm@u@i@a@[O]Ie@My@BmC\\cDIe@CcAYwBy@qAc@aAOUAkLuEU]wAc@oAm@uAw@MAy@i@{@y@g@}@Y{@Ok@Io@Gq@CuA@]Fs@zAyGZgB?e@j@wC\\{Bh@qFTwDL{CFkD?sEOmF]sFk@eFCG]eCs@mDaA}Do@_CgFwPeAyDo@yCm@eDYsBe@oEWmEGiBGaD@oENmFXmE\\aDj@}Dt@uDdAgEhBwFjAwCbBuDp@mAdEeH~E}HvBuCnAcBdJiL|EyG|BcDzBqDpBiD|CkGrAgDnBmFt@uCTcARu@z@yE\\uBf@mEPmBRaDJkDFmHKwD[}Fg@oNq@uMcAqOk@aLBc@SiGGoEAwDFmGLgEReE^gFn@}GdAqJjBqO~AiQLyA\\_GRaGLeIDeJCaIAoRB_GFaDR_GPeDb@{F`AwHvAmHbAaEl@sBb@mBJqATqAHYn@gD^yAh@wCxBqLjA{J`@gE`@sHLgEJ_JA}SDkEXcH\\yDZoBt@aEl@kClAqEfA{C`AaCxAwCxDkGbGqJfAoB`BoDtCsHjBoHz@iE^qBz@aHd@iFb@{HXwI^cI`@_Ff@kEh@qD`AkFfAgE~AoF`BkElC{HbBqFpBeHp@uClAoGnBgLn@cF^_Dn@oGd@yGZ_HPsHDcGCmLIqHAiCJiLTcHFeAZwDr@qGf@_DrAwG`CwIhEyNjAwEn@uC\\iBn@qEr@sHr@kN\\sF~@cJh@mDn@aDv@wCjBaGrAwD~CeHjB_DvBcD|GwIpFiHpCqElFuJlCyF~@wBlCcHnDgLvC}KhBsGbBkFzByFzBiF~EgKjFyLlCgH`CwGvCqK|EuSv@mCdBeFpAeDPGNMl@uA`JmPr@yANy@JqAA_EOoBi@gBo@iAY]aAq@{B_AgE}AqB}@m@e@y@]QCSBaDaCiNaJkFsCgDuBuDoBwA}@}E{BiGaCSa@wI{CkDcAmAo@s@g@i@g@q@aAu@}Aa@wAUwAMoB?gBLmBTaBd@kBl@uA`@u@`@i@hAcArAq@nBi@Xe@xEeApDo@hIcBbC]b@Kz@[`EcCf@_@hAo@t@m@rEqEfV{YlMgPnIaMtDgGlF}JdEaJpEeLlA_D|B_HvAwEpA_EvBuIdAmFlFc[xDgUr@gDd@mCbAmE|AkHvGgVtAyFt@kDx@eFpAmKp@_GhEu_@hAoKxAaMfBeP^gFPiBViGFkF@uBEcD}Asc@KcCq@aW_@q^?yCOgHUiGs@gZBwEXcIb@}JHwBP_CrBeSX_Eh@wDvB}KTqAhF_Tx@eChCcHjMm[|FuNzB}GdAyDhA_F`@aCXuBf@_FNyCVkJHsEHaSFoJ@kGHoHLyEhAmYr@wT`Byb@RqHfAe[NuFd@eJ^_NzBgn@n@kIjA}JrAuHz@gD~@cF|DoM~GgSpFoQpCoL|AwGxPao@fCwJ~A}FdFcObEoJrG{LxEqHjBgCnCmExCoEt@{@`A{AzEqIbCeFvBiFjByEnD{KrAyEdA{CdFmPpAyExEyOF]x@_CnAcEd@qA|BqIz@mCdBiFd@aBjB_GpF}RbCyJhBgKrA{Hj@cE`@aFb@wG`@cKToKHwOGuEc@gOMkDSaEs@yIgCqUuEaa@wHyo@gBqSq@kIiBqXqAiT_A{MkAoM{AuMkAqIeBwKqEuYsCeRu@}EwAgKy@qJYmD]uGW_IQ}ICsD@y@CeEJgG?wAJqEZiFF_C\\mFl@qG^{Dz@yG`AaGnCoNf@}CbA}GtAyGr@_FVaCZgBlBaKvDaTrCuNnAmHp@oDd@yC|AkMf@sDXaCt@cJr@oLn@yNVmKL{LPgRR{M`@gRVsHZwMXeIzA}ZPqJHeU?}GRq^@uRDuPLkGNiHl@gK^eETmBl@wFr@}E|B}LhEsRxBqHhBkF|@{Bx@{BrAwC`CcF`FqJrAqCp@mAh@mArBmDh@gA~DeHn@gAfFgKzJsUhEoLnLo_@|DwNrDuPbG_\\~RuuAvA{KlA}Kx@}HzAiS|@sOpAa^dBil@hAo_@V{JNoJ?eq@EaPPiRVyMb@yJxAuTd@wGd@gFzJatA~A{QjA_L`C{QvEiYf@sC`WcoApDgOfHo`@dDuRvAgJzAkM`AsMl@}LdBcv@t@eSpBoPnDwR~FgSlu@cfCfGkRnAkDnM__@|CyK`BaHj@gDl@kFz@iKtAoUr@wQnF{g@|D}]n@eIX}C~@{Gp@sDf@aClAwEzBcHjCcH~D}HxCiFzFsIbFqE~IuFxV}KlY_OnMiHbBeAjCiBzDiCbEkDfAiApF_FhCcCrCgCzAeAnG{FpA_BlCoCb@]t@{@fFqGzKyLvDoFbG{Kv@sBlBoEn@oBvAoF`BmIpAsIn@yHd@yJ?eIE}GSyJe@eHkAgKaAwFwMgx@uEmZQcC[mCkBs[OyPDyHNsHRoFr@eM|Dia@x@iHbBsRXoCfB{Qv@yLz@cR~DebAbAcXVyGF_BfAaOp@eItFyh@t@wHx@cMNoGAcGY_IWmF{@oHcBuJqAiFqA_EgBwEkB}DaOgXaFcJoDkHeDuHmCgHsBsGqBgH{BkJcF_YkEeUcD{MmBwGqCkIwXiq@{JmVqFwMgGaO_FwJkFoIuGqI{E_FeG{Fwa@e\\_CeByg@ga@gJoHaMeMiLuN_E}FkD}F_IyO{FoNeBgF{@qCsDaN_B}GoAcGiCkNeB}N{@}Ia@qFi@uJWuHIkGG{OJaJDmCf@wP|Eu`BtC}aAn@{XZ_PB{Bb@cTP}KbBg~@RmJz@qa@t@ic@^eTFmRMaQI}GSkHyCmt@QcQ?yGHeRRsI`@kMR{Ev@cN`@kG`CcV~Eic@xDy^|A{NnAaNd@kHb@oMPaL?iPW{`@?{GBwCf@mJHeAv@kGn@sDv@mDtBaH`BkE|FiJhDcE|FkFbNqKvEkDzJkI~GyHjCwDtDeGdAkBzCyFrB}GnAyDdA_E|BkKbCoOhAkG|EcVbLel@zC}Vj@qIf@sJNiF@{Ah@_QP}JZyKr@cLRaCv@oG`AaGj@_DhBsHnD_L`BaEvCmGjEsIfNmXlDwH`G{Nb[iw@hUwk@~JaZ`Msf@xQsv@fWyeApDwO~Kud@`D}KfCqIpHaUzFeOrDyIfEoJnKeTpT_`@rJiQ`OsWpGqLrF_LxBkFzCqIrDgLlBaH|DuPtMqm@tKge@bDaLfByExAkEhYeo@xYsn@lEyJbFyKhDoI`FmOdDeLzBkKzAiItBaQjAyLd@cHn@mTp@sX~Beq@VeMZsVdDeuA`@eQ?gKa@mJcAyIcAwFaB}FwDaKiD_KY_AaAcEm@aDi@iEu@eIa@}F[gEi@aFaAcI}AwKMo@]eAmCuNwC}LcBmGoBuGuGmSqAqE{DmO_BcHy@yDkCkNqBqMy@kGqAeLc@uEg@wFw@_Lq@oN_@qMo@_a@SkH_Bw`AY}K@qAY{MCsEQuHc@gRm@sLg@aI_@mEU_CgBoNmAkH{A_I_DmNuAgF_CuHgDgJsD}I_BoDsEcJkC}EiM}QsFoGwEwFsAgB_AsAoA{BkBkEeBsEkAsEy@iEm@kEg@kHGmBGcJV_RA_FEoB[sFc@qDq@sD_AuDy@wBiAmCmAyBcBaCkAsAkCkC}EkEcBeB}D_F{CsEkB}DgBgE{AuEoA_Fu@uDi@mE}@sJo@sH{@gHu@}EaAyEwA{FiAoDyEiNmAeDeByFcCqIaC}K_A{EeAiImAoK]mDWiDiA_T_@gFu@cI{@iHqA{IwAcIeBeIaCcJwA}E{DeL}BcGgDqHqCyFuE}H{FqI}BeD{GyHuMgMiE}D}EqFiDuEkEuHiBuDyAiD]y@{D}LaAoDg@yBaAgFeAoGSaBq@aHi@eIQwEGcH@qFTmKPoTGwTYmMu@sTyAkV{@iJqA}KoB}NqAcJ{CgPkA{FiCeLoB{Iu@iCoE{NaCwHeAsCmAuC{B{E{FsKsBsDaFsH_DmE{AkBuCcDsCwCeC{BeEoEuE_GuCkEw@oAyFaKyAkCqCwG{A}D}AyEyBiHaDcM}AwFgDaKoBmFuBiFoCiGwFuK}C{FwCaGyAcDmA_DoA}D{BuI{AwGaAeF]uBe@aE}@sJ_@_HOuGs@yi@[eIa@sFwEqe@cAyH]qGKcDDuENeDHsAf@_EpGe_@r@sF`@wELmD?kFQaEUmCYaCYwAaAgEwCuKgOsg@_BwGaAsF}@_Hc@eEM}A_@cHIcCG{G?uBF{Fb@yJ\\cEt@wGjA{H|@aEhB}GzA}EnBaFdDyHrPo]bMqWpJwRxE_K`AgB|GsOpCuHrAeEn@cBdIgXrCaLrDmNRg@`^esArXodA`BgG~@yDTiAjA}EhA}F`BkJf@wDd@qDrAeOjBoYjByZxBq\\`AcPXcGvDyl@fAuR~Bw_@V{EX_J@uBAoFGqEiA{b@CqD@wDRuILwCX_ER{BbAeIhAkGtAcGhB_HtCeK~FgThCsL|BuMpBuP\\mDr@eLh@mLfAqXNcFx@uOjAmLr@aFhAcGp@kDhj@}{BlGmXbDoQjEs\\nAmMdAyNpAi[VoS`AebAHcHp@mq@d@qe@VmIVkDh@aFrAyHzHs_@jEoSr@wCbCaMj@kEZcDXoEHaCB_C@qE]yHIiAs@yGqAyH{@_DgAqDqAwDwD{J}CmIeEsKa@oAy@gDWoAc@aDMaBM}C?eCFiCNaDh@iE^wB^sAxBeG~MsVpAwCvBqF|D}MvB{Jj@gDz@_HnJybA^qDrA_LbC{Ot@mElAcId@}DVsCR_EFsDCuGO_E_AeL{Cm]QoDIeILyDVqEj@mFx@iF`CiNhCmQlA}Hf@uDr@qD`@cBtAeEz@_CfB{DpIqNzEgJlJaSb@y@xEyJdAkCvBeGfO}o@jEeSnF_X~A_JzBeOnByNrBcPdFkd@\\gDd@}HZiLDiFS{PSmLAs@TkIZoC^aCzAcJnCuYXuDL{CNmIR}CVuBj@uCnA_EZ{@bAeCvAyEh@wCb@sEHoCE_DOcE]yDOkCE_BB{DDcBNkBLq@fAsKNkC@uDMqDk@{EkAuHc@_CiAmKOkG@oDNiDVkDb@oDlAgIPs@rA}EXoAdCyHz@_BfAeBnFgFfCgBhEqBtDyAzGiBfF}@vIQnV`BrIxCrEvBxGnEdJvIjAxBx@dBrCvMz@jDzBtFl@lArApBjClDzAtA~C~BrCjApCv@hD\\vBBfBElDg@~CeAbDeBnCmBpDyEr@qAzAgDp@sB~@_E\\_C\\oDJmBDoCAiBOaEOiBOgAoA}Km@}Ec@cFOuBIoD?mAJ_GVuE`@{DlBwLrAeHvCuPn@iDf@wDbAeJdAwOr@kHRuCrBu]ZeGN}D?wBEwESyHSqCm@wGo@eEqG}]aJqf@y@yEqBcJmAmDeAgCwAeCsAsBoFiH{BaE}AqDwAiEiE{OmA{E_AkEuAoK[{Ds@sMUcF_@cHa@gFMoA_AkF_AiDi@eBiAgC{@_BkAgBqFaHyLeOwCeEaAgByAkDe@wAg@wBo@uDe@eFKkEB{EPeFHw@^_CxEgWT{APwANuBPiF@qAEsBKoBWuCWgBa@uBi@uBwAoE{AuCqAkBeBsBkAgAgAy@aBy@cAc@wCcA_AS}@MsAKsDKsGI}AIcBUaCm@{Am@sBmAYOgA}@s@q@eBwBmHeLu@uAaAeBu@aBiEuL}@iCsAcFeAeFiDgU{BsO}@}Gi@eDa@}AcBqEaAqB_G}J{AsCs@iBi@{Ak@_Cu@eEUaCO_EB_DXiHJcCbAgPHuCA{DKyCW_Di@eDw@gDgDwLk@_C}@{Ei@mE_@{EeDim@aGsbASwB[iCgBqLWiCMsDCwDH_H\\iF`@yENqCD{DGuDGiBUiCSkBSyA_@qB}AeGsCgJw@qCg@wBUgAa@kC]iEImBCsB?{F\\kL@cCGcCIcB]qDi@mD}@iEqByGaBaFg@mBa@}BUeB]iFEqAWyREsNAqKKsEYuGg@iGc@aEm@}DaAoEaBsHcWy`Ay@iEq@cF[wDoAo`@e@uKi@oPYiGc@uE[eCUsAu@sD{DmPo@}CaAuFw@wHKuCOwHHiFTcEh@}Ff@{DtAwGtA{E`BkEhBwDvByDpDaGvKaRxRe\\bCaFdBwEp@aCjAkGjAeJ`@wDzBcQzAsM|BsSt@uEd@cCf@uBp@oBpBkFpGcOpFyMxBoGZeAjBqHrAkH~AuJnBkMv@kE|@kD|@uCtAgDn@qAhB{C~B_DtA{AjC_CnFcDxGwDzB_BrBmBbC{CvEsG`CcC~AqAfLcI`HiE|JwF`C{AxBgB|AaB~CyEt@{Aj@uAzAgEvAmG`AaFxF}Ux@eDdTyq@|AsFlAuGd@sFPuGAyF]oGy@}FeBcIaM_c@uEoPq@kCeAcF_@{BUmB_@}FEiBEaEBoEL}HRaJAkIIsDK}Ci@yHMuAoCuR{AcKyA}KeAmJw@mIk@yHgAmQGwDGkDIqA{@yRsBgm@]{GcBkUaAeJ_CmRwEi^kHgh@q@qFW_DSgEYoMOsEYwB_@sDm@mEe@eCw@gD{FiT{@iEgMws@YqB[{AgAuG]cB_@aCg@yEK}BKmDJyJB{@h@iFvAmJhHi`@bBgInCkPf@oETiCN{DL}E?}ABmB_@eJa@yEeCaQ_CqNaDaTa@uDSkCKyCEmCA}JLsQEyQS}EQqCg@{De@kCcAsEq@gC}HuScHyRaBaEu@uAoBwFoBmFaDoJ_AgDiAkFq@kEo@oFm@{HQoEGgMMw^CmEA{FIgK]_QS{Gs@oPy@uM_BuT_CiZi@iH{@_KmD_e@e@{Ia@aPEwIBwIF{Gd@qNrCyd@JaCLuF@wIo@cc@UiVPoGZkDz@mGz@cE|A}E`BeEbE{GjAyAnBqBlOwN|AiBbCcDn@kAz@gBdAcCtA}DzO{i@pPal@bGoSzBqIpBcJp@{Df@qDd@yDr@aHrCew@l@eOFgCb@cJl@yJLsAr@yIv@yHpB}Oh@wDvTeuAnAoH`BoLpAqLT{Bh@uId@cLZeQEmJCsCm@wVeDmkAMoFMaOCoHDqKb@aU`CihAZyJXyEb@cFRmBpAeJhByIl@iC|@aD`BeFtAwDv@kBpCyFdCmE|CyEpBiCxAeBdFiFfZiXfCoCbB}BfBiC`AgBr@yAdBsErFiObAeC|ByE`CkE|C{EhBaC`BqB~CgDrBmBvCaCpDeClCaBbB}@vEqBpCcAdEiApGmAzAUxBSrDWnBGxG@xCJbZjCrGZdFFlF?jHQlRqAjFW|CGzGH`G`@vBXrFbAnN~CxCR|BDbFQrBa@tDeAjCqArA}@tB}A`BiBbAoA`B}B~@aBrAaD`CcFzY}o@lC}EbBcCjEqEtB_B~AaArAo@`Bq@~Bq@zB_@rBU~CKnB@vAHxBV~Cn@hE`BdBx@vEvCdCvA~@b@bBj@|Bf@nAPfDJtCQjM_BxAEfB?hAHrAP~A`@dBl@vAv@tA~@z@r@`BhBlIpKhBnBhBzA`CzApAp@xB~@xAf@pAZ|AX|APfCHlA?~AGrAMlBW~A]bBi@~Ao@xBgAfBmAxAkAbBcB~AmB|CgElBaCdDgDbDcCpC}A~DaBpD}@nDg@jCSrECnJ|@dCLzB@lCSrBa@fCy@pC{A|CiCfAoA`AsA|BmD|FcK`DkFtCcE~C}DrDaE~J}JxBaCzA}Bf@}@hAcCr@wBp@sCh@aD\\cDNuEEgEKeBe@iEW{A]gBgBwHiA}Fe@kEIiBIkCBoCHaCNqBRaBv@wDx@qCb@oA|AmDt@sAjC{D|BmCtBwBnCcCzCeCtFuDfAs@rLsGpEuCtDgD`DyDbA{AxByDrAuCTg@nAkDzCcJhAuCfAwBlAuBtBeCdA_AzB_BdB}@tBq@nB_@|@K`CG~ADbBN~EbAbFjAlFn@tBFbD?fCGxDc@zEkArBy@`CiAvBmA`BoA~AyAhBeBxBsCpBaDpAeCbBaEb@qAr@aCbCwKfAsEf@aBv@uBp@}AtAmCz@uA|CaEtA{ArBaBtFgEpBeBdBgBr@{@tBwCfB}CtCkGjBkE~AqCbCyCv@q@xB_B~@c@pAi@`Cm@jBShBK`DFfAH|Bf@`Bp@`Bx@|@n@xApAdAjArBnCrDtFrAjBdAlA`B`Bt@h@lAp@hBv@tDdAxE\\zINlBJzARzAZ|Bv@zDlB~ChCbItIpFnE~CnB|BnAbCfArDpA|Ah@pFrAhCv@pAf@rBhAhBpA~@x@`AhAtBpCrEbIdAjBhAdBp@|@rBtBxAnApAz@rD`BxEjB|FrC~AfAxEhC`Ab@lBt@rBd@lCXpCFhCGxFUlDUnHYtJKjA@vMp@~Ep@zE|@vJfCrNzDpGdAxDh@nET|GHfC?fH]dDe@~Cy@zCaBdDoCrBgCnB{Dl@yA~A{EfDuMdByFp@kBt@mBxByDzC}EnAiBbCyCxCqCfC{C`B_CzAmC~@}Bh@uAp@wBd@yB^oCTmCLyDDkFSiI}@qMiAuT[oH?mDNwFd@{Dn@{DhA{DxAiDvAiChCgD~G{GdEgEzBqD`BcEt@yBx@mDj@gDf@mIlBqd@v@qK`@wDt@}C`AyClBcEnBcDrA_BxGuFxAmAjCgCfCeDhBuCrDsGzAoCtFyI~BeDhCeDtDqEtHaIdGgG`QuRhIgKbVc\\zKyO`IuKdFkHdV{\\|AsBpA{A|AaBvAkAfDaCbDoBrKaHtQaL`BiApCiCfCqCxBmDd@w@rAoCx@uBrA_El@eC`@sB`@uD`@uENgFCuISgJAcEHqKZyGj@uGZ_Dh@sDhAgGhAuE`AcDpAcEjEwKlOs\\zLuW|G}NjL_WZk@|@qBvCcFl@u@dBeBrB}AnC{ApD_BpJ{D|L}ErOqGpAe@tMqFbZaMlCaAvC{@|D{@|B[rCWvEMdFBvNZpHLhFEjCUlCm@|Ao@xAw@jCyBx@{@lAwBvAaDx@mAn@k@hCsEnAaBdAgAtB}AfAo@zAm@nBc@hAKz@EhAAhBJ~Bf@~DxApElBrC|@lB\\r@LlABzAG`AGbB[tBw@`Ae@x@i@r@m@|@}@t@_AdAmBx@qBVy@x@eDRkAN{ANeD@iESiIImFByBJ{BVeCb@gCx@gD|CqJ`AmDb@oBX_CNyBFmC@kCI{G?kFDaBFyANsAVeBh@}BbA}CjA_Ct@mAtAgBbA_AtA_A`Ae@bBs@`AUfBW~@CxA?hCTjCt@`Bp@hBlAbBvA`AbAzBrCvHfKlBxBdAhAhB|AbBhAzBdAhCv@lAV~@NhBNjC@|CMlB]hB_@lAc@rCwAxB}AxAqAhJuKxAuA`Aq@jAq@hAc@hBe@pAQhBOnCIzAM|AWfAUzAg@jB{@lBuArAmA|AkBn@aA`AeBbAyBl@iBd@_Bp@uDPyAVsDJaENwNLkENgCz@eJz@mF`AaF`@cBzA}E~AgEbCcFr@uAnCeE|ByC|CaDhAgAfDiC|CmBxBgA|BaAnAc@jEiAbB]hC_@rDYvCIbBFjCD|BPlBRxDr@fDv@p`@vKbFpA~XbIz@PpF|A`E`BfAl@bBnAdA`A|BjC`B|BtBfD|B|DnDrFzAxB~AlBpAnApAdArAx@zAt@|Al@bDx@bD^nC@nIc@nBAdB@tAFtBXfARrCv@xAn@~A|@zB~Ar@j@zA`BnA~Ap@`Al@fAnGrMpA~BtAnB|BfCbBrAxBlAvBz@lDn@nDNxACrAGrCa@bDoAn@]vA}@jB{AjAoAp@{@f@u@fAqB`AqBxByGr@{BrAmD|@}AjAaBbAiAdD}BtKkGvAeA~AyAfBoB`G}Fl@e@`CuAxAm@xAa@jCi@~@MlCGvBBpAFxCf@d@LlC~@nBfAtAbAzClCvBpBtEpFxD~EfAnAhDjDdBvAzAhA|D|BnD`B~DvAlE`AlDf@tDVbE@nCEhBKxC[dDm@tCw@fC}@fBu@|DyB|AcAjDoC~CaDpCqDnDqFfAqBdBkD~F{MlE_K|DoInEaJlE}H|HuMvEmIvFsKbCqFhBoElC{HlAkE`FcT`DqMbAgDtB{FhCeGfBiDnD{FdIwLjBwChBeDjByDpAyCdEsLvBmHbPci@hCwJd@qBv@_Ev@eGd@oFVwETgD^oD^uBViA|AuE\\u@~AqCzAkBbAeA`DgCzGsEdDgCxAgBhBqCfA{Bh@wAr@eCp@aD\\kCNuBFyADaCHeLB}BL{CL}AXaCX}Ad@oB^kAz@sBlByDrC_FfDcFfBeCvF_HzCcD`IsHhJ{HxCqC|CgDlB_CvCmEt@mAbDoGxCiH~AcFfBsGZ{AlA}Gf@oDf@kEZ{Dn@{JHs@PyBVsBTwA`AsEnAyD|AqD~@iB\\m@j@w@Xa@fCyCjC_CvCmBpEoBfDy@~@QnCUxDCzBNtC\\vCr@v@TdDvAzBpA~AnA~CjCjDdCxAv@lAf@fBd@jB\\lBLhBBbACfCYpBe@|Ai@jJcEvBu@~Aa@zAOrDGvCNlBTnC~@tDpBdEfClDdB~C|@jB^pD^hCDhDIvCYnAUhBg@jDwAxBoApAaAzAqAxCeDvDyEnFwFtDcDfD_ClAw@nEyBbBq@|B{@fFyAdB]zCe@xAQhEW~FIfZ@fJInISrESdKs@nPcBxHcAzv@mLtHeAz@OlIkA~R{ClGwAlFgBdFaCtDwB`IuFrNoJd@_@b\\eUzEyC|DqBlCgAzEeB~Bo@zBg@bFy@xDc@`DSfCG|FBzETbCTlFx@zAXhCn@zBp@`DfAvD~AbhBx~@rDtBfG|C|BnAfNfHfDtBtDrCv@p@zDxD|DpE~EbGhBtBlClCzChClE~CbDtBhD`BtElBlGlBdJdBzEd@zFX~D?rFMdCQxEg@dEw@rCq@jEwA|B}@tCuA|BkAdDqBdFuDpD_DnCuCvDkElGuHzEeGtK_O~DyFnH}KjJgOdF}Ipe@}{@jGmKvFgHlDsDdE}DvIiGxPeKdDkBx~@oj@`HyDjGmCtDoAjBk@`E}@xCk@lHw@zAGjBCvFQjE@pNr@lIZnEVn^dBxSx@bH\\dF`@hD^bFz@`Dr@hF|AlG`C`A`@X^dBbA~Az@vDxCnEvDlGxFRXVp@FTBb@IdA@ZmClNLj@NNL@RQL[nA_G\\oBbAoF?_@NcBp@oGn@cG@oAFu@`C_StCeXVkAJsA|BoVf@iIxC_o@`AyRFcCFuGG{IWyRUiMWqRCqHK{IEiLFm@?qBJcBxAaGd@iDRcCToHb@uBb@kB@a@rCuHvCaI|D_KjC_GbHgNxF}JvBqDzAwCdGeLvAaCn@wAn[ml@fBmDhCmG~AgFXeAt@oD`@yB\\}B~@iId@_GLkCLaDAiDDwDFgKBiq@Li[Dkq@Ju^R{nAAmAJ_k@ByB?mIDwGAgAKkHe@yJi@eGoA{KyB{TsCqXc@}CO_A{@mDiAyD}CuHeAoCsG{OiA_E_AeFU{AWeCq@cKaDc`@w@uMqGgoADaAVwBtDgSTy@p@_BPm@tB_CrBkCtIgMdGsJnJaNfFwHfBaCtAcC~JcOFONOjHuKfD}FL[vCgFvBoDjEyH~@qBnEyIh@gAn@wBRw@XwAPsAnIww@lB}PHyABsAKaAYDDf@",
+      "last_updated": "2025-07-10T10:08:55.403575+00:00",
+      "fuel_stations": [
+        {
+          "id": "ChIJWzQeWfElyxQRkUJjBLrzQE8",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Demirciler, 41455 Dilovası/Kocaeli, Türkiye",
+          "location": {
+            "latitude": 40.8554089,
+            "longitude": 29.5377171
+          },
+          "rating": 4.2,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 143,
+          "displayName": {
+            "text": "Socar istasyonu",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJhRcZCGovyxQR-f-aKW2tD3k",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Denizli, Kocaeli Çayırova Yolu, 41400 Gebze/Kocaeli, Türkiye",
+          "location": {
+            "latitude": 40.8919,
+            "longitude": 29.534
+          },
+          "rating": 3.5,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 13,
+          "displayName": {
+            "text": "Starpet Denizli Köyü",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJzVgi_jcvyxQRtfanXbngV9s",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Denizli, Kocaeli Çayırova Yolu, 41400 Gebze/Kocaeli, Türkiye",
+          "location": {
+            "latitude": 40.899249399999995,
+            "longitude": 29.522106700000002
+          },
+          "rating": 3,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 9,
+          "displayName": {
+            "text": "Onex - Efka Petrol",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJ2Y_6HEgvyxQRCKQdm3ydHEI",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Denizli, 41400 Gebze/Kocaeli, Türkiye",
+          "location": {
+            "latitude": 40.899214,
+            "longitude": 29.521501899999997
+          },
+          "rating": 3,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 8,
+          "displayName": {
+            "text": "Sunpet-süreyya Tesisleri Petrol",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJ3yJJGEIvyxQRIgEkilidirE",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Denizli, Ankara Yolu No:98, 41400 Denizli Merkez/Denizli, Türkiye",
+          "location": {
+            "latitude": 40.891141,
+            "longitude": 29.532670999999997
+          },
+          "rating": 1,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 1,
+          "displayName": {
+            "text": "Sulayici Petrol",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJzVgi_jcvyxQR2n0ZejoqIrI",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Denizli, Atatürk Cd. no:37, 41400 Gebze/Kocaeli, Türkiye",
+          "location": {
+            "latitude": 40.8993222,
+            "longitude": 29.522010899999998
+          },
+          "businessStatus": "OPERATIONAL",
+          "displayName": {
+            "text": "Kpet",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJebZ4qg1XyxQRZYJuVoeKP70",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Eseler, Kuzey Marmara Otoyolu No:52/A, 41310 İzmit/Kocaeli, Türkiye",
+          "location": {
+            "latitude": 40.7954683,
+            "longitude": 30.0784715
+          },
+          "rating": 4.3,
+          "websiteUri": "http://www.totalistasyonlari.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 673,
+          "displayName": {
+            "text": "TotalEnergies İstasyonu",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJE1FbDhNXyxQRH6YaocWvA7Q",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Eseler, Kuzey Marmara Otoyolu No:53/A, 41001 İzmit/Kocaeli, Türkiye",
+          "location": {
+            "latitude": 40.794557700000006,
+            "longitude": 30.077376299999997
+          },
+          "rating": 4,
+          "websiteUri": "http://totalistasyonlari.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 75,
+          "displayName": {
+            "text": "TotalEnergies İstasyonu",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJuV58zNJXyxQRLgBk92aJXEc",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Eseler, Q3VG+W9, 41001 İzmit/Kocaeli, Türkiye",
+          "location": {
+            "latitude": 40.794756799999995,
+            "longitude": 30.075946
+          },
+          "rating": 4.1,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 332,
+          "displayName": {
+            "text": "Cafe bonjour",
+            "languageCode": "ru"
+          }
+        },
+        {
+          "id": "ChIJ_bzDZrhWyxQR7uwOWuuYPC8",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Bayraktar, 41001 İzmit/Kocaeli, Türkiye",
+          "location": {
+            "latitude": 40.778953,
+            "longitude": 30.080531200000003
+          },
+          "rating": 3.5,
+          "websiteUri": "http://www.teco.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 17,
+          "displayName": {
+            "text": "Teco",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJB2tVY2aOnUARMEuonXFAzBM",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Kemaliye, Cumhur Yüzü Sok No: 12, 54300 Hendek/Sakarya, Türkiye",
+          "location": {
+            "latitude": 40.7960893,
+            "longitude": 30.7428027
+          },
+          "rating": 4.1,
+          "websiteUri": "https://www.opet.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 294,
+          "displayName": {
+            "text": "Opet",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJV_ppXkeJnUARCT8jMje3nUs",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Kargalıyeniköy, 54300 Hendek/Sakarya, Türkiye",
+          "location": {
+            "latitude": 40.751917899999995,
+            "longitude": 30.6982517
+          },
+          "rating": 2.4,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 85,
+          "displayName": {
+            "text": "Pacific",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJ9e0tPA0u0hQR0hnjY5vO83I",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Yeni, Atatürk Blv No:118/A, 54300 Hendek/Sakarya, Türkiye",
+          "location": {
+            "latitude": 40.794815199999995,
+            "longitude": 30.7344587
+          },
+          "rating": 3.8,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 356,
+          "displayName": {
+            "text": "bp",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJTZnUCYWPnUAR2tk8OwliPKc",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Başpınar, Remzi Efendi Cd. No:24, 54300 Hendek/Sakarya, Türkiye",
+          "location": {
+            "latitude": 40.7837867,
+            "longitude": 30.740789099999997
+          },
+          "rating": 4.1,
+          "websiteUri": "https://www.petrolofisi.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 59,
+          "displayName": {
+            "text": "Petrol Ofisi",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJVxtzsmCOnUARs99HTXnfezc",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "No. /Sakarya, Başpınar, Remzi Efendi Cd. No:57, 54300 Hendek/Sakarya, Türkiye",
+          "location": {
+            "latitude": 40.792801,
+            "longitude": 30.744524
+          },
+          "rating": 4,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 163,
+          "displayName": {
+            "text": "Shell Oil Çürüksul",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJZRoHuTiJnUARmoqMHBvhS1g",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Kargalıyeniköy, 54300 Hendek/Sakarya, Türkiye",
+          "location": {
+            "latitude": 40.751932,
+            "longitude": 30.698098899999998
+          },
+          "rating": 3.5,
+          "websiteUri": "http://www.alpet.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 32,
+          "displayName": {
+            "text": "Alpet-yalvaçlar Akaryakıt",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJF5ZsZ0eJnUAR4cE_BNTTsNA",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Kargalıyeniköy, 54300 Hendek/Sakarya, Türkiye",
+          "location": {
+            "latitude": 40.7527976,
+            "longitude": 30.696831399999997
+          },
+          "rating": 1.9,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 34,
+          "displayName": {
+            "text": "Kuzey Guney Pasifik Petrol A.Ş.",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJU9pWcmaOnUARK-q4aftaXcs",
+          "types": [
+            "gas_station",
+            "convenience_store",
+            "food_store",
+            "food",
+            "point_of_interest",
+            "store",
+            "establishment"
+          ],
+          "formattedAddress": "Şehit A.Gaffar Okkan Bulvari Başpınar Mahallesi, PAFTA:45, PARSEL:34, Kemaliye, 54300 Hendek/Sakarya, Türkiye",
+          "location": {
+            "latitude": 40.7960968,
+            "longitude": 30.742813999999996
+          },
+          "rating": 1,
+          "websiteUri": "https://find.shell.com/tr/fuel/12384582-hendek-merkez/tr_TR",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 4,
+          "displayName": {
+            "text": "Shell",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJRdtyVz-JnUARo7eEUwIYGxo",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Kargalıyeniköy, 54300 Hendek/Sakarya, Türkiye",
+          "location": {
+            "latitude": 40.751315,
+            "longitude": 30.695988
+          },
+          "rating": 4,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 1,
+          "displayName": {
+            "text": "Sivrihisar Aşağıkepen",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJ7-Qu0IuOnUARgTYPHAadp_4",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Yeni, Servetiye Cd., 54300 Hendek/Sakarya, Türkiye",
+          "location": {
+            "latitude": 40.788764,
+            "longitude": 30.733822099999998
+          },
+          "rating": 2.8,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 6,
+          "displayName": {
+            "text": "Ptt",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJfx8xie5tnUARvJjPWDoyRmI",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Kumluca Mah. Ankara Cad. No:19, Merkez, 81900 Kaynaşlı/Düzce, Türkiye",
+          "location": {
+            "latitude": 40.7736277,
+            "longitude": 31.321690799999995
+          },
+          "rating": 3.9,
+          "websiteUri": "https://www.petrolofisi.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 120,
+          "displayName": {
+            "text": "Petrol Ofisi",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJHaOPO2xtnUARYnSsJNu_w70",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Şirinevler Mh, Ankara Cd, 81902 Darıyerihasanbey/Kaynaşlı/Düzce, Türkiye",
+          "location": {
+            "latitude": 40.7715557,
+            "longitude": 31.340704300000002
+          },
+          "rating": 3.8,
+          "websiteUri": "https://www.sunpettr.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 280,
+          "displayName": {
+            "text": "Opet Kaynaşlı",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJVYcdooVynUARThh_3oeZav0",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Karaçalı Mh, Düzce Cd., 81900 Kaynaşlı/Düzce, Türkiye",
+          "location": {
+            "latitude": 40.7758542,
+            "longitude": 31.3067842
+          },
+          "rating": 3.8,
+          "websiteUri": "http://www.totalistasyonlari.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 189,
+          "displayName": {
+            "text": "Total",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJX03qO49ynUARZ7t1qOVlCKI",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Çele, D100 ÜZERİ, 81900 Kaynaşlı/Düzce, Türkiye",
+          "location": {
+            "latitude": 40.775914799999995,
+            "longitude": 31.3031226
+          },
+          "rating": 4.1,
+          "websiteUri": "http://www.aytemiz.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 182,
+          "displayName": {
+            "text": "Aytemiz KAYNAŞLI",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJ9_qk0_ZynUARmdONdDeMvvo",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Şimşir, Doğan Sk. No:2, 81900 Kaynaşlı/Düzce, Türkiye",
+          "location": {
+            "latitude": 40.780564,
+            "longitude": 31.284237999999995
+          },
+          "rating": 3.8,
+          "websiteUri": "http://www.total.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 9,
+          "displayName": {
+            "text": "Total",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJW5SKYvdynUARZARrwiD8bu8",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Şimşir, 81900 Kaynaşlı/Düzce, Türkiye",
+          "location": {
+            "latitude": 40.7805081,
+            "longitude": 31.279683000000002
+          },
+          "rating": 5,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 1,
+          "displayName": {
+            "text": "Das",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJizLA3flynUARlw0avoR2c6A",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Şimşir, 81900 Kaynaşlı/Düzce, Türkiye",
+          "location": {
+            "latitude": 40.7806877,
+            "longitude": 31.279074899999998
+          },
+          "rating": 4.7,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 3,
+          "displayName": {
+            "text": "Kadoil",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJ09C7HgBtnUARn9xahPUt0gE",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "köyü Güldere mevki no 1 Opet inciler petrol, Şirinevler, 81900 Darıyerihasanbey/Kaynaşlı/Düzce, Türkiye",
+          "location": {
+            "latitude": 40.7715835,
+            "longitude": 31.340706400000002
+          },
+          "businessStatus": "OPERATIONAL",
+          "displayName": {
+            "text": "Opet",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJHf9FQX1tnUARH7ClbENJ2IM",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Merkez, Kanarya Sk., 81900 Kaynaşlı/Düzce, Türkiye",
+          "location": {
+            "latitude": 40.7736936,
+            "longitude": 31.320073500000003
+          },
+          "rating": 4.6,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 12,
+          "displayName": {
+            "text": "Karadeniz Gaz - Veziroğlu Petrol",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJ30cJkPZynUARUW35zDLITcE",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Şimşir, 81900 Kaynaşlı/Düzce, Türkiye",
+          "location": {
+            "latitude": 40.7789146,
+            "longitude": 31.284792500000002
+          },
+          "rating": 3.6,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 25,
+          "displayName": {
+            "text": "OIL KORUPET",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJ-YUJdQkznUARKbsDAqpnF6Y",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Köroğlu, Kuzörenemirler Köyü Yolu No:11, 14200 Kuzörenemirler/Bolu Merkez/Bolu, Türkiye",
+          "location": {
+            "latitude": 40.758155599999995,
+            "longitude": 31.923946400000002
+          },
+          "rating": 4.2,
+          "websiteUri": "http://www.tppd.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 33,
+          "displayName": {
+            "text": "Türkiye Petrolleri",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJ07sJPtAznUARnaX8ISfC6Pc",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Merkez, D100, 14030 Aşağıkuzören/Bolu Merkez/Bolu, Türkiye",
+          "location": {
+            "latitude": 40.7597911,
+            "longitude": 31.941010799999997
+          },
+          "rating": 3.8,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 55,
+          "displayName": {
+            "text": "ÖZ KÖROĞLU AKARYAKIT",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJ14Mb8PAxnUARDogW4gvcNAo",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Meşeci, 14030 Nuhlar/Bolu Merkez/Bolu, Türkiye",
+          "location": {
+            "latitude": 40.757073899999995,
+            "longitude": 31.9215514
+          },
+          "rating": 4,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 23,
+          "displayName": {
+            "text": "Yupet",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJeQWeTgExnUAR3XlefdOmxBM",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Merkez, Ankara Bolu Yolu, 14030 Afşar/Bolu Merkez/Bolu, Türkiye",
+          "location": {
+            "latitude": 40.74543,
+            "longitude": 31.861577999999994
+          },
+          "rating": 5,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 2,
+          "displayName": {
+            "text": "Parkoil",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJpT7j6vgxnUAR4wp6K2BITnw",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Köroğlu, 14030 Kuzörenemirler/Bolu Merkez/Bolu, Türkiye",
+          "location": {
+            "latitude": 40.759140699999996,
+            "longitude": 31.932282599999994
+          },
+          "rating": 4.6,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 8,
+          "displayName": {
+            "text": "Seypet",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJ7bJksQYxnUAR_dpTJKQHP0w",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Merkez, 14030 Afşar/Bolu Merkez/Bolu, Türkiye",
+          "location": {
+            "latitude": 40.745543999999995,
+            "longitude": 31.861704999999997
+          },
+          "rating": 3,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 1,
+          "displayName": {
+            "text": "Woog's",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJjYz_-AAynUARRfuaxqVxUcU",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Merkez, Köy Yolu Küme Evleri No:42, 14030 Aşağıkuzören/Bolu Merkez/Bolu, Türkiye",
+          "location": {
+            "latitude": 40.760259999999995,
+            "longitude": 31.940806
+          },
+          "businessStatus": "OPERATIONAL",
+          "displayName": {
+            "text": "Total Energies",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJMbVCkgoznUARoDyLW0zQROg",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Merkez, Merkez Mevkii Kümeevler No:42, 14030 Aşağıkuzören/Bolu Merkez/Bolu, Türkiye",
+          "location": {
+            "latitude": 40.760458,
+            "longitude": 31.941011
+          },
+          "websiteUri": "https://moil.com.tr/istasyonlar",
+          "businessStatus": "OPERATIONAL",
+          "displayName": {
+            "text": "Moil İstasyon",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJbwa9TQExnUARrjqhQBdn6Ak",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Merkez, 14030 Afşar/Bolu Merkez/Bolu, Türkiye",
+          "location": {
+            "latitude": 40.7454178,
+            "longitude": 31.8617004
+          },
+          "rating": 4.5,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 2,
+          "displayName": {
+            "text": "Onex",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJgUIV8PAxnUARHjcufzHR1PU",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Meşeci, 14030 Nuhlar/Bolu Merkez/Bolu, Türkiye",
+          "location": {
+            "latitude": 40.7572219,
+            "longitude": 31.9212917
+          },
+          "rating": 3,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 2,
+          "displayName": {
+            "text": "Teco",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJc30vr5sz0xQR59T5mFM7-GM",
+          "types": [
+            "gas_station",
+            "coffee_shop",
+            "convenience_store",
+            "cafe",
+            "food_store",
+            "food",
+            "point_of_interest",
+            "store",
+            "establishment"
+          ],
+          "formattedAddress": "Ankara Bolu Yolu Parsel:2 391, Saray, 06980 Kahramankazan/Ankara, Türkiye",
+          "location": {
+            "latitude": 40.065132,
+            "longitude": 32.6131928
+          },
+          "rating": 3.8,
+          "websiteUri": "https://find.shell.com/tr/fuel/12218965-kazan/tr_TR",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 138,
+          "displayName": {
+            "text": "Shell",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJJ3fAFBw00xQRljWFWx7q9T8",
+          "types": [
+            "gas_station",
+            "coffee_shop",
+            "sandwich_shop",
+            "convenience_store",
+            "car_wash",
+            "cafe",
+            "food_store",
+            "restaurant",
+            "food",
+            "point_of_interest",
+            "store",
+            "establishment"
+          ],
+          "formattedAddress": "Ankara Bolu Yolu, Fatih Sultan, Mehmet Blv No:710, 06170 Yenimahalle/Ankara, Türkiye",
+          "location": {
+            "latitude": 40.029207,
+            "longitude": 32.643086000000004
+          },
+          "rating": 3.8,
+          "websiteUri": "https://find.shell.com/tr/fuel/10051270-saray-ankara/tr_TR",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 79,
+          "displayName": {
+            "text": "Shell",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJ88yOzOQ10xQRg3H8TFyAZgc",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Saray, Adnan Menderes Blv. No:372, 06980 Kahramankazan/Ankara, Türkiye",
+          "location": {
+            "latitude": 40.0549387,
+            "longitude": 32.6278874
+          },
+          "rating": 4.2,
+          "websiteUri": "https://www.petrolofisi.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 128,
+          "displayName": {
+            "text": "Petrol Ofisi",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJ4RYxqHEz0xQR2ZXuvnkV8QU",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Dağyaka, Ankara Bolu Yolu No:422, 06980 Kahramankazan/Ankara, Türkiye",
+          "location": {
+            "latitude": 40.078694999999996,
+            "longitude": 32.6128105
+          },
+          "rating": 3.9,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 203,
+          "displayName": {
+            "text": "bp",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJC0eZJukz0xQRWDOdESrvRIs",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Fatih Sultan Mehmet Bulvarı No:444, Dağyaka, 06980 Kahramankazan/Ankara, Türkiye",
+          "location": {
+            "latitude": 40.082717599999995,
+            "longitude": 32.615578299999996
+          },
+          "rating": 4,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 290,
+          "displayName": {
+            "text": "CLD OPET",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJrXtWJ4kz0xQRjPWRSr_zjcU",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Saray, Fatih Sultan Mehmet Caddesi No:363, 06980 Kahramankazan/Ankara, Türkiye",
+          "location": {
+            "latitude": 40.0572537,
+            "longitude": 32.623499699999996
+          },
+          "rating": 3.8,
+          "websiteUri": "http://www.totalistasyonlari.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 72,
+          "displayName": {
+            "text": "TotalEnergies İstasyonu",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJwRSiDXwz0xQRKOV25gizHMQ",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Saray, 06980 Kahramankazan/Ankara, Türkiye",
+          "location": {
+            "latitude": 40.0566562,
+            "longitude": 32.6250812
+          },
+          "rating": 3.6,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 10,
+          "displayName": {
+            "text": "Keser Petrol",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJ74hpWogz0xQRhOFPe3VnSF0",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Saray, Saray Cd., 06980 Kahramankazan/Ankara, Türkiye",
+          "location": {
+            "latitude": 40.0569157,
+            "longitude": 32.625384
+          },
+          "rating": 1,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 1,
+          "displayName": {
+            "text": "Kadoil",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJTWp594gz0xQRCzRT3mTmhxc",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Saray, 06980 Kahramankazan/Ankara, Türkiye",
+          "location": {
+            "latitude": 40.0570808,
+            "longitude": 32.624725399999996
+          },
+          "rating": 4.7,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 3,
+          "displayName": {
+            "text": "Q Plus",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJ5b0hitgz0xQRe7V4FBy9i08",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Saray, Adnan Menderes Blv., 06980 Kahramankazan/Ankara, Türkiye",
+          "location": {
+            "latitude": 40.0408776,
+            "longitude": 32.596750199999995
+          },
+          "businessStatus": "OPERATIONAL",
+          "displayName": {
+            "text": "Ars",
+            "languageCode": "tr"
+          }
+        }
+      ]
+    },
+    {
+      "id": "istanbul_izmir",
+      "name": "İstanbul → İzmir",
+      "origin": {
+        "latitude": 41.0082,
+        "longitude": 28.9784
+      },
+      "destination": {
+        "latitude": 38.4192,
+        "longitude": 27.1287
+      },
+      "distance_km": 484.9,
+      "duration_minutes": 325,
+      "polyline": "uuhyF_zzoDeAfBGBw@FCAs@z@mEbGSb@GbA@j@BL~CvCzAdAn@VfAZ~Bz@bEhAJABETKrAL`AT`APzDb@v@}@f@}@l@qAR]J_@h@oAJWp@Ql@LZ]ZLTT\\l@f@vBBHtAd@v@LbBNd@@TPDLR~@JlF?`@Ch@Il@a@pCIl@i@~Bm@fEUvDYrIAfDBdBEvIIdCY`Dq@nG_@zDCf@SlCIfCCnDD`DLnBFj@x@|DjAxDf@pAj@lBp@`Df@hD@fAb@zEx@jLA^RlGAxBBxAHb@JVXRXB\\MVYHUHm@_@oE[}B]aDK]eA{NQs@]{DOsAa@eBi@aBKS{CeJe@sBU}AMwBCqD@mBN_FVmD`AoIZwDHoB^mQAm@~@yPJuAb@}DvCaNT}AJ{B@}BIiDmA_Z{@gLo@uGyBuQsCkQsDaT_B{JeAeJoAsMK{BIuIVmK^sKtDmp@HeD@oBCmDU{GOgCu@{GkBwNq@yGIwD@aBFwAj@eFvB}Qd@cFNmB|CwYr@{F~@mJjAuL@[N}@XkC~@yHT_C`@aD|AoNnA{KN{@V}@r@}EfAoGl@}CrBcJbAuDBUV[PMVGjAF`@?h@GhAk@`@_@d@}@VmARqBKeAOw@g@iAm@u@i@a@[O]Ie@My@BmC\\cDIe@CcAYwBy@qAc@aAOUAkLuEU]wAc@oAm@uAw@MAy@i@{@y@g@}@Y{@Ok@Io@Gq@CuA@]Fs@zAyGZgB?e@j@wC\\{Bh@qFTwDL{CFkD?sEOmF]sFk@eFCG]eCs@mDaA}Do@_CgFwPeAyDo@yCm@eDYsBe@oEWmEGiBGaD@oENmFXmE\\aDj@}Dt@uDdAgEhBwFjAwCbBuDp@mAdEeH~E}HvBuCnAcBdJiL|EyG|BcDzBqDpBiD|CkGrAgDnBmFt@uCTcARu@z@yE\\uBf@mEPmBRaDJkDFmHKwD[}Fg@oNq@uMcAqOk@aLBc@SiGGoEAwDFmGLgEReE^gFn@}GdAqJjBqO~AiQLyA\\_GRaGLeIDeJCaIAoRB_GFaDR_GPeDb@{F`AwHvAmHbAaEl@sBb@mBJqATqAHYn@gD^yAh@wCxBqLjA{J`@gE`@sHLgEJ_JA}SDkEXcH\\yDZoBt@aEl@kClAqEfA{C`AaCxAwCxDkGbGqJfAoB`BoDtCsHjBoHz@iE^qBz@aHd@iFb@{HXwI^cI`@_Ff@kEh@qD`AkFfAgE~AoF`BkElC{HbBqFpBeHp@uClAoGnBgLn@cF^_Dn@oGd@yGZ_HPsHDcGCmLIqHAiCJiLTcHFeAZwDr@qGf@_DrAwG`CwIhEyNjAwEn@uC\\iBn@qEr@sHr@kN\\sF~@cJh@mDn@aDv@wCjBaGrAwD~CeHjB_DvBcD|GwIpFiHpCqElFuJlCyF~@wBlCcHnDgLvC}KhBsGbBkFzByFzBiF~EgKjFyLlCgH`CwGvCqK|EuSv@mCdBeF~CeIhAkChByDfDiGvQsYnDqH~DuJvC}I`EuNpCcKpBuGfCmHpCyGdEcJ|E}JpDkI`BeDnAiDn@{AnFuQbDsNxAcGrAoEzByFx@iB~AwChCeEfDeEfAgAjAqAtAmAhCkBv@}@bDeBhA]tEwBrCu@xDu@dGeAvEaApD}@fKiDnF{BlJiFxHyEbJiGzAoAbB}AnFmFhCuCxDoEjEmFlD{DnDsD`EqD`BwA|C{BzFuDnAw@nHsD`FoBlH_C`GaBtE}ApDuAxCmAvIcEfDgBbCyAjIwFtCuBpJ}HhEiEzFkG~FgHdDmEzD}FdBqCfEuHbGiLxCsG|EkJlDcGpDwF`CiDrDgElFiFhEqD`FoDlHmEvGuDxGkEtDgCdHoFzCeCvDmDjHqHpAkArHyG`F{D|C_CbIaFrJ_FdJmD~C_A`EaAtB_@dDk@nIoApDq@hDeAvCgAfDcBlCaBjCkBlAgAnAoAtD}DvCyDdGwJnB{D`BuDrBiF`ByEjDiLl@_CvFgPtAuDvEqKpB}DvAoCdHqLrByCrJyL`MaO`EyEtKsMdNqQ`G{ItFeIzDuGpEaJ`BmDpCaHhFsO~@iDhBwHjAwFbAgGZ{AhEsXlDoUfIih@^gCh@{FHqAHqBFmE?aBKcDG{AmAqNSgDIyBEmEFsCFgBZqDReBr@iE^aBv@wCbAsC^aA`EyItBgE|BmFx@yBjCsIt@yDTEPi@dCiKrAmD~AwCtBiCjAiA|AeA`IsEhFqCxB_BhIiHpAaAzBqA\\KLCjEeBxBs@vRyEvDy@bCs@tASpIwBxD_AnEmAjHwA~Do@vE_@pMu@~NQxGN~ERnRlBzaDnY~Df@tF~@bARzCx@|DrA|CnAjEzBfElCdD`CzDnDvHbIpCzCbEzDhBtAtD~B^RzB`AjDpAdBh@hFhArL`BjBTvE~@|C|@xBv@xDnBpCxAlLxFvBbAxLnHdN`JvXbR~VzP`H~FtDjDbCbClEzEtGlI`ArA~GbKtNrTtSp[bEnGvGxIxFzGjJbKnClCjFxEbCtBfDdDpDbDzCtC|DzDbClCrBrCvBjDrAlCvBpE~DtJ~AfE`FjLlCpGvFvL|I`QdDxFj@jArBnFbAdDt@vC`@|Bb@dDNzANvE?`DKjFWjF_@vGI|AWjCi@dIE|DBlCF~Aj@rGf@vDb@bCz@lD`AfDv@vB|@tBl@jAnBdDhCbDnBrBvC`CnUrPtCbBn@\\dDlAdBd@`Cb@~D\\lFHzDFlCRzDh@dBd@`Cv@jDbBxBtAnCbC|A|AhCrDbChEpA`D~@pCn@`Cn@`Db@dC`@fDZxEVpJb@lOb@zIb@rEt@~F~@pFbDlOh@rB~AtFt@pBnAlC~B`EjA`BlBzBfBdBzAjAfBjAzBhAtI`EdGhCpE`BbCn@nEz@hE\\vPj@vA?hT[|BFxBNrC^vEfA~FrBrDpBh@ZnDlClClCtBhC~EzHzBfEdAlBnBxDnE~HhBlC`C|C~AfB|CxCzDhDxCnB~EfCpB|@zCbAfBf@`FbApDb@pDXnCH~GGlLk@jKi@|BCnCF~AJfC\\xCx@`Bh@dDzA~IjFhFjC~BtApL`GtInDdAf@tHnCtMlEnI`DnUlHjCv@zk@hRfSvGpGjBrEhAzIbBdEr@fGr@zD`@nF\\vCHfCAbJP`C?xBFhJh@nD\\fEz@bBb@dBl@pEbClJbG`JfFxFpCrClA~CnAjGnBzEnAhHpAtC^`LbA|v@`DtCLhG\\dIj@fMtAlJpAzOrC`MpCjDx@dLfDlGrBbMpEVXtInDdItDtNnH~TbNtBpAjHbEzCpB~EtCtCjB`a@jV|CnBzShMt@`@rLpHrBjAhIfF`FtDrDvC|DtDlErEpFpGbF|G~EhIdG`LlEfKvEvM~ChKnDfOpBnMjC`S|@jMjAbSx@vJh@bEhAbFfAtDrBrFrAdDvCtExXda@dDxFnBvDrAjDvA|D`DbLdBxFjAlD`DtHp@rAjXfc@jAjBfCrEpD`GrDpGdDfHfC~G~DzQ`EnV`AnGj@`DhA|ExC|JtDxJxFlMfH`O~BhG^rAr@tCr@xDZxB\\lBdAnIhAdLJhBPjBd@|C|@nJHtA`ApI`AxJb@tIJxDPbEJzHDvFVfM^lL^`Ff@`FdA|HpGz_@`ApG|DbTlAfHz@|Ff@xFpBf\\fG~dArC|f@xDzo@hAzUb@nET|A|@zEdA`EzApEnApC~ApCfDfExCvCtCvB`FrC~c@dVbFvBrEnA~Cj@vHd@dCClD[`Dm@bVuJtBg@nDi@bAIvDGdA?|DRjEx@lDjA`ExBnDtClIrIlCrCvBdB|A`A|CvAfDhAvCn@t@JlVrBn`@|ElUbDjG|@nD^zEZ`ELnGBjJIhJUnE@rGT|DXxG~@rJfCrDnAjFfC|YjQnLxHjE|BtS`KxFzCxGnEfM|JpBpBtDvEhC|E`CdGlBlIv@jGr@rJXdG^hElA`JnAzGpBjI|BpH`@|@|\\|j@vBhEnFdJvGhK|H|KbDhEjD`EhCzDvBtEpAjD~@pDhAfGThBT`CRxCHvCCfMAtA@hFHlDThEf@jFXlBdDdRrAjHdCnLn@pCtAbElA~CzA`DjBpCdC|CnCjCvLxKhItHpCjCfCvB|OhOpCvCrErF`H`J~BvDvAbC`FlJ|AbDdC|FlFnNzDhMzCpMtBjKXvArBhOx@hHv@`Il@rJ^fIXfKFvH?zFBvGJpF\\`I^dG`@~En@tF`AvGdAjGdAdFnAnF`B~FnBzF|BvFnCdGjCfFtAbCpIdN`BpCzA|ClCvGp@nBrBpGn@~BhA|En@pD~CvSx@tEjAhFNd@vCdL|AbGfAbF~AdIvAnJx@xGh@zEj@fGx@hHh@fEpAzH~BrJjBfGzCdIfBvDr@vAhErHdFlItBxDdCdF~AlDzAzDrF`P`B`GL\\~EdUvA~Hz@lDh@`CdDxQ`@zCTbDb@hJJtFAfHQrEq@nKm@nIuF~s@}@nLeBrT}AbRoFjs@_CtZ}@|NY~G[pMObLC`MD~GLdK\\~L\\zHVxDjCxXTfCzAjVbCt[bAxL|@nJb@vGj@vG^fFb@hEf@dGnG|u@lCtYhDtZ~BtQpCfXfEzd@d@nF`B`VdBhZ^fIPfDv@xRv@hO`@|E|AtMx@bF\\`BRv@lCfM^~A|@dDtD|L`AhBhC`GfBpDxEjKbFhJ|BrEvBnFlCdI`E~MnAxE~AxIt@dFvAxLp@xINjCTvKDpFCxGQhI]dIW`EuAzM_BfKg@vC}AfHyBvI{CfJy@nBsC|FeE`I_GdLgEjJqDdIqC`HaExLsCvJuBdJsAzGyAvJaBrNy@|KUnEe@zKe@xJY`FGtCAnHW|LEbPD~GHdGb@nRbAp\\Fx@PpGDtHEjG[hPg@rNi@~IaAvLm@pGgAnJsBxNkHnd@{Ex\\qH`d@_EhVuA`IO~@{@lIk@xHU~Dq@jNWrHYzMIvQFxEItIOxFYnFaBlPo@~Eq@nDgBdJwAjIuFnZm@hEkC~Us@hHu@hKq@bMm@nRw@pPm@xM]|Fo@pIwB`WqBxZ[vGw@lRyAr\\Kl@SrDq@xPgBph@e@rMOlDWlJOtESfIEpKTjTp@pSZfIfApWFvFCjQInEo@tLm@pJgAzKu@zGeBpLcEnUu@nGg@zEo@bIKtBOxGAhCBjCNzDZ~GpAbUd@jLHbFFlODvSLzSHrDXdEj@lF|@hHbBrKlAlGhEnPjD|LjD`LfFjOxEzLjClGfGbMrB`EjLjTzR~^xIbPpCzFtCrGx@vBd@hAr@vBlAfD`CxH|AxFdAlEdDfOl@dDbAlHnAbLpAlM|A`NbDtXrBxQxAnK~@vFbC|MvCjNtCjLfC`JjCnIzAdE|AtDjEdL|@nBzArD`CxEjEzIjDpGjUz^dIxMvLnRxGxKrHzLpIfNlP~WbJ`OxJfOnOdUh[pd@zJ~NhIpLt]~g@lWn_@pO~TlDnFzFjJlCfFhDvIxBbHhBnHxBpL`Mxu@fHnc@|CfOpAdFlEvNdEhLnDfI|BtEnC`FrBdDz@zAdAzANZX^|AhC`CjDxDvE`FfFnDfDhG`FvDlC`k@~]zp@fb@n_@xUhRnLzGrD`F|BnDzAfE~A`IjD~E~B|GrDhHlEbIrFhEbDbAp@vHvGbEzDrGzGxDlEvDvE~CbElEhGfFhH~FpHbFzF|DbE`s@|r@zDpDdCrBxDtC~AbAnC~AjD`BfEbBfBl@lJ~BtATrDb@vEXfCHrFAfGUjHi@la@uDvEU|DAbCFfCNjBR|Dt@hEpAdDpA~C|ApCdBnBvAxAnAvApAdBlBdBtBnAfBhBvCxCrFdGnLzEnIhE~GtChExFzH|GfIhFzFzHvHnGvFhV`ShCnBh^pZnHfGtE|D`RnQjwAvzAdClCnCbDvE`GtEhG`KjLfHxHrOfNzH|FpJtG~E~Cb@^vVzMhJtFrKhHtHnFpO~LxM`LtErDpG~EvF|DnK`HpKjGlOxHrGxCbGbCrMzEpHdCrIfCfJ`CzHhBrI`ChGxBbDnAnD|AnCrAhDfBxHtEnBrAtG`F|EbE|FtFjDpDlEjFhEpFfBfCvGnKxBxDfCzEdCjFtBvEpDlHrCpFtDhGxCpEbKnNhIjKjCvCxAzAfAx@zMrMfDnDnGxFxBdBhFrE|BjCfFzEtBhBvE`DlB`A`A`@rCrApC~@nHxAbNl@jHVtKfAzGfAhGxApDbAlHdC`FrBjLnGxEdDzEvDbEvDfM|MxGtGvGjFzE~CxS`MvMnHhWfOhHjEjE`CnAl@hJbGlE|CxJnHrLzJxH~GxHxHnA|AhFrHn@hAhChFl@lAvF|OnAlDh@tA`AtBv@xAzBdDf@r@tA~A~AxApFhE|WtUdK|GvHxDzO~GrIpCnQfDrVtCpFnA~HzCfEjBbEjCxEtDzDxDrJzKjGnG`F|DbF~B~IhDpQzEpI~BlLtBlFp@TDdJl@|GN|OQtS[vGLbLx@rLjAdRzDxNbEvKhE`J`E~I~E`LtHzQjOzF|F~InKlKtN`HxLdeAfnBhG`KnE`GzExFpD~DvEdEnFjElPbLzFdE|InHxEfEfJfJpOzPd@j@~Z~b@jJdLdHdIfNrNbInH`ElDfLvItMdJzGjE|FdElAbAxGjG`GlG`F|FdDtEjDjF|DxGdEzHfFpLrBlFxAhErDtLbBdGfB|HrAbHf@`DpBdOl@dFpD~VjBbLhE|T`@`ChDhVb@dEhAdLdAjLf@tIX~NNxOF|H?fG]jUQjGmAxRMdCMbBuCtXu@pEkAnIq@tH{@tLQ|DUxIOlG@pIDtABpEJbFT~Fj@nJj@rGh@`FTdB`A~FpBrK`ArG~AtMtAnM|@~J~@fNb@`HZrGXrG`@fPHjHHdVUlZFtJJvHLzCvArUh@rGv@nHfBlMbCdNlBxIj@~BrCfKfBzFpA|DlC`HvCdH~AlD~BvEzDfH`F`IzAxB~DpFdD~DzDjEvOfPfCvCvGxIdFxHnJ|PvE`K|ClHfFxMvFxPbBvFpCvJfE|PvAxGdDdPf@pClAnFrG`W|ApGnFjQ`C`HdBxElApDfG~O~BzFjAdCdC~EhCpFdEfJfI~S~IxY~BnHnBvFtDpJz@vBv@xAzAhDpDjHtDjG|FhJzCvDzX`_@~DjGbA~AtCbExC~Ed@~@hCrE|H|NvAdCtFvI`GrIpFdHrFnGbFfFpC`DhDnDtFjGvE`Gx@bA`GjIhCbEhLfSxGlMxDfInDjH|B`ElEnI~E~I`CvD~HpLlFrH`FvGzGnIpE~EfNnN~CzCbCrBhC~BdIzG`JpGxDnCnIvFlKxFzNpHhJrF|AbAfI`GrM`J`OdLvD`DjF`FpG`HlLzL~A`BnEjFvGzI`DtDrAvAj@t@xF~F|GhGfIvGfD|BdJvF~KpFhGlC~I|CxKpCzBh@xB^f@LpFv@jLtAhIb@xHPvEBzLSdG_@dGg@~Fu@dG_AjHw@`EW~DMdD?pDDpHZzJnA`Dl@xEjA|JfDzLzFbCtAhKfE~Bv@rEdA|Dp@xAPdIj@bHH|BCvHm@rEm@tCk@pF}ApBo@dEgBtFmCxDwB~HuDbF}AdCm@hCg@rDe@vDYxFGrEDbJz@tE|@jEpAnDlAdEvBxAx@pFvDtBfBnAlAxD`ElAtAhDhFxCvFtCtGdApClBfGfEhQ\\`B`BfGnB`G|AnDnCpFjBbDtBxCxCtDbDnDnBhB~AnAvFzDdIvDpFfBnCp@zFx@jGh@hDFdE?zF_@hBQnDm@nFoAnC{@bC_ArKcEdMwE~DaBfBo@xAo@bIgC`EiArFiApDg@pDa@|AMbFQxEGzFJtCLbFb@rFx@~Dt@fGxApHdCjInDnGhDjHzE~DvCzGdG`A`AvDhE`HpItBzC|CzEfF~I`BlCz@~AfRb\\l@hAfAdBvI`OfD~FlApBjCrEfDnFxBvCtDzDdBzAfDfCzBpA~DhBdC|@jCt@nCj@jC\\|CXlCFfFCxKi@xDInD?jBDzCJdFj@|Dn@vEdA|Br@dDlAdBx@`A`@bFhC|EhDzDbDtDtDlBzBdC~CbFvHzAdCrE|G~BxCjDxD|B|BxApAhCnBlD`CpC~AjErBfDpAjEpArGvA`Gv@zu@`IdJbAjLn@dLVjDBtIGnPYbA@`_@i@`QSfXa@vOWpRQzNUxOUhJ@tEFrERhIl@nBZvSlC`QdC`n@lIlVfDjFx@|Db@nIr@jFTlJLtHEjKa@rIs@vUkBpMy@jD[xGu@vESrMOtF?`P^fJ`@~Ed@lN`BxN`DvFzAnGjBr|@bZxn@|S`M|DvXjIzKbD`NxDnp@tRzFtBzHhDxCtAbJ`FhHvEhF`E|HzGjGbGrDzD`ElE~EnGvR|X|MdSdDdEdDvDbEdErJlI|ClCtCvBpIpFvEbC~G`DxFvBrDfAbEjAzBj@`HrAfFx@rBThFt@zD\\xDVpELpD@vHEfQm@t@GdEKpf@aBvIk@jGo@~F}@zEaAzMkDnE}AbE_B`IkDxFuCvI{FrFkEdEsDtPwP`OwNhDoDbG_GhDsDjDcE`EgFvEoHfBwCtCmF|EsJxD}IxA}DzB}GbBgGvByIvGo]`B}IdDeShMgs@|AaHxBuHjDkKdM}[|KqYtGoO|F{NrGeP~Pyb@|CiIdOcZdEgGjJeLrGoFjFaEtDeC~RsKz_@gUrLoGjHqE|QiKzQmKfUaMvl@m[~GqDjI_EpGsCbK_EjE}AfImChJiC|FyAjJqBfPyCtNgBfK}@fDWzXsAvPs@jR}@n_@cBdS_AfWkAtUgAlNgAjEk@pH_BzIyBju@i[phAyd@jFgB~FcBtP_Ehb@gJjN_DvIgBtHkBpCy@hCq@vHmC~FqC`DgBvGoE~LaKfc@qa@tIwIr|@gy@hEaEfPeOrFuErEqDhJiGdFsC~@e@pBs@~DeBlC_AxIkCnDy@~H_AbJ}@|HEjA@jBIjE?tBBhN~@~PhC`J|B~NjGnE|B|TjNlCpB|ElCvXfNrHbEzO~IjMhInH~DdHlDbJhDpCdA`GdBhOtCjIhAbHb@pER~U?jGDvH\\lJz@xFt@nHxAhG~AbIfCxAd@vF`CbKrE~Q|HpBv@`RzHpM|FfHvChy@r]bPvHxBhArDvBlHzEvCtBnGfF`KpJ~GpHlDdEpEvFlg@fq@fPhTzPlUbTbYzNrRfPtTxFhH~JfLlApArAfBzDdE`D`DlDdDxAnAd@f@hK|IlDrCzNpKlKzG~CfB~JbGbLzFpLlFfK`EtIvClGtBbHdBbFvArD~@`OvC`ItAtFv@rM|ArPpAjLj@bELpOLxMApEExYeAfQs@~d@oCxOo@tTm@vVqAjJo@|IMvFOtDMrD?fb@PjJJbEAzDFtDLhMThL`@pGZxSl@bCJtMLbE@fU`@pSFzLCxJIvJ[dNMhHSxPs@zKg@~BErH]dSoA|O{@rFo@jf@yCdWcArDMbNQtOKfG?~DJzNLb\\fA~Jl@rQvAjHn@jO~AdMfBtg@hJtNdDdMbDlJjCtNvExJzClMpErR`Ghd@~NdPjFlSfGvGhBzIlBrUtDdHx@~Kv@bFX`LX`T?jTs@hWcCjTmDfu@sMdSuD~PoErQmGzReJz`@qWzNeM|NyKnOkKdQiJ~OyGxQiGdQgE|PgC~QeBpQ{@lZNpXHlSKzOUtN]rSs@pSWdTVvRfAdThB|RpCx[hGbFhAbPtFxDx@bGrBrJpDvJpEhCxAtNpHvRnLtP~KbDzBtNlK`WdS~NhMvNzMzGvGtGvGjNdO~ObRzRpV~B~C|LtPlN~SjKrPhX~a@~InMrB`DzG|I~MpQtP|SvObRvFhGdCrCpOjP`K~KzHzIxA|AtCpDtMxOzOdQ~EfFlAjA|ArApDfDvD|DrE|E|GnGxBlBjG|FpCzBdJzHtMlKlOhLpMdJbJfGvJfGlElCzLdHbNzIxSzPdClBhKlK|DpEjInKhLhPzJhN|ElHjCnEr@pAxBfF|@bCdBnFp@nCnApHd@rCtEz`@tA`Kz@tIvBvPhEl_@VzCVnDVdIDpDAtFe@lKs@dMsArXeAfWo@fMcCdb@u@~IUrFExAg@hM?l@_AdMQvBu@tFm@jDcAnEcB~F_ArCuDzM_AnE}@dGSdB_@bFOdCUhKEjDCdOKvMQ~GI~Ba@tGe@bFw@dGw@xEaEfT{@rE{AvJiAvJi@hGk@jJ[nIOvHAbD@tFLfGr@tSj@lNb@vQBxFCzH[lJg@lJo@zHaAvI_AdHMv@e@tD{B|JsC`LsJzYqCfJ_CjI{BdKuBlMc@vDm@bGo@`He@dIc@vPEtBHtITpMZ|Ir@tJ`@dFjBhRj@lFp@fJ`@fJJhEBhCCfHItB?`DInGY`NgB|j@eEv|AA|BSxFMtGUdSBxJHnGVnJ`@rJh@rHb@`Fj@dF^xCxD`Xv@hFlBfJvG~VxErNbO`\\fJpN~MbQdFbHzGhKnEdIlBxDjLxWd@dAvEbNv@tCbC`Lb@dDz@rJp@tLP|I@`FE~FKlE}@|OsAhTiAhTy@|Rk@nLGlEFxDRtDNbB`@tCZ~Al@hCx@lCbBfEx@vA`AfBfI`KbCtCpBxBjD`EtB|CjBrDdA`CjAzDXbAr@|Db@lDPhCJnBDhFIdCUzD_BdSY`@YjCYxAu@zBWf@o@`Ac@h@g@d@wAz@{@XgBTaA@wBQcKqB_F]yR{@qGSkDWgCg@yBq@}Aq@eAk@aBmAa@a@Sa@YaAE_@OUQMS?[LSZId@?d@Hd@HTgAtJyBjSoBbRFr@aHbp@M|B@bBF`AD^j@jC^`A`@z@~DhH|@tBj@rBVbCpCbk@HjALrDrAxWN`Cf@vE\\jCj@`DfArExC`Lfd@|`BxFlS|HxYnDnMrD|LhBzG^|A`BrF`@pAl@fA\\\\b@XxD~@HLnFbBdCrA\\RzAnAzC`DrCpDhKbPhFpIvAtB`HlIpIxJ|ClD|EdGxDvEpEfGbG~IhBzBt@j@r@Zv@Ph@Hh@BhAE~IkBlD}@nC}@~BeA`CuApB}@pDkAlXsHlAY|@KdAG`C?r@BzARtAZx@ZzAr@z@h@|@fAx@vAXh@h@~AZhA^pBRfBh@lHTzA`@bBlAxERdAx@rHh@`ChBzEh@dA`@p@~@t@d@Xz@\\\\HvAJvBAdA@r@d@XV^h@\\Z\\JNBx@O\\?PJRRb@bAJj@FRNfACh@Ql@{D|ImLlTeIlM_MxN}EvDoFpCyGxCkE~BaBlAoAjAc@j@YLw@b@{@lBSFk@j@QD[E]Q[K_HcFeBq@eB_@qAg@Es@BQ|@aDTaBFm@pANPb@MvAADRHOb@",
+      "last_updated": "2025-07-10T10:09:08.369517+00:00",
+      "fuel_stations": [
+        {
+          "id": "ChIJV5QuGuEgyxQRbYpQwYi6dAo",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Sultan Orhan Mah. Terminal Cad. D: 4, Sultan Orhan, Hasköy Sanayi Sitesi, 41400 Gebze/Kocaeli, Türkiye",
+          "location": {
+            "latitude": 40.8030468,
+            "longitude": 29.4604902
+          },
+          "rating": 4,
+          "websiteUri": "https://www.opet.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 327,
+          "displayName": {
+            "text": "Opet",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJ2VX3G3zfyhQRVld3xgu_cCk",
+          "types": [
+            "gas_station",
+            "coffee_shop",
+            "convenience_store",
+            "cafe",
+            "food_store",
+            "food",
+            "point_of_interest",
+            "store",
+            "establishment"
+          ],
+          "formattedAddress": "Tavşanlı, İstanbul İzmit Yolu, 41040 Gebze/Kocaeli, Türkiye",
+          "location": {
+            "latitude": 40.8096338,
+            "longitude": 29.508748999999998
+          },
+          "rating": 3.9,
+          "websiteUri": "https://find.shell.com/tr/fuel/12792612-tavsanli-gebze/tr_TR",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 37,
+          "displayName": {
+            "text": "Shell",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJNT201NMjyxQRUqdZYzK3_pE",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Diliskelesi, 735. Sk. No:50, 41455 Dilovası/Kocaeli, Türkiye",
+          "location": {
+            "latitude": 40.7742642,
+            "longitude": 29.519946099999995
+          },
+          "rating": 4.2,
+          "websiteUri": "https://www.petrolofisi.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 483,
+          "displayName": {
+            "text": "Petrol Ofisi",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJ3bpdCVQhyxQR2GtsgRy98VE",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Tavşanlı Mah. E5 Karayolu Esentepe Mevki, Gebze Dilovası OSB, 41400 Gebze/Kocaeli, Türkiye",
+          "location": {
+            "latitude": 40.8075135,
+            "longitude": 29.505743600000002
+          },
+          "rating": 4.1,
+          "websiteUri": "https://www.opet.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 792,
+          "displayName": {
+            "text": "Opet",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJ1eSyx94gyxQR6f9HGDtfs7A",
+          "types": [
+            "gas_station",
+            "coffee_shop",
+            "sandwich_shop",
+            "convenience_store",
+            "fast_food_restaurant",
+            "car_wash",
+            "cafe",
+            "food_store",
+            "restaurant",
+            "food",
+            "point_of_interest",
+            "store",
+            "establishment"
+          ],
+          "formattedAddress": "Sultan Orhan, Terminal Cd., 41400 Gebze/Kocaeli, Türkiye",
+          "location": {
+            "latitude": 40.80937,
+            "longitude": 29.46035
+          },
+          "rating": 3.8,
+          "websiteUri": "https://find.shell.com/tr/fuel/10049545-kirazpinari/tr_TR",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 80,
+          "displayName": {
+            "text": "Shell",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJGS7lhtwgyxQRigP0iLLBGOE",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Arapçeşme, Yeni Bağdat Cd. No:755, 41400 Gebze/Kocaeli, Türkiye",
+          "location": {
+            "latitude": 40.810957099999996,
+            "longitude": 29.455444500000002
+          },
+          "rating": 3.9,
+          "websiteUri": "https://www.petrolofisi.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 125,
+          "displayName": {
+            "text": "Petrol Ofisi",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJ06MQzgsjyxQRiySf58-_jhA",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Dilovası OSB, İstanbul İzmit Yolu, 41455 Gebze/Kocaeli, Türkiye",
+          "location": {
+            "latitude": 40.787604800000004,
+            "longitude": 29.5324332
+          },
+          "rating": 3.4,
+          "websiteUri": "https://www.petrolofisi.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 466,
+          "displayName": {
+            "text": "Petrol Ofisi",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJh_DEQPAjyxQRTKxHMEClN88",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Gebze Dilovası OSB, Eynerce Cd. No:6, 41455 Dilovası/Kocaeli, Türkiye",
+          "location": {
+            "latitude": 40.7793826,
+            "longitude": 29.544202799999997
+          },
+          "rating": 3.9,
+          "websiteUri": "https://www.petrolofisi.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 62,
+          "displayName": {
+            "text": "Petrol Ofisi",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJxXnNWaQjyxQRO0AH3NnSY6Y",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "D-1004 Sk, No:10, Dilovası OSB, Dilovası Organize Sanayi Bölgesi 1. Kısım, 41455 Dilovası/Kocaeli, Türkiye",
+          "location": {
+            "latitude": 40.774169,
+            "longitude": 29.548492
+          },
+          "rating": 3.9,
+          "websiteUri": "https://totalistasyonlari.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 35,
+          "displayName": {
+            "text": "SADAŞ",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJgwuLcOQgyxQRy8CsacERSVA",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Barış, Güney Yanyol Cd. No:352, 41235 Gebze/Kocaeli, Türkiye",
+          "location": {
+            "latitude": 40.800741099999996,
+            "longitude": 29.468157
+          },
+          "rating": 3.8,
+          "websiteUri": "https://www.petrolofisi.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 129,
+          "displayName": {
+            "text": "Petrol Ofisi",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJ8e_K1FRbyhQRpbOLTJf7J7w",
+          "types": [
+            "gas_station",
+            "sandwich_shop",
+            "convenience_store",
+            "fast_food_restaurant",
+            "food_store",
+            "restaurant",
+            "point_of_interest",
+            "food",
+            "store",
+            "establishment"
+          ],
+          "formattedAddress": "Engürücük, Gebze-Orhangazi-İzmir Otoyolu, 16600 Gemli̇k/Bursa, Türkiye",
+          "location": {
+            "latitude": 40.3905403,
+            "longitude": 29.142219899999997
+          },
+          "rating": 4,
+          "websiteUri": "https://find.shell.com/tr/fuel/12542343-gemlik-oht-dogu/tr_TR",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 584,
+          "displayName": {
+            "text": "Shell",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJJZvca6BbyhQRfK5vnARatDI",
+          "types": [
+            "gas_station",
+            "convenience_store",
+            "food_store",
+            "point_of_interest",
+            "food",
+            "store",
+            "establishment"
+          ],
+          "formattedAddress": "Hisar, Bursa Yalova Yolu 1. km, 16600 Gemli̇k/Bursa, Türkiye",
+          "location": {
+            "latitude": 40.42295,
+            "longitude": 29.164308
+          },
+          "rating": 3.8,
+          "websiteUri": "https://find.shell.com/tr/fuel/10048794-gemlik/tr_TR",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 77,
+          "displayName": {
+            "text": "Shell",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJMyH97GtayhQROr05Uk7iaGM",
+          "types": [
+            "gas_station",
+            "sandwich_shop",
+            "coffee_shop",
+            "car_wash",
+            "convenience_store",
+            "fast_food_restaurant",
+            "cafe",
+            "food_store",
+            "restaurant",
+            "point_of_interest",
+            "food",
+            "store",
+            "establishment"
+          ],
+          "formattedAddress": "Umurbey, İmamaslan Dinlenme Tesisleri 2588, 16600 Gemli̇k/Bursa, Türkiye",
+          "location": {
+            "latitude": 40.4230418,
+            "longitude": 29.214684499999994
+          },
+          "rating": 4.1,
+          "websiteUri": "https://find.shell.com/tr/fuel/10048811-umurbey/tr_TR",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 29,
+          "displayName": {
+            "text": "Shell",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJ10lBbnZbyhQRkaIxa1ku3PY",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Hisar, 16600 Gemlik/Bursa, Türkiye",
+          "location": {
+            "latitude": 40.4227437,
+            "longitude": 29.155513
+          },
+          "rating": 4.1,
+          "websiteUri": "http://www.burgem.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 433,
+          "displayName": {
+            "text": "Opet Gemlik Burgem Akaryakıt",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJxzwVb3dbyhQR0xLk_hCZxYg",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Hisar, Dörtyol Ağzı Mevkii, 16600 Gemli̇k/Bursa, Türkiye",
+          "location": {
+            "latitude": 40.4229378,
+            "longitude": 29.1540492
+          },
+          "rating": 3.9,
+          "websiteUri": "https://www.petrolofisi.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 96,
+          "displayName": {
+            "text": "Petrol Ofisi",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJF5YeTnZbyhQRJmw_bUju95Q",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Hisartepe Mah. Gemlik Sümerbank Girişi, Balıkçı Barinağı, Ata, 16600 Gemli̇k/Bursa, Türkiye",
+          "location": {
+            "latitude": 40.422156199999996,
+            "longitude": 29.151544299999998
+          },
+          "rating": 3.8,
+          "websiteUri": "https://www.petrolofisi.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 160,
+          "displayName": {
+            "text": "Petrol Ofisi",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJv5Ki9uxdyhQRFBei-q1kabs",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Cumhuriyet, Kumla Cd. No:206/1, 16620 Gemli̇k/Bursa, Türkiye",
+          "location": {
+            "latitude": 40.4454214,
+            "longitude": 29.1360805
+          },
+          "rating": 3.2,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 56,
+          "displayName": {
+            "text": "BP",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJqX1gNKNcyhQRji47MoJVE6w",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Ata Mah. Sanayi Cad. No:2, Ata, 16600 Gemli̇k/Bursa, Türkiye",
+          "location": {
+            "latitude": 40.409818800000004,
+            "longitude": 29.1275906
+          },
+          "rating": 4.3,
+          "websiteUri": "http://www.tppd.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 4,
+          "displayName": {
+            "text": "Türkiye Petrolleri",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJUQm_6lJayhQRrzKr3GibuHo",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Umurbey, 16600 Gemlik/Bursa, Türkiye",
+          "location": {
+            "latitude": 40.4237079,
+            "longitude": 29.1865891
+          },
+          "rating": 5,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 1,
+          "displayName": {
+            "text": "Liman",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJQyJay0tFyhQRuwkpQYybqf4",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Engürücük, 16600 Gemlik/Bursa, Türkiye",
+          "location": {
+            "latitude": 40.3899705,
+            "longitude": 29.141982499999997
+          },
+          "rating": 3,
+          "websiteUri": "http://www.zes.net/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 2,
+          "displayName": {
+            "text": "ZES",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJWwjHcSv3tRQRWC5ZqkG59ac",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Muratlı Mahallesi Muratlı Sokağı No:119/3 ( Ada:- , Pafta:- , Parsel:, Muratlı, 16700 Karacabey/Bursa, Türkiye",
+          "location": {
+            "latitude": 40.272,
+            "longitude": 28.6028
+          },
+          "rating": 4.4,
+          "websiteUri": "http://www.totalistasyonlari.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 80,
+          "displayName": {
+            "text": "TotalEnergies İstasyonu",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJuTFJWf_3tRQR2Gi_0eMdbvg",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Muratlı Mahallesi Muratlı Sokağı No:119/2 ( Ada:- , Pafta:- , Parsel:, Muratlı, 16700 Karacabey/Bursa, Türkiye",
+          "location": {
+            "latitude": 40.2737,
+            "longitude": 28.5985
+          },
+          "rating": 3.8,
+          "websiteUri": "http://www.totalistasyonlari.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 22,
+          "displayName": {
+            "text": "TotalEnergies İstasyonu",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJq0nlUKH3tRQRQJuo5OjMMW0",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Taşpınar, Kırkdamla Mevkii, 16700 Karacabey/Bursa, Türkiye",
+          "location": {
+            "latitude": 40.258351,
+            "longitude": 28.619041
+          },
+          "rating": 4,
+          "websiteUri": "http://www.tppd.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 4,
+          "displayName": {
+            "text": "Türkiye Petrolleri",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJxwEHs7L3tRQRF8madbZ3KYc",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Mudanya Yenikaraağaç Yolu, Çayönü, Karakol Yanı, 16970 Mudanya/Bursa, Türkiye",
+          "location": {
+            "latitude": 40.294207,
+            "longitude": 28.649656399999998
+          },
+          "rating": 4.7,
+          "websiteUri": "http://www.tppd.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 3,
+          "displayName": {
+            "text": "Türkiye Petrolleri",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJiQhnTXP2tRQR-9EzSjsH4Ao",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Çayönü, 16970 Mudanya/Bursa, Türkiye",
+          "location": {
+            "latitude": 40.294182,
+            "longitude": 28.649715099999995
+          },
+          "rating": 2.9,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 9,
+          "displayName": {
+            "text": "Erk-mustafa Koç Petrol",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJ5xWdrMr3tRQR9e91qIwDCe8",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Taşpınar, Mudanya Yenikaraağaç Yolu, 16700 Karacabey/Bursa, Türkiye",
+          "location": {
+            "latitude": 40.261654,
+            "longitude": 28.650185999999998
+          },
+          "businessStatus": "OPERATIONAL",
+          "displayName": {
+            "text": "TP",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJwxMuHg_3tRQRLE52r7jVr5o",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Taşpınar, 16700 Karacabey/Bursa, Türkiye",
+          "location": {
+            "latitude": 40.258438,
+            "longitude": 28.618976999999997
+          },
+          "businessStatus": "OPERATIONAL",
+          "displayName": {
+            "text": "Turkuaz",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJHW95HhhpthQRU3ThJ-rnPNQ",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Şeker, Bandırma Cad No:171/A, 10600 Susurluk/Balıkesir, Türkiye",
+          "location": {
+            "latitude": 39.9544103,
+            "longitude": 28.1702519
+          },
+          "rating": 4.2,
+          "websiteUri": "https://www.petrolofisi.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 79,
+          "displayName": {
+            "text": "Petrol Ofisi",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJl4lnWRdvthQR4p-AJ7HARUw",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Karapürçek, Karapürçek Cad No:60, 10600 Susurluk/Balıkesir, Türkiye",
+          "location": {
+            "latitude": 39.988019099999995,
+            "longitude": 28.2006147
+          },
+          "rating": 3.8,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 32,
+          "displayName": {
+            "text": "BP",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJ43Bz5i9pthQR6gRLd_9btIc",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Balıklıdere, 10602 Susurluk/Balıkesir, Türkiye",
+          "location": {
+            "latitude": 39.965742999999996,
+            "longitude": 28.170149
+          },
+          "rating": 4.2,
+          "websiteUri": "http://www.total.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 56,
+          "displayName": {
+            "text": "Total-ilhanoğlu Petrol",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJLxzN3ptvthQRgQARfWr-1LI",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Göbel, İstiklal Hürriyet Cad No:2, 10610 Susurluk/Balıkesir, Türkiye",
+          "location": {
+            "latitude": 40.0195065,
+            "longitude": 28.1524248
+          },
+          "rating": 3.8,
+          "websiteUri": "https://www.petrolofisi.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 19,
+          "displayName": {
+            "text": "Petrol Ofisi",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJ_UQ63i9pthQRcB4_QsGwtCM",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Balıklıdere, Şosa Arası Bandırma Caddesi no:201/1, 10600 Susurluk/Balıkesir, Türkiye",
+          "location": {
+            "latitude": 39.9656516,
+            "longitude": 28.1700889
+          },
+          "rating": 3.3,
+          "websiteUri": "https://www.aytemiz.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 58,
+          "displayName": {
+            "text": "Aytemiz",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJNzEyP8xtthQRbqZbz-OqOJQ",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Mustafakemalpaşa-izmir Karayolu Üzeri Bayır Mevkii, Taşköprü, 16500 Mustafakemalpaşa/Bursa, Türkiye",
+          "location": {
+            "latitude": 40.002272999999995,
+            "longitude": 28.221613899999998
+          },
+          "rating": 3.8,
+          "websiteUri": "http://www.euroil.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 66,
+          "displayName": {
+            "text": "Euroil",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJCxqjwxlpthQRWYrRV7PRsmI",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Şeker, Bursa Balıkesir Yolu, 10602 Susurluk/Balıkesir, Türkiye",
+          "location": {
+            "latitude": 39.95209500000001,
+            "longitude": 28.169827
+          },
+          "rating": 3.5,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 22,
+          "displayName": {
+            "text": "Parkoil",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJsT5afN9vthQRG4Nrbeyz9hE",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Karapürçek, 10600 Susurluk/Balıkesir, Türkiye",
+          "location": {
+            "latitude": 39.990044399999995,
+            "longitude": 28.2020874
+          },
+          "businessStatus": "OPERATIONAL",
+          "displayName": {
+            "text": "Kadoil",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJgacLdUtpthQRd2bHpb_Pjk0",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Şeker, 10600 Susurluk/Balıkesir, Türkiye",
+          "location": {
+            "latitude": 39.9519455,
+            "longitude": 28.1700964
+          },
+          "rating": 3.7,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 3,
+          "displayName": {
+            "text": "LİMAN AKARYAKIT",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJfZqxeMluthQRbpqfi6ELDPg",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Yahyaköy Mh, Balıkesir Bursa Yolu, 10602 Susurluk/Balıkesir, Türkiye",
+          "location": {
+            "latitude": 39.9767826,
+            "longitude": 28.1795323
+          },
+          "businessStatus": "OPERATIONAL",
+          "displayName": {
+            "text": "Marina",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJUbni01kdtxQRdiO1V6S_rbQ",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Naipli Mh. Bursa İzmir Otoyolu No:75, Naipli, 10010 Karesi/Balıkesir, Türkiye",
+          "location": {
+            "latitude": 39.655699999999996,
+            "longitude": 27.731099999999998
+          },
+          "rating": 4.1,
+          "websiteUri": "https://www.petrolofisi.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 1363,
+          "displayName": {
+            "text": "Petrol Ofisi",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJudtv1ecbtxQRRDKBmUAcbKg",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Bakacak Mah. Bursa İzmir Otoyolu No:70, Bakacak, 10010 Karesi/Balıkesir, Türkiye",
+          "location": {
+            "latitude": 39.654524099999996,
+            "longitude": 27.7287334
+          },
+          "rating": 4.3,
+          "websiteUri": "https://www.petrolofisi.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 872,
+          "displayName": {
+            "text": "Petrol Ofisi",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJicsX-Wr_thQR24lCxZslV0o",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Edremit yolu üzeri , Naipli köyüne gelmeden, Kalaycılar, 10010 Karesi/Balıkesir, Türkiye",
+          "location": {
+            "latitude": 39.646280499999996,
+            "longitude": 27.7857772
+          },
+          "rating": 4.4,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 83,
+          "displayName": {
+            "text": "Opet - Esbaş Petrol",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJD-GWBS8DtxQRFzhIIs589eQ",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Naipli, Balıkesir Edremit Yolu No:5, 10185 Karesi/Balıkesir, Türkiye",
+          "location": {
+            "latitude": 39.6455705,
+            "longitude": 27.768329899999998
+          },
+          "rating": 4.2,
+          "websiteUri": "https://www.petrolofisi.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 70,
+          "displayName": {
+            "text": "Petrol Ofisi",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJDzcWuz8DtxQRY383psXlugc",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Kalaycılar, Köy Sokağı No:200/A, 10010 Karesi/Balıkesir, Türkiye",
+          "location": {
+            "latitude": 39.645612299999996,
+            "longitude": 27.778508799999997
+          },
+          "rating": 4.1,
+          "websiteUri": "http://www.tppd.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 83,
+          "displayName": {
+            "text": "Türkiye Petrolleri",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJmxpxpk8DtxQRY4d_gPlSLEg",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Naipli, 10010 Balıkesir Merkez/Balıkesir, Türkiye",
+          "location": {
+            "latitude": 39.639736,
+            "longitude": 27.7469899
+          },
+          "rating": 3.4,
+          "websiteUri": "http://www.soil.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 30,
+          "displayName": {
+            "text": "Soil-ünata Akaryakıt",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJRfFSz6cDtxQRRlSbuEUiLr8",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "çevre yolu 10 km., petrol ofisi akaryakıt istasyonu., Kalaycılar, 10010 Karesi/Balıkesir, Türkiye",
+          "location": {
+            "latitude": 39.645618,
+            "longitude": 27.786483
+          },
+          "rating": 2.9,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 7,
+          "displayName": {
+            "text": "necat akaryakıt otomotiv A.Ş.",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJPd05qU8DtxQRsQQXLaHiqMw",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Naipli Mh, Naipli, Balıkesir Edremit Yolu, 10010 Karesi/Balıkesir, Türkiye",
+          "location": {
+            "latitude": 39.6398487,
+            "longitude": 27.7466084
+          },
+          "rating": 3.2,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 14,
+          "displayName": {
+            "text": "Nipet",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJQz8Fr08DtxQR9H-Rpu4DRs4",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Naipli, 10010 Karesi/Balıkesir, Türkiye",
+          "location": {
+            "latitude": 39.639663999999996,
+            "longitude": 27.7467232
+          },
+          "businessStatus": "OPERATIONAL",
+          "displayName": {
+            "text": "Welloil",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJQz8Fr08DtxQRARie66RAPiQ",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Naipli, 10010 Karesi/Balıkesir, Türkiye",
+          "location": {
+            "latitude": 39.639663999999996,
+            "longitude": 27.7467232
+          },
+          "businessStatus": "OPERATIONAL",
+          "displayName": {
+            "text": "Türk Park",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJFSg8p1apuBQRU_A4kGoRR7k",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Kurtuluş Mah. Hürriyet Blv. No:10, Turgutalp, 45530 Soma/Manisa, Türkiye",
+          "location": {
+            "latitude": 39.197960099999996,
+            "longitude": 27.566794899999998
+          },
+          "rating": 4.4,
+          "websiteUri": "https://www.petrolofisi.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 32,
+          "displayName": {
+            "text": "Petrol Ofisi",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJ6SH5cEVntxQR63S4rs1Af_8",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Hatun, Benzinlik İç Yolu, 45500 Soma/Manisa, Türkiye",
+          "location": {
+            "latitude": 39.2254546,
+            "longitude": 27.564103799999998
+          },
+          "rating": 4.4,
+          "websiteUri": "http://www.termo.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 10,
+          "displayName": {
+            "text": "( KÜÇÜKLER//PETROL ) ( CAfE gRaF )",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJ03no4qhhtxQRs9grpxvW_Fk",
+          "types": [
+            "gas_station",
+            "food_store",
+            "point_of_interest",
+            "food",
+            "store",
+            "establishment"
+          ],
+          "formattedAddress": "Tugutalp Mah. Savaştepe Cad. No: 42, Turgutalp, Balıkesir Savaştepe Yolu Üzeri, 45500 Soma/Manisa, Türkiye",
+          "location": {
+            "latitude": 39.1979663,
+            "longitude": 27.566796800000002
+          },
+          "rating": 4.4,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 47,
+          "displayName": {
+            "text": "Seçkin Petrol Soma (AZİZ KURT)",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJZzrhdkVntxQRNaCWDfynmBY",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Hatun, 45500 Soma/Manisa, Türkiye",
+          "location": {
+            "latitude": 39.2252435,
+            "longitude": 27.563999499999998
+          },
+          "rating": 5,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 1,
+          "displayName": {
+            "text": "Exen Gaz",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJ0zvRUMe_uRQREDINFffr_P8",
+          "types": [
+            "gas_station",
+            "coffee_shop",
+            "car_wash",
+            "convenience_store",
+            "cafe",
+            "food_store",
+            "point_of_interest",
+            "food",
+            "store",
+            "establishment"
+          ],
+          "formattedAddress": "İshakçelebi, Manisa Akhisar Yolu, 45010 Saruhanlı/Manisa, Türkiye",
+          "location": {
+            "latitude": 38.75745,
+            "longitude": 27.63546
+          },
+          "rating": 3,
+          "websiteUri": "https://find.shell.com/tr/fuel/12774820-manisa-girisi/tr_TR",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 42,
+          "displayName": {
+            "text": "Shell",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJD9e6StW9uRQRStwXBGUpgus",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "İshakçelebi, Cengiz Topel Caddesi No:1, 45820 Saruhanlı/Manisa, Türkiye",
+          "location": {
+            "latitude": 38.7690316,
+            "longitude": 27.6562883
+          },
+          "rating": 4.1,
+          "websiteUri": "https://www.aytemiz.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 7,
+          "displayName": {
+            "text": "Aytemiz",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJY0MSNqfHuRQRAm4JxDYakNo",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Tirkeş, TİRKEŞ SOKAĞI No:501, 45800 Saruhanlı/Manisa, Türkiye",
+          "location": {
+            "latitude": 38.81748,
+            "longitude": 27.699237
+          },
+          "rating": 4.1,
+          "websiteUri": "http://www.aytemiz.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 61,
+          "displayName": {
+            "text": "Aytemiz SARUHANLI",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJc8SwKZS4uRQR4heczJ9-kNc",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Koyuncu, Balıkesir Manisa Yolu No:45800, 45800 Saruhanlı/Manisa, Türkiye",
+          "location": {
+            "latitude": 38.786925,
+            "longitude": 27.670396999999998
+          },
+          "rating": 3.2,
+          "websiteUri": "https://www.alpet.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 15,
+          "displayName": {
+            "text": "Alpet",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJe5120s6-uRQRp_NUAQoUYyk",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "İshakçelebi, 45820 Saruhanlı/Manisa, Türkiye",
+          "location": {
+            "latitude": 38.757445,
+            "longitude": 27.6354018
+          },
+          "rating": 4.3,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 11,
+          "displayName": {
+            "text": "M Oil",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJFxwEhyu5uRQREBmGgBhgry8",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "İshakçelebi, 45820 Saruhanlı/Manisa, Türkiye",
+          "location": {
+            "latitude": 38.764002,
+            "longitude": 27.6469211
+          },
+          "rating": 3.5,
+          "websiteUri": "http://www.enerjipetrol.com/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 2,
+          "displayName": {
+            "text": "Energy-gediz Petrol",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJY6B-oNK-uRQRCrz8Ow0ZyfI",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "İshakçelebi, 45820 Saruhanlı/Manisa, Türkiye",
+          "location": {
+            "latitude": 38.7603659,
+            "longitude": 27.642183
+          },
+          "rating": 5,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 4,
+          "displayName": {
+            "text": "Şahh",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJqynhzc6-uRQRMgXvsfShk5Y",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "İshakçelebi, Manisa Akhisar Yolu, 45820 Saruhanlı/Manisa, Türkiye",
+          "location": {
+            "latitude": 38.757498399999996,
+            "longitude": 27.6354962
+          },
+          "rating": 3.9,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 18,
+          "displayName": {
+            "text": "OtoMilangaz - Kaan Petrol",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJ96-yURLHuRQRYYJtrHZ1ftk",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Tirkeş, Manisa Akhisar Yolu, 45800 Saruhanlı/Manisa, Türkiye",
+          "location": {
+            "latitude": 38.8173965,
+            "longitude": 27.699294899999998
+          },
+          "rating": 5,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 1,
+          "displayName": {
+            "text": "SMF PETROL LOJİSTİK",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJpXFoI6jHuRQRo_eLh8eSoVo",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Dilek, Atatürk Cd., 45804 Saruhanlı/Manisa, Türkiye",
+          "location": {
+            "latitude": 38.826638599999995,
+            "longitude": 27.6909711
+          },
+          "rating": 5,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 3,
+          "displayName": {
+            "text": "Bosspet - Asyak Petrol",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJh3Rytb18uRQRT054FFN8ABs",
+          "types": [
+            "gas_station",
+            "coffee_shop",
+            "sandwich_shop",
+            "convenience_store",
+            "car_wash",
+            "cafe",
+            "food_store",
+            "restaurant",
+            "food",
+            "point_of_interest",
+            "store",
+            "establishment"
+          ],
+          "formattedAddress": "Evka 3, 129. Sk. No:4, 35040 Bornova/İzmir, Türkiye",
+          "location": {
+            "latitude": 38.458475,
+            "longitude": 27.251692
+          },
+          "rating": 4,
+          "websiteUri": "https://find.shell.com/tr/fuel/10050056-4-sanayi-bornova/tr_TR",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 152,
+          "displayName": {
+            "text": "Shell",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJKW1PkD9juRQRLHGYtTyAKxE",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Egemenlik, 6108/1. Sk. No:3, 35070 Bornova/İzmir, Türkiye",
+          "location": {
+            "latitude": 38.4263,
+            "longitude": 27.2436
+          },
+          "rating": 4.4,
+          "websiteUri": "https://www.opet.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 131,
+          "displayName": {
+            "text": "Opet",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJz7ZgFdh8uRQRZv4GwmCk2UI",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Erzene Mahallesi Ankara Cad, Erzene, Ankara Asfaltı Cd. No:216, 35040 Bornova/İzmir, Türkiye",
+          "location": {
+            "latitude": 38.4543748,
+            "longitude": 27.2596751
+          },
+          "rating": 4.2,
+          "websiteUri": "http://www.total.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 161,
+          "displayName": {
+            "text": "Total",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJy7NH0FV7uRQRxrxtGvjoEYk",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Karacaoğlan, Kemalpaşa Cd. No: 62, 35060 Bornova/İzmir, Türkiye",
+          "location": {
+            "latitude": 38.440818199999995,
+            "longitude": 27.269866699999998
+          },
+          "rating": 4.2,
+          "websiteUri": "https://www.opet.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 253,
+          "displayName": {
+            "text": "Opet",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJQU5MlGB6uRQRly9BPq19RiM",
+          "types": [
+            "gas_station",
+            "coffee_shop",
+            "convenience_store",
+            "fast_food_restaurant",
+            "cafe",
+            "food_store",
+            "restaurant",
+            "food",
+            "point_of_interest",
+            "store",
+            "establishment"
+          ],
+          "formattedAddress": "Kemalpaşa OSB, Ankara Asfaltı Cd. No:10 D:10, 35735 Kemalpaşa/İzmir, Türkiye",
+          "location": {
+            "latitude": 38.461642999999995,
+            "longitude": 27.339396999999998
+          },
+          "rating": 4.3,
+          "websiteUri": "https://find.shell.com/tr/fuel/10050123-cinarlicesme-guney/tr_TR",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 199,
+          "displayName": {
+            "text": "Shell",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJC5S-Z0xjuRQRlTf1B9F353M",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Kemalpaşa, 7405/2. Sk. No:5, 35060 Bornova/İzmir, Türkiye",
+          "location": {
+            "latitude": 38.4383333,
+            "longitude": 27.2513889
+          },
+          "rating": 4,
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 144,
+          "displayName": {
+            "text": "Shell - Pınarbaşı İzmir İstasyonu",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJn8Ya_aN8uRQRH3B0fhs1iXM",
+          "types": [
+            "gas_station",
+            "coffee_shop",
+            "convenience_store",
+            "cafe",
+            "food_store",
+            "food",
+            "point_of_interest",
+            "store",
+            "establishment"
+          ],
+          "formattedAddress": "Doğanlar, Ankara Cd., 35050 Bornova/İzmir, Türkiye",
+          "location": {
+            "latitude": 38.4535811,
+            "longitude": 27.2614676
+          },
+          "rating": 4.2,
+          "websiteUri": "https://find.shell.com/tr/fuel/10048974-naldoken/tr_TR",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 37,
+          "displayName": {
+            "text": "Shell",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJY8njksQKwRQRqiotfrhwTYg",
+          "types": [
+            "gas_station",
+            "point_of_interest",
+            "establishment"
+          ],
+          "formattedAddress": "Doğanlar, Ankara Cd. No:214, 35050 Bornova/İzmir, Türkiye",
+          "location": {
+            "latitude": 38.4545623,
+            "longitude": 27.2591412
+          },
+          "rating": 4,
+          "websiteUri": "https://www.petrolofisi.com.tr/",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 32,
+          "displayName": {
+            "text": "Petrol Ofisi",
+            "languageCode": "tr"
+          }
+        },
+        {
+          "id": "ChIJNZ_oeVxjuRQR5lYH69PciTE",
+          "types": [
+            "gas_station",
+            "coffee_shop",
+            "convenience_store",
+            "fast_food_restaurant",
+            "cafe",
+            "food_store",
+            "car_repair",
+            "restaurant",
+            "food",
+            "point_of_interest",
+            "store",
+            "establishment"
+          ],
+          "formattedAddress": "Gürpınar, 7004. Sk., 35060 Bornova/İzmir, Türkiye",
+          "location": {
+            "latitude": 38.424403,
+            "longitude": 27.259483
+          },
+          "rating": 4,
+          "websiteUri": "https://find.shell.com/tr/fuel/12293958-isikkent-baglanti-yolu/tr_TR",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 70,
+          "displayName": {
+            "text": "Shell",
+            "languageCode": "en"
+          }
+        },
+        {
+          "id": "ChIJV53HpGB6uRQRfqvkDvrSYzo",
+          "types": [
+            "gas_station",
+            "coffee_shop",
+            "convenience_store",
+            "fast_food_restaurant",
+            "cafe",
+            "food_store",
+            "restaurant",
+            "food",
+            "point_of_interest",
+            "store",
+            "establishment"
+          ],
+          "formattedAddress": "Kemalpaşa OSB, Ankara Asfaltı Cd. 13-2, 35735 Kemalpaşa/İzmir, Türkiye",
+          "location": {
+            "latitude": 38.462376,
+            "longitude": 27.338818999999997
+          },
+          "rating": 4.2,
+          "websiteUri": "https://find.shell.com/tr/fuel/10049422-cinarlicesme-kuzey/tr_TR",
+          "businessStatus": "OPERATIONAL",
+          "userRatingCount": 68,
+          "displayName": {
+            "text": "Shell",
+            "languageCode": "en"
+          }
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "api_source": "Google Routes API & Google Places API",
+    "data_quality": "real_time",
+    "collection_timestamp": "2025-07-10T10:09:10.370625+00:00",
+    "version": "2.0"
+  }
+}
