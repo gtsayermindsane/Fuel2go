@@ -16,7 +16,26 @@ from config import constants
 
 @dataclass
 class FuelStationData:
-    """Benzin istasyonu veri modeli"""
+    """
+    Bir benzin istasyonunun tüm verilerini temsil eden veri sınıfı (dataclass).
+    
+    Attributes:
+        station_id (str): İstasyonun benzersiz kimliği.
+        name (str): İstasyonun adı.
+        brand (str): İstasyonun markası (örn: Shell, BP).
+        country (str): İstasyonun bulunduğu ülke.
+        region (str): İstasyonun bulunduğu bölge.
+        latitude (float): Enlem.
+        longitude (float): Boylam.
+        address (str): Tam adresi.
+        fuel_types (List[str]): Mevcut yakıt türleri.
+        services (List[str]): Sunulan hizmetler (örn: Market, Oto Yıkama).
+        rating (float): Kullanıcı puanı (örn: 4.5).
+        review_count (int): Toplam yorum sayısı.
+        operating_hours (Dict[str, str]): Çalışma saatleri.
+        price_data (Dict[str, float]): Yakıt fiyat bilgileri.
+        last_updated (datetime): Verinin son güncellenme zamanı.
+    """
     station_id: str
     name: str
     brand: str
@@ -34,6 +53,15 @@ class FuelStationData:
     last_updated: datetime
     
     def to_dict(self) -> Dict[str, Any]:
+        """
+        FuelStationData nesnesini, veritabanına yazmaya uygun bir sözlüğe dönüştürür.
+        
+        Liste ve sözlük gibi karmaşık tipler, veritabanına kaydedilebilmesi için
+        JSON string formatına çevrilir.
+
+        Returns:
+            Dict[str, Any]: Veritabanı kaydına uygun anahtar-değer çiftlerini içeren sözlük.
+        """
         return {
             'station_id': self.station_id,
             'name': self.name,
@@ -54,7 +82,28 @@ class FuelStationData:
 
 @dataclass
 class RouteData:
-    """Rota veri modeli"""
+    """
+    Bir rotanın tüm verilerini ve analizlerini temsil eden veri sınıfı (dataclass).
+    
+    Attributes:
+        route_id (str): Rotanın benzersiz kimliği.
+        origin_lat (float): Başlangıç noktası enlemi.
+        origin_lng (float): Başlangıç noktası boylamı.
+        dest_lat (float): Varış noktası enlemi.
+        dest_lng (float): Varış noktası boylamı.
+        distance_km (float): Toplam mesafe (km).
+        duration_minutes (float): Tahmini seyahat süresi (dakika).
+        traffic_delay_minutes (float): Trafiğe bağlı gecikme (dakika).
+        fuel_consumption_liters (float): Tahmini yakıt tüketimi (litre).
+        carbon_emission_kg (float): Tahmini karbon emisyonu (kg).
+        weather_conditions (Dict[str, Any]): Rota başlangıcındaki hava durumu.
+        traffic_conditions (Dict[str, Any]): Rota genelindeki trafik durumu.
+        road_conditions (Dict[str, Any]): Yol durumu bilgileri.
+        vehicle_type (str): Rota için kullanılan araç tipi.
+        fuel_stations_en_route (List[str]): Rota üzerindeki istasyonların kimlikleri.
+        cost_analysis (Dict[str, float]): Yakıt ve diğer masrafların analizi.
+        created_at (datetime): Rota verisinin oluşturulma zamanı.
+    """
     route_id: str
     origin_lat: float
     origin_lng: float
@@ -74,6 +123,12 @@ class RouteData:
     created_at: datetime
     
     def to_dict(self) -> Dict[str, Any]:
+        """
+        RouteData nesnesini, veritabanına yazmaya uygun bir sözlüğe dönüştürür.
+
+        Returns:
+            Dict[str, Any]: Veritabanı kaydına uygun anahtar-değer çiftlerini içeren sözlük.
+        """
         return {
             'route_id': self.route_id,
             'origin_lat': self.origin_lat,
@@ -95,14 +150,31 @@ class RouteData:
         }
 
 class DataWarehouse:
-    """Veri ambarı sınıfı - SQLite tabanlı"""
+    """
+    SQLite tabanlı veri ambarı yönetimi sınıfı.
+    
+    Bu sınıf, veritabanı bağlantısını kurar, gerekli tabloları oluşturur (eğer yoksa)
+    ve veri ekleme, sorgulama gibi temel veritabanı işlemlerini yönetir.
+    """
     
     def __init__(self, db_path: str = constants.DB_PATH):
+        """
+        DataWarehouse sınıfını başlatır.
+
+        Args:
+            db_path (str, optional): SQLite veritabanı dosyasının yolu.
+                                     Varsayılan olarak `constants.DB_PATH`.
+        """
         self.db_path = db_path
         self.init_database()
     
     def init_database(self):
-        """Veritabanı tablolarını oluştur"""
+        """
+        Veritabanını ve gerekli tabloları (fuel_stations, routes vb.) başlatır.
+        
+        Eğer tablolar mevcut değilse, `constants` dosyasında tanımlanan
+        CREATE TABLE sorgularını kullanarak tabloları oluşturur.
+        """
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
@@ -116,7 +188,15 @@ class DataWarehouse:
         conn.close()
     
     def insert_fuel_station(self, station: FuelStationData):
-        """Benzin istasyonu verisi ekle"""
+        """
+        Veritabanına bir benzin istasyonu kaydı ekler veya mevcut kaydı günceller.
+        
+        `INSERT OR REPLACE` komutu sayesinde, aynı `station_id`'ye sahip bir kayıt
+        varsa, eski kayıt silinir ve yenisi eklenir.
+
+        Args:
+            station (FuelStationData): Eklenecek istasyon verilerini içeren nesne.
+        """
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
@@ -135,7 +215,12 @@ class DataWarehouse:
         conn.close()
     
     def insert_route(self, route: RouteData):
-        """Rota verisi ekle"""
+        """
+        Veritabanına bir rota kaydı ekler veya mevcut kaydı günceller.
+
+        Args:
+            route (RouteData): Eklenecek rota verilerini içeren nesne.
+        """
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
@@ -154,7 +239,15 @@ class DataWarehouse:
         conn.close()
     
     def get_stations_by_country(self, country: str) -> pd.DataFrame:
-        """Ülkeye göre istasyonları getir"""
+        """
+        Belirtilen ülkedeki tüm benzin istasyonlarını bir pandas DataFrame olarak döndürür.
+
+        Args:
+            country (str): Sorgulanacak ülkenin adı.
+
+        Returns:
+            pd.DataFrame: Ülkedeki istasyonları içeren DataFrame.
+        """
         conn = sqlite3.connect(self.db_path)
         df = pd.read_sql_query(
             constants.SQL_SELECT_STATIONS_BY_COUNTRY,
@@ -164,7 +257,16 @@ class DataWarehouse:
         return df
     
     def get_routes_by_date_range(self, start_date: str, end_date: str) -> pd.DataFrame:
-        """Tarih aralığına göre rotaları getir"""
+        """
+        Belirtilen tarih aralığında oluşturulmuş rotaları bir pandas DataFrame olarak döndürür.
+
+        Args:
+            start_date (str): Başlangıç tarihi (örn: '2023-01-01').
+            end_date (str): Bitiş tarihi (örn: '2023-12-31').
+
+        Returns:
+            pd.DataFrame: Tarih aralığındaki rotaları içeren DataFrame.
+        """
         conn = sqlite3.connect(self.db_path)
         df = pd.read_sql_query(
             constants.SQL_SELECT_ROUTES_BY_DATE,
@@ -174,7 +276,16 @@ class DataWarehouse:
         return df
     
     def get_analytics_summary(self) -> Dict[str, Any]:
-        """Analitik özet"""
+        """
+        Veritabanındaki verilerden genel bir analitik özet oluşturur.
+
+        Toplam istasyon ve rota sayısı, ortalama karbon emisyonu ve yakıt tüketimi,
+        ülke bazında istasyon dağılımı ve araç tipine göre emisyon ortalamaları
+        gibi temel metrikleri hesaplar.
+
+        Returns:
+            Dict[str, Any]: Analitik özet metriklerini içeren bir sözlük.
+        """
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
@@ -212,15 +323,39 @@ class DataWarehouse:
         }
 
 class RealTimeDataCollector:
-    """Gerçek zamanlı veri toplama sistemi"""
+    """
+    Hava durumu, trafik, yakıt tüketimi gibi gerçek zamanlı veya mock verileri
+    toplayan ve hesaplayan yardımcı sınıf.
+    
+    Bu sınıf, bir rota için anlık koşulları simüle etmek veya gerçek API'lerden
+    veri çekmek için kullanılır. Mevcut haliyle mock veriler üretmektedir.
+    """
     
     def __init__(self, warehouse: DataWarehouse):
+        """
+        RealTimeDataCollector sınıfını başlatır.
+
+        Args:
+            warehouse (DataWarehouse): Veritabanı işlemleri için kullanılacak
+                                       DataWarehouse nesnesi.
+        """
         self.warehouse = warehouse
         self.weather_api_key = None  # Meteoroloji API anahtarı
         self.traffic_api_key = None  # Trafik API anahtarı
     
     def collect_weather_data(self, lat: float, lng: float) -> Dict[str, Any]:
-        """Hava durumu verisi topla"""
+        """
+        Belirtilen konum için (mock) hava durumu verisi oluşturur.
+        
+        Gerçek bir implementasyonda OpenWeatherMap gibi bir API çağrısı yapabilir.
+
+        Args:
+            lat (float): Enlem.
+            lng (float): Boylam.
+
+        Returns:
+            Dict[str, Any]: Hava durumu metriklerini içeren sözlük.
+        """
         # OpenWeatherMap veya benzeri API kullanılabilir
         # Şimdilik mock data
         return {
@@ -233,7 +368,17 @@ class RealTimeDataCollector:
         }
     
     def collect_traffic_data(self, route_polyline: str) -> Dict[str, Any]:
-        """Trafik verisi topla"""
+        """
+        Belirtilen rota için (mock) trafik verisi oluşturur.
+
+        Gerçek bir implementasyonda Google Traffic API gibi bir servis kullanılabilir.
+
+        Args:
+            route_polyline (str): Trafik verisinin toplanacağı rota polyline'ı.
+
+        Returns:
+            Dict[str, Any]: Trafik durumu metriklerini içeren sözlük.
+        """
         # Google Traffic API veya Mapbox Traffic API kullanılabilir
         # Şimdilik mock data
         return {
@@ -246,7 +391,18 @@ class RealTimeDataCollector:
     
     def calculate_fuel_consumption(self, distance_km: float, vehicle_type: str, 
                                  traffic_factor: float = 1.0) -> float:
-        """Yakıt tüketimi hesapla"""
+        """
+        Verilen mesafe, araç tipi ve trafik faktörüne göre yakıt tüketimini hesaplar.
+
+        Args:
+            distance_km (float): Gidilecek mesafe (km).
+            vehicle_type (str): Araç tipi (örn: 'gasoline_car').
+            traffic_factor (float, optional): Trafik yoğunluğunun tüketime etkisi. 
+                                              1.0 normal trafik demektir. Varsayılan 1.0.
+
+        Returns:
+            float: Hesaplanan toplam yakıt tüketimi (litre).
+        """
         # Araç tipi bazında yakıt tüketimi (L/100km)
         consumption_rates = constants.FUEL_CONSUMPTION_RATES
         
@@ -255,7 +411,16 @@ class RealTimeDataCollector:
     
     def calculate_carbon_emission_ipcc(self, fuel_consumption: float, 
                                      vehicle_type: str) -> float:
-        """IPCC yöntemleriyle karbon emisyon hesaplama"""
+        """
+        IPCC (2006) emisyon faktörlerini kullanarak karbon emisyonunu hesaplar.
+
+        Args:
+            fuel_consumption (float): Tüketilen yakıt miktarı (litre).
+            vehicle_type (str): Araç tipi.
+
+        Returns:
+            float: Hesaplanan toplam karbon emisyonu (kg CO2).
+        """
         # IPCC 2006 rehberi emission factors (kg CO2/L)
         emission_factors = constants.CARBON_EMISSION_FACTORS_IPCC
         
@@ -265,7 +430,20 @@ class RealTimeDataCollector:
     def collect_comprehensive_route_data(self, origin: Dict[str, float], 
                                        destination: Dict[str, float],
                                        vehicle_type: str = constants.DEFAULT_VEHICLE_TYPE) -> RouteData:
-        """Kapsamlı rota verisi topla"""
+        """
+        Tek bir rota için tüm verileri (hava durumu, trafik, maliyet vb.) toplayan
+        ve bir `RouteData` nesnesi oluşturan kapsamlı bir metot.
+        
+        Not: Bu metot şu anda mock verilerle çalışmaktadır.
+
+        Args:
+            origin (Dict[str, float]): Başlangıç konumu ({'latitude': ..., 'longitude': ...}).
+            destination (Dict[str, float]): Varış konumu.
+            vehicle_type (str, optional): Araç tipi. Varsayılan 'gasoline_car'.
+
+        Returns:
+            RouteData: Tüm hesaplanmış ve toplanmış verileri içeren rota nesnesi.
+        """
         
         # Google Routes API'dan temel rota bilgisi
         # (Mevcut GoogleRoutesClient kullanılabilir)
@@ -329,6 +507,18 @@ class RealTimeDataCollector:
         )
 
 class FuelDB:
+    """
+    Veritabanı bağlantısını yönetmek için basit bir yardımcı sınıf.
+    
+    Not: Bu sınıfın işlevselliği `DataWarehouse` içinde zaten mevcut olduğu için
+    ileride birleştirilebilir veya kaldırılabilir.
+    """
     def __init__(self, db_path: str = constants.DB_PATH):
+        """
+        FuelDB sınıfını başlatır.
+
+        Args:
+            db_path (str, optional): SQLite veritabanı dosyasının yolu.
+        """
         self.db_path = db_path
         self.conn = None

@@ -75,7 +75,14 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 def initialize_session_state():
-    """Initialize session state variables"""
+    """
+    Streamlit session state (oturum durumu) değişkenlerini başlatır.
+    
+    Uygulama boyunca durumu korunması gereken değişkenler (örn: API istemcisi,
+    veritabanı bağlantısı, toplanan veriler) 'st.session_state' içinde saklanır.
+    Bu fonksiyon, bu değişkenlerin uygulama ilk çalıştığında veya sayfa
+    yenilendiğinde mevcut olmasını sağlar.
+    """
     if 'routes_data' not in st.session_state:
         st.session_state.routes_data = []
     if 'client' not in st.session_state:
@@ -90,7 +97,12 @@ def initialize_session_state():
         st.session_state.data_collector = EnhancedDataCollector()
 
 def display_header():
-    """Display main header"""
+    """
+    Uygulamanın ana başlık bölümünü görüntüler.
+    
+    Bu fonksiyon, `constants` dosyasından alınan başlık, alt başlık ve
+    açıklama metinlerini içeren bir HTML bloğu oluşturur ve ekrana basar.
+    """
     st.markdown(f"""
     <div class="main-header">
         <h1>{constants.HEADER_TITLE}</h1>
@@ -100,7 +112,17 @@ def display_header():
     """, unsafe_allow_html=True)
 
 def display_sidebar():
-    """Display sidebar with controls"""
+    """
+    Kenar çubuğunu (sidebar) ve içindeki kontrol elemanlarını görüntüler.
+    
+    Kenar çubuğu, sistem durumu göstergelerini (API, veritabanı durumu),
+    rota hesaplama için kullanıcı girdilerini (enlem, boylam, seyahat modu vb.)
+    içerir.
+
+    Returns:
+        dict: Kullanıcının kenar çubuğunda seçtiği rota parametrelerini
+              içeren bir sözlük.
+    """
     st.sidebar.header(constants.SIDEBAR_HEADER)
     
     # System status
@@ -143,7 +165,12 @@ def display_sidebar():
     }
 
 def display_data_collection_dashboard():
-    """Ana veri toplama dashboard'u"""
+    """
+    'Veri Toplama ve Analiz' sekmesinin içeriğini görüntüler.
+    
+    Bu dashboard, kullanıcıya kapsamlı veri toplama işlemini başlatma
+    ve veritabanındaki mevcut verilerin özetini görme imkanı sunar.
+    """
     st.header(constants.DATA_COLLECTION_HEADER)
     
     col1, col2, col3 = st.columns([2, 1, 1])
@@ -187,7 +214,13 @@ def display_data_collection_dashboard():
     display_current_data_status()
 
 def display_current_data_status():
-    """Mevcut veri durumunu göster"""
+    """
+    Veritabanındaki mevcut verilerin durumunu ve temel analizleri gösterir.
+    
+    Toplam istasyon ve rota sayısı gibi temel metrikleri, ülke bazında istasyon
+    dağılımını gösteren bir bar grafiğini ve araç tipine göre emisyon dağılımını
+    gösteren bir pasta grafiğini içerir.
+    """
     st.subheader(constants.CURRENT_DATA_STATUS_HEADER)
     
     try:
@@ -224,7 +257,13 @@ def display_current_data_status():
         st.error(f"❌ {constants.ERROR_DATA_STATUS}: {str(e)}")
 
 def display_detailed_station_analysis():
-    """Detaylı istasyon analizi"""
+    """
+    'Detaylı İstasyon Analizi' sekmesinin içeriğini görüntüler.
+    
+    Bu sekme, kullanıcının veritabanındaki istasyon verilerini ülkeye, markaya
+    ve puana göre filtrelemesine olanak tanır. Filtrelenmiş sonuçlar bir tablo
+    ve bir harita üzerinde gösterilir.
+    """
     st.header(constants.DETAILED_ANALYSIS_HEADER)
     
     try:
@@ -272,7 +311,19 @@ def display_detailed_station_analysis():
         st.error(f"❌ {constants.ERROR_ANALYSIS}: {str(e)}")
 
 def display_stations_map(df_stations):
-    """İstasyonları haritada göster"""
+    """
+    Verilen DataFrame'deki istasyonları bir Folium haritası üzerinde gösterir.
+    
+    Harita üzerinde her istasyon bir işaretçi ile temsil edilir. İşaretçilere
+    tıklandığında istasyon hakkında temel bilgileri (ad, marka, puan vb.)
+    gösteren bir pencere açılır.
+
+    Args:
+        df_stations (pd.DataFrame): Haritada gösterilecek istasyonların
+                                     verilerini içeren pandas DataFrame.
+                                     'latitude' ve 'longitude' sütunlarını
+                                     içermelidir.
+    """
     try:
         if df_stations.empty:
             st.info(constants.INFO_NO_STATIONS_TO_DISPLAY)
@@ -310,7 +361,12 @@ def display_stations_map(df_stations):
         st.error(f"❌ {constants.ERROR_MAP_DISPLAY}: {str(e)}")
 
 def display_export_options():
-    """Veri dışa aktarma seçenekleri"""
+    """
+    'Veri Dışa Aktar' sekmesinin içeriğini görüntüler.
+    
+    Kullanıcıya, veritabanındaki verileri (istasyonlar, rotalar, özet)
+    Excel veya JSON formatında dışa aktarma ve indirme seçenekleri sunar.
+    """
     st.header(constants.EXPORT_HEADER)
     
     col1, col2 = st.columns(2)
@@ -363,7 +419,13 @@ def display_export_options():
                 st.error(f"❌ {constants.ERROR_JSON_EXPORT}: {str(e)}")
 
 def main():
-    """Main application function"""
+    """
+    Uygulamanın ana fonksiyonu.
+    
+    Streamlit uygulamasını çalıştıran ana döngüyü içerir. Oturum durumunu
+    başlatır, başlığı ve kenar çubuğunu görüntüler, sekmeleri oluşturur
+    ve her sekmenin içeriğini ilgili fonksiyonları çağırarak doldurur.
+    """
     initialize_session_state()
     display_header()
     

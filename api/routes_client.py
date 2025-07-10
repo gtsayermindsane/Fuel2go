@@ -12,9 +12,21 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class GoogleRoutesClient:
-    """Google Routes API client for route calculation and optimization"""
+    """
+    Google Routes API ile etkileşim kurmak için bir istemci sınıfı.
+    
+    Bu sınıf, rota hesaplama, trafik bilgisi alma ve karbon emisyonu tahmini gibi
+    işlemleri yönetir. API anahtarlarını ve diğer yapılandırmaları `config` modülünden
+    alır. Ayrıca, API'ye yapılan istekler arasında hız sınırlaması (rate limiting) uygular.
+    """
     
     def __init__(self):
+        """
+        GoogleRoutesClient sınıfını başlatır.
+        
+        Yapılandırmayı yükler, API anahtarlarını doğrular, bir `requests.Session`
+        nesnesi oluşturur ve gerekli HTTP başlıklarını (headers) ayarlar.
+        """
         self.config = config
         self.config.validate_api_keys()
         self.session = requests.Session()
@@ -25,7 +37,13 @@ class GoogleRoutesClient:
         self.min_interval = 60 / self.config.requests_per_minute  # seconds between requests
         
     def _rate_limit(self):
-        """Implement rate limiting between requests"""
+        """
+        API istekleri arasında hız sınırlaması uygular.
+        
+        `config` dosyasında belirtilen `requests_per_minute` değerine göre,
+        ardışık iki istek arasında geçmesi gereken minimum süreyi kontrol eder.
+        Gerekirse, bir sonraki isteği yapmadan önce programı bekletir.
+        """
         current_time = time.time()
         time_since_last = current_time - self.last_request_time
         
@@ -45,19 +63,26 @@ class GoogleRoutesClient:
                      waypoints: Optional[List[Dict[str, float]]] = None,
                      compute_alternative_routes: bool = False) -> Dict[str, Any]:
         """
-        Compute route between origin and destination
-        
+        Başlangıç ve varış noktaları arasında bir rota hesaplar.
+
         Args:
-            origin: {"latitude": float, "longitude": float}
-            destination: {"latitude": float, "longitude": float}
-            travel_mode: "DRIVE", "WALK", "BICYCLE", "TRANSIT"
-            routing_preference: "TRAFFIC_AWARE", "TRAFFIC_AWARE_OPTIMAL", "FUEL_EFFICIENT"
-            departure_time: ISO 8601 format string (e.g., "2025-07-10T15:00:00Z")
-            waypoints: List of waypoint coordinates
-            compute_alternative_routes: Whether to compute alternative routes
-            
+            origin (Dict[str, float]): Başlangıç konumu. Örn: {'latitude': 41.0, 'longitude': 29.0}.
+            destination (Dict[str, float]): Varış konumu. Örn: {'latitude': 39.9, 'longitude': 32.8}.
+            travel_mode (str, optional): Seyahat modu. Varsayılan "DRIVE".
+                                         Diğer seçenekler: "WALK", "BICYCLE", "TRANSIT".
+            routing_preference (str, optional): Rota tercihi. Varsayılan "TRAFFIC_AWARE".
+                                                Diğer seçenekler: "TRAFFIC_AWARE_OPTIMAL", "FUEL_EFFICIENT".
+            departure_time (Optional[str], optional): Kalkış zamanı (ISO 8601 formatında).
+                                                      Trafik tahmini için gereklidir.
+            waypoints (Optional[List[Dict[str, float]]], optional): Ara noktaların listesi.
+            compute_alternative_routes (bool, optional): Alternatif rotaların hesaplanıp
+                                                         hesaplanmayacağı. Varsayılan False.
+
         Returns:
-            Dictionary containing route information
+            Dict[str, Any]: Google Routes API'sinden dönen ham rota bilgisi.
+
+        Raises:
+            requests.exceptions.RequestException: API'ye yapılan istek sırasında bir hata oluşursa.
         """
         self._rate_limit()
         
@@ -130,13 +155,17 @@ class GoogleRoutesClient:
     
     def get_route_details(self, route_response: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Extract and format route details from API response
-        
+        API yanıtından rota detaylarını ayıklar ve formatlar.
+
         Args:
-            route_response: Raw response from compute_route
-            
+            route_response (Dict[str, Any]): `compute_route` metodundan dönen ham API yanıtı.
+
         Returns:
-            Formatted route details
+            Dict[str, Any]: Mesafe, süre, polyline ve rota bacakları (legs) gibi
+                            formatlanmış rota detaylarını içeren bir sözlük.
+
+        Raises:
+            ValueError: API yanıtında hiç rota bulunamazsa.
         """
         if "routes" not in route_response or not route_response["routes"]:
             raise ValueError("No routes found in response")
@@ -172,14 +201,19 @@ class GoogleRoutesClient:
     def calculate_carbon_emission(self, distance_km: float, 
                                 vehicle_type: str = "gasoline_car") -> Dict[str, float]:
         """
-        Calculate carbon emission based on distance and vehicle type
+        Mesafe ve araç tipine göre karbon emisyonunu hesaplar.
         
+        Bu metot, ortalama değerlere dayalı basit emisyon faktörleri kullanır.
+
         Args:
-            distance_km: Distance in kilometers
-            vehicle_type: Type of vehicle (gasoline_car, diesel_car, electric_car)
-            
+            distance_km (float): Kilometre cinsinden toplam mesafe.
+            vehicle_type (str, optional): Araç tipi. Varsayılan "gasoline_car".
+                                          Seçenekler: "gasoline_car", "diesel_car",
+                                          "electric_car", "hybrid_car".
+
         Returns:
-            Carbon emission data
+            Dict[str, float]: Hesaplanan emisyon verilerini (toplam emisyon, faktör vb.)
+                              içeren bir sözlük.
         """
         # Emission factors (kg CO2 per km) - based on average values
         emission_factors = {
@@ -202,13 +236,16 @@ class GoogleRoutesClient:
     
     def get_traffic_conditions(self, route_response: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Extract traffic condition information from route response
+        Rota yanıtından trafik durumu bilgilerini ayıklar.
         
+        Bu metot, API yanıtındaki süre bilgisini temel alarak basit bir trafik
+        durumu özeti sunar.
+
         Args:
-            route_response: Raw response from compute_route
-            
+            route_response (Dict[str, Any]): `compute_route` metodundan dönen ham API yanıtı.
+
         Returns:
-            Traffic condition data
+            Dict[str, Any]: Trafik süresi gibi bilgileri içeren bir sözlük.
         """
         if "routes" not in route_response or not route_response["routes"]:
             return {"traffic_conditions": "no_data"}

@@ -24,9 +24,22 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class EnhancedDataCollector:
-    """Gelişmiş veri toplama sistemi - Tablolardaki gibi kapsamlı veri toplama"""
+    """
+    Avrupa genelindeki benzin istasyonları için kapsamlı veri toplama ve işleme sistemi.
+    
+    Bu sınıf, Google Places API'sini kullanarak belirtilen ülkelerin başkentleri
+    çevresindeki benzin istasyonlarını toplar, bu verileri zenginleştirir (marka tanıma,
+    mock fiyat ve hizmet verileri ekleme) ve hem JSON hem de Excel formatında
+    dışa aktarır. Ayrıca toplanan verileri bir SQLite veritabanına kaydeder.
+    """
     
     def __init__(self):
+        """
+        EnhancedDataCollector sınıfını başlatır.
+        
+        API istemcilerini (GoogleRoutesClient, GooglePlacesClient), veri ambarını
+        (DataWarehouse) ve sabitleri (ülkeler, markalar) ayarlar.
+        """
         self.routes_client = GoogleRoutesClient()
         self.places_client = GooglePlacesClient()
         self.warehouse = DataWarehouse()
@@ -37,7 +50,18 @@ class EnhancedDataCollector:
         self.fuel_brands = constants.FUEL_BRANDS
     
     def identify_fuel_brand(self, station_name: str) -> str:
-        """İstasyon adından marka belirle"""
+        """
+        Verilen istasyon adına göre yakıt markasını belirler.
+        
+        İstasyon adını, `constants.FUEL_BRANDS` içinde tanımlanmış anahtar kelimelerle
+        karşılaştırarak markayı bulur. Eşleşme bulunamazsa 'Other' döner.
+
+        Args:
+            station_name (str): Yakıt istasyonunun adı.
+
+        Returns:
+            str: Belirlenen marka adı veya 'Other'.
+        """
         station_name_lower = station_name.lower()
         
         for brand, keywords in self.fuel_brands.items():
@@ -50,7 +74,23 @@ class EnhancedDataCollector:
         return constants.UNKNOWN_BRAND
     
     def collect_stations_by_country(self, country_code: str, max_stations: int = constants.MAX_STATIONS_PER_COUNTRY) -> List[Dict[str, Any]]:
-        """Ülke bazında benzin istasyonları topla"""
+        """
+        Belirtilen ülke kodu için benzin istasyonu verilerini toplar.
+
+        Ülkenin başkentini merkez alarak, `constants.SEARCH_RADII` içinde belirtilen
+        farklı yarıçaplarda Google Places API üzerinden 'gas_station' araması yapar.
+        Belirtilen `max_stations` sayısına ulaşana kadar veya tüm yarıçaplar
+        taranana kadar devam eder.
+
+        Args:
+            country_code (str): Veri toplanacak ülkenin ISO 3166-1 alpha-2 kodu (örn: 'TR').
+            max_stations (int, optional): Ülke başına toplanacak maksimum istasyon sayısı.
+                                          Varsayılan olarak `constants.MAX_STATIONS_PER_COUNTRY`.
+
+        Returns:
+            List[Dict[str, Any]]: Toplanan ve zenginleştirilmiş istasyon verilerinin listesi.
+                                  Her bir öğe bir istasyonu temsil eden bir sözlüktür.
+        """
         logger.info(constants.LOG_MSG_COUNTRY_STATION_COLLECTION_START.format(country=country_code))
         
         country_info = self.european_countries.get(country_code)
@@ -97,7 +137,20 @@ class EnhancedDataCollector:
         return collected_stations
     
     def enhance_station_data(self, station: Dict[str, Any], country_code: str) -> Optional[Dict[str, Any]]:
-        """İstasyon verisini gelişmiş bilgilerle zenginleştir"""
+        """
+        Ham istasyon verisini ek bilgilerle zenginleştirir.
+
+        Google Places API'den gelen temel istasyon verisine; marka, ülke, mock yakıt türleri,
+        hizmetler, çalışma saatleri, fiyatlar ve tesis bilgileri gibi ek veriler ekler.
+
+        Args:
+            station (Dict[str, Any]): Google Places API'den gelen ham istasyon verisi.
+            country_code (str): İstasyonun bulunduğu ülkenin kodu.
+
+        Returns:
+            Optional[Dict[str, Any]]: Zenginleştirilmiş istasyon verisi. Gerekli temel bilgiler
+                                      (örn: enlem/boylam) eksikse None dönebilir.
+        """
         try:
             display_name = station.get('displayName', {})
             name = display_name.get('text', constants.UNKNOWN_NAME) if display_name else constants.UNKNOWN_NAME
@@ -140,7 +193,19 @@ class EnhancedDataCollector:
             return None
     
     def generate_fuel_types(self, brand: str) -> List[str]:
-        """Marka bazında yakıt türleri üret"""
+        """
+        Verilen markaya göre mock yakıt türleri listesi oluşturur.
+        
+        Tüm markalar için temel yakıt türlerini (benzin, dizel) içerir ve belirli
+        premium markalar için ek yakıt türleri (LPG, Premium Benzin) ekler.
+        Ayrıca rastgele olarak E10/E85 yakıtlarını da ekleyebilir.
+
+        Args:
+            brand (str): Yakıt markası.
+
+        Returns:
+            List[str]: Oluşturulan yakıt türleri listesi.
+        """
         base_types = constants.BASE_FUEL_TYPES.copy()
         
         if brand in constants.PREMIUM_FUEL_BRANDS:
@@ -159,7 +224,14 @@ class EnhancedDataCollector:
         return base_types
     
     def generate_services(self) -> List[str]:
-        """İstasyon hizmetleri üret"""
+        """
+        Rastgele mock istasyon hizmetleri listesi oluşturur.
+        
+        `constants.POSSIBLE_SERVICES` listesinden rastgele 3 ila 6 adet hizmet seçer.
+
+        Returns:
+            List[str]: Oluşturulan hizmet listesi.
+        """
         possible_services = constants.POSSIBLE_SERVICES
         
         # Rastgele 3-6 hizmet seç
@@ -167,7 +239,15 @@ class EnhancedDataCollector:
         return np.random.choice(possible_services, num_services, replace=False).tolist()
     
     def generate_operating_hours(self) -> Dict[str, str]:
-        """Çalışma saatleri üret"""
+        """
+        Rastgele mock çalışma saatleri oluşturur.
+
+        %80 ihtimalle 24 saat açık, %20 ihtimalle ise hafta içi ve hafta sonu
+        farklı olan sınırlı çalışma saatleri oluşturur.
+
+        Returns:
+            Dict[str, str]: Çalışma saatlerini içeren sözlük.
+        """
         # %80 şans 24 saat, %20 şans sınırlı saatler
         if np.random.random() > 0.2:
             return {"all_days": "00:00-23:59"}
@@ -179,7 +259,18 @@ class EnhancedDataCollector:
             }
     
     def generate_price_data(self, country_code: str) -> Dict[str, float]:
-        """Ülke bazında yakıt fiyatları üret"""
+        """
+        Ülke koduna göre mock yakıt fiyatları oluşturur.
+
+        `constants.BASE_PRICES` içindeki ülkeye özgü temel fiyatları alır, bu fiyatlara
+        %±5 arasında rastgele bir varyasyon ekleyerek daha gerçekçi bir fiyat seti oluşturur.
+
+        Args:
+            country_code (str): Fiyatların oluşturulacağı ülkenin kodu.
+
+        Returns:
+            Dict[str, float]: Yakıt türlerini ve fiyatlarını içeren sözlük.
+        """
         # Ortalama fiyatlar (EUR/L)
         base_prices = constants.BASE_PRICES
         
@@ -195,7 +286,15 @@ class EnhancedDataCollector:
         }
     
     def generate_facilities(self) -> Dict[str, Any]:
-        """İstasyon tesisleri bilgisi üret"""
+        """
+        Rastgele mock istasyon tesis bilgileri oluşturur.
+
+        Pompa sayısı, engelli erişimi, EV şarj imkanı, kamyon dostu olup olmadığı,
+        ödeme yöntemleri ve sadakat programı gibi bilgileri rastgele olarak üretir.
+
+        Returns:
+            Dict[str, Any]: Tesis bilgilerini içeren sözlük.
+        """
         return {
             'pump_count': np.random.randint(4, 16),
             'accessibility': np.random.choice([True, False], p=[0.8, 0.2]),
@@ -206,7 +305,19 @@ class EnhancedDataCollector:
         }
     
     def collect_comprehensive_data(self):
-        """Kapsamlı veri toplama - Tüm Avrupa ülkeleri"""
+        """
+        Tüm Avrupa ülkeleri için kapsamlı veri toplama işlemini başlatır ve yönetir.
+
+        `constants.EUROPEAN_COUNTRIES` listesindeki her ülke için
+        `collect_stations_by_country` fonksiyonunu çağırır. Toplanan tüm verileri
+        bir araya getirir, özet istatistikler oluşturur, veritabanına kaydeder
+        ve sonuçları JSON ve Excel dosyalarına yazar.
+
+        Returns:
+            Dict[str, Any]: Toplama işleminin özetini, ülke bazında özetleri,
+                            tüm istasyon verilerini ve analitik bilgileri içeren
+                            kapsamlı bir sözlük.
+        """
         logger.info(constants.LOG_MSG_COMPREHENSIVE_COLLECTION_START)
         
         all_stations = []
@@ -303,7 +414,18 @@ class EnhancedDataCollector:
         return output_data
     
     def generate_analytics(self, stations: List[Dict[str, Any]]) -> Dict[str, Any]:
-        """İstasyon verileri için analitik özet"""
+        """
+        Toplanan istasyon verilerinden analitik bir özet oluşturur.
+
+        Marka ve ülke dağılımı, puan istatistikleri, yakıt türü popülerliği,
+        toplam ve aktif istasyon sayısı gibi analitik verileri hesaplar.
+
+        Args:
+            stations (List[Dict[str, Any]]): Analiz edilecek istasyon verilerinin listesi.
+
+        Returns:
+            Dict[str, Any]: Hesaplanan analitik verileri içeren bir sözlük.
+        """
         if not stations:
             return {}
         
@@ -341,7 +463,18 @@ class EnhancedDataCollector:
         }
     
     def export_to_excel(self, stations: List[Dict[str, Any]], filename: str):
-        """Verileri Excel formatında dışa aktar"""
+        """
+        Toplanan verileri çok sayfalı bir Excel dosyasına aktarır.
+
+        Dosya üç sayfa içerir:
+        1. 'Stations': Ana istasyon verileri.
+        2. 'Prices': Her istasyon için detaylı fiyat bilgileri.
+        3. 'Summary': `generate_analytics` tarafından oluşturulan özet istatistikler.
+
+        Args:
+            stations (List[Dict[str, Any]]): Dışa aktarılacak istasyon verileri.
+            filename (str): Oluşturulacak Excel dosyasının adı.
+        """
         try:
             # Ana istasyon verileri
             df_stations = pd.DataFrame(stations)
@@ -377,7 +510,13 @@ class EnhancedDataCollector:
             logger.error(constants.LOG_MSG_EXCEL_EXPORT_ERROR.format(error=e))
 
 def main():
-    """Ana fonksiyon"""
+    """
+    Komut satırından `enhanced_data_collector`'ı çalıştırmak için ana giriş noktası.
+    
+    Bu fonksiyon, `EnhancedDataCollector` sınıfından bir nesne oluşturur ve
+    `collect_comprehensive_data` metodunu çağırarak tek seferlik bir veri
+    toplama işlemi başlatır. Sonrasında veritabanından bir özet çeker ve yazdırır.
+    """
     collector = EnhancedDataCollector()
     
     # Kapsamlı veri toplama
@@ -391,7 +530,15 @@ def main():
     print(f"   🌍 Ülke Dağılımı: {db_summary['stations_by_country']}")
 
 def get_final_data_from_db(db_path="db/fuel2go_data.db"):
-    """Veritabanından son işlenmiş veriyi çeker."""
+    """
+    Belirtilen veritabanı dosyasından son işlenmiş veriyi çeker.
+    
+    Not: Bu fonksiyonun içi henüz tam olarak doldurulmamıştır.
+    
+    Args:
+        db_path (str, optional): SQLite veritabanı dosyasının yolu. 
+                                 Varsayılan olarak "db/fuel2go_data.db".
+    """
     conn = sqlite3.connect(db_path)
     # ... existing code ...
 

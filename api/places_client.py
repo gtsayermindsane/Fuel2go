@@ -16,16 +16,35 @@ logger = logging.getLogger(__name__)
 
 class GooglePlacesClient:
     """
-    Client for Google Places API to find details about locations.
+    Google Places API ile etkileşim kurarak mekanları (örneğin, benzin istasyonları)
+    bulmak için bir istemci sınıfı.
+    
+    Bu sınıf, yakındaki yerleri arama ve belirli bir yerin detaylarını getirme
+    gibi işlemleri yönetir. Gerekli API anahtarını `config` modülünden alır.
     """
     
     def __init__(self):
+        """
+        GooglePlacesClient sınıfını başlatır.
+        
+        Yapılandırmayı yükler, API anahtarlarını doğrular ve bir `requests.Session`
+        nesnesi oluşturur.
+        """
         self.config = config
         self.config.validate_api_keys()
         self.session = requests.Session()
         
     def get_headers(self) -> dict:
-        """Get standard headers for Places API requests"""
+        """
+        Places API istekleri için standart HTTP başlıklarını (headers) oluşturur.
+        
+        Bu başlıklar, API anahtarını ve yanıtta dönmesi istenen alanları (`FieldMask`)
+        içerir. Bu sayede sadece ihtiyaç duyulan veriler istenerek API kullanımı
+        optimize edilir.
+
+        Returns:
+            dict: API isteği için gerekli başlıkları içeren sözlük.
+        """
         return {
             'Content-Type': 'application/json',
             'X-Goog-Api-Key': self.config.google_places_api_key,
@@ -38,7 +57,18 @@ class GooglePlacesClient:
                       radius_meters: int, 
                       place_types: List[str]) -> List[Dict[str, Any]]:
         """
-        Search for places of a specific type near a location.
+        Belirtilen bir konuma yakın, belirli türdeki yerleri arar.
+
+        Args:
+            latitude (float): Aramanın yapılacağı merkez noktanın enlemi.
+            longitude (float): Aramanın yapılacağı merkez noktanın boylamı.
+            radius_meters (int): Arama yapılacak alanın yarıçapı (metre cinsinden).
+            place_types (List[str]): Aranacak yer türlerinin listesi (örn: ["gas_station"]).
+
+        Returns:
+            List[Dict[str, Any]]: Bulunan yerlerin listesi. Her bir yer, API'den
+                                  dönen ham verileri içeren bir sözlüktür. Hata
+                                  durumunda boş bir liste döner.
         """
         request_body = {
             "includedTypes": place_types,
@@ -76,7 +106,14 @@ class GooglePlacesClient:
 
     def get_place_details(self, place_id: str) -> Optional[Dict[str, Any]]:
         """
-        Get detailed information about a specific place.
+        Belirli bir yerin detaylı bilgilerini getirir.
+
+        Args:
+            place_id (str): Detayları alınacak yerin kimliği (place ID).
+
+        Returns:
+            Optional[Dict[str, Any]]: İstenen yerin detaylarını içeren bir sözlük.
+                                      Hata durumunda veya yer bulunamazsa None döner.
         """
         if not place_id.startswith('places/'):
              place_id_url = f"places/{place_id}"

@@ -19,7 +19,18 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def haversine_distance(lat1, lon1, lat2, lon2):
-    """İki nokta arası mesafeyi (km) hesaplar"""
+    """
+    İki coğrafi nokta arasındaki mesafeyi Haversine formülü kullanarak hesaplar.
+
+    Args:
+        lat1 (float): Birinci noktanın enlemi.
+        lon1 (float): Birinci noktanın boylamı.
+        lat2 (float): İkinci noktanın enlemi.
+        lon2 (float): İkinci noktanın boylamı.
+
+    Returns:
+        float: İki nokta arasındaki mesafe (kilometre cinsinden).
+    """
     R = constants.EARTH_RADIUS_KM
     
     lat1_rad = radians(lat1)
@@ -36,7 +47,20 @@ def haversine_distance(lat1, lon1, lat2, lon2):
     return R * c
 
 class DataCollector:
+    """
+    Google Routes ve Places API'lerini kullanarak rota ve yakıt istasyonu verilerini toplayan sınıf.
+    
+    Bu sınıf, önceden tanımlanmış popüler rotalar için rota bilgilerini çeker ve
+    bu rotalar üzerindeki yakıt istasyonlarını bularak verileri bir JSON dosyasına kaydeder.
+    Ayrıca sürekli veri toplama modunda da çalışabilir.
+    """
     def __init__(self):
+        """
+        DataCollector sınıfını başlatır.
+
+        API istemcilerini (GoogleRoutesClient, GooglePlacesClient) başlatır ve
+        toplanacak rotaların listesini `constants`'tan yükler.
+        """
         self.routes_client = GoogleRoutesClient()
         self.places_client = GooglePlacesClient()
         self.data_file = constants.STATIONS_JSON_PATH
@@ -47,7 +71,17 @@ class DataCollector:
     def collect_stations_for_route(self, polyline: str) -> list:
         """
         Bir rota polyline'ı boyunca yakıt istasyonlarını bulur.
-        Rota boyunca her 50km'de bir arama yapar.
+        
+        Rota geometrisini temsil eden polyline'ı kullanarak, rota boyunca
+        belirli aralıklarla (STATION_SEARCH_INTERVAL_KM) ve belirli bir
+        yarıçap içinde (STATION_SEARCH_RADIUS_METERS) yakıt istasyonlarını arar.
+        Tekrarlanan istasyonları önlemek için bir set kullanır.
+
+        Args:
+            polyline (str): Rota geometrisini kodlanmış olarak içeren polyline dizesi.
+
+        Returns:
+            list: Rota boyunca bulunan ham istasyon verilerinin listesi.
         """
         if not polyline:
             return []
@@ -88,8 +122,23 @@ class DataCollector:
         logger.info(constants.LOG_MSG_ROUTE_STATIONS_FOUND.format(count=len(all_stations)))
         return all_stations
 
-    def collect_route_data(self, route_config):
-        """Tek bir rota ve üzerindeki istasyonlar için veri topla"""
+    def collect_route_data(self, route_config: dict) -> dict:
+        """
+        Tek bir rota ve üzerindeki istasyonlar için veri toplar.
+
+        Verilen rota konfigürasyonunu kullanarak Google Routes API'den rota detaylarını
+        alır. Ardından `collect_stations_for_route` metodunu çağırarak rota üzerindeki
+        yakıt istasyonlarını toplar ve tüm bu verileri birleştirerek bir sözlük
+        halinde döndürür.
+
+        Args:
+            route_config (dict): 'id', 'name', 'origin' ve 'destination' anahtarlarını
+                                 içeren rota yapılandırma sözlüğü.
+
+        Returns:
+            dict: Rota detaylarını ve bulunan istasyonları içeren bir sözlük.
+                  Hata durumunda None döner.
+        """
         try:
             logger.info(constants.LOG_MSG_COMPUTING_ROUTE.format(route_name=route_config['name']))
             
@@ -133,8 +182,17 @@ class DataCollector:
             logger.error(constants.LOG_MSG_ROUTE_GENERAL_ERROR.format(route_name=route_config['name'], error=e), exc_info=True)
             return None
     
-    def collect_all_data(self):
-        """Tüm rotalar ve istasyonlar için veri topla"""
+    def collect_all_data(self) -> dict:
+        """
+        `routes_to_collect` listesindeki tüm rotalar için veri toplama işlemini yürütür.
+
+        Her bir rota için `collect_route_data` metodunu çağırır, toplanan tüm verileri
+        bir araya getirir, bir özet oluşturur ve sonucu `self.data_file` ile belirtilen
+        JSON dosyasına yazar.
+
+        Returns:
+            dict: Toplama işleminin özetini ve toplanan tüm rota verilerini içeren sözlük.
+        """
         logger.info(constants.LOG_MSG_NEW_DATA_COLLECTION_START)
         
         collected_routes = []
@@ -173,8 +231,17 @@ class DataCollector:
         
         return output_data
     
-    def run_continuous(self, interval_minutes=60):
-        """Sürekli veri toplama"""
+    def run_continuous(self, interval_minutes: int = 60):
+        """
+        Veri toplama işlemini belirtilen aralıklarla sürekli olarak çalıştırır.
+
+        `collect_all_data` metodunu periyodik olarak çağırır. Döngü, bir
+        `KeyboardInterrupt` (Ctrl+C) ile durdurulabilir.
+
+        Args:
+            interval_minutes (int, optional): Her bir veri toplama döngüsü arasındaki
+                                              bekleme süresi (dakika cinsinden). Varsayılan 60.
+        """
         logger.info(constants.LOG_MSG_CONTINUOUS_COLLECTION_START.format(interval=interval_minutes))
         
         while True:
@@ -190,7 +257,13 @@ class DataCollector:
                 time.sleep(60)
 
 def main():
-    """Ana fonksiyon"""
+    """
+    Komut satırından `data_collector`'ı çalıştırmak için ana giriş noktası.
+
+    Tek seferlik bir toplama işlemi yapar. Eğer komut satırından `--continuous`
+    argümanı verilirse, `run_continuous` metodu ile sürekli toplama modunda çalışır.
+    İkinci bir argüman olarak bekleme süresi (dakika) verilebilir.
+    """
     collector = DataCollector()
     
     if len(sys.argv) > 1 and sys.argv[1] == '--continuous':
