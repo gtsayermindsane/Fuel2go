@@ -1,3 +1,11 @@
 requests
 python-dotenv
 polyline
+streamlit
+plotly
+pandas
+folium
+streamlit-folium
+numpy
+openpyxl
+sqlite3

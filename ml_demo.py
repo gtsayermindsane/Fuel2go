@@ -19,7 +19,7 @@ from utils.data_preprocessing import RouteDataProcessor
 def main():
     """Main demonstration function"""
     print("🚀 Fuel2go Makine Öğrenimi Demo'su")
-    print("="*50)
+    print("="*50)æ
     
     # Initialize processor
     processor = RouteDataProcessor()
