@@ -18,6 +18,7 @@ from pathlib import Path
 from api.routes_client import GoogleRoutesClient
 from api.places_client import GooglePlacesClient
 from data_models import DataWarehouse, FuelStationData, RouteData, RealTimeDataCollector
+from config import constants
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -31,61 +32,30 @@ class EnhancedDataCollector:
         self.warehouse = DataWarehouse()
         self.real_time_collector = RealTimeDataCollector(self.warehouse)
         
-        # Avrupa ülkeleri ve kodları (E100 kategorisi bazında)
-        self.european_countries = {
-            'TR': {'name': 'Turkey', 'capital': {'lat': 39.9334, 'lng': 32.8597}},
-            'DE': {'name': 'Germany', 'capital': {'lat': 52.5200, 'lng': 13.4050}},
-            'FR': {'name': 'France', 'capital': {'lat': 48.8566, 'lng': 2.3522}},
-            'ES': {'name': 'Spain', 'capital': {'lat': 40.4168, 'lng': -3.7038}},
-            'IT': {'name': 'Italy', 'capital': {'lat': 41.9028, 'lng': 12.4964}},
-            'UK': {'name': 'United Kingdom', 'capital': {'lat': 51.5074, 'lng': -0.1278}},
-            'PL': {'name': 'Poland', 'capital': {'lat': 52.2297, 'lng': 21.0122}},
-            'NL': {'name': 'Netherlands', 'capital': {'lat': 52.3676, 'lng': 4.9041}},
-            'BE': {'name': 'Belgium', 'capital': {'lat': 50.8503, 'lng': 4.3517}},
-            'AT': {'name': 'Austria', 'capital': {'lat': 48.2082, 'lng': 16.3738}},
-            'CH': {'name': 'Switzerland', 'capital': {'lat': 46.9481, 'lng': 7.4474}},
-            'CZ': {'name': 'Czech Republic', 'capital': {'lat': 50.0755, 'lng': 14.4378}},
-            'DK': {'name': 'Denmark', 'capital': {'lat': 55.6761, 'lng': 12.5683}},
-            'SE': {'name': 'Sweden', 'capital': {'lat': 59.3293, 'lng': 18.0686}},
-            'NO': {'name': 'Norway', 'capital': {'lat': 59.9139, 'lng': 10.7522}},
-            'FI': {'name': 'Finland', 'capital': {'lat': 60.1699, 'lng': 24.9384}}
-        }
-        
-        # Benzin markalarına göre kategoriler
-        self.fuel_brands = {
-            'Shell': ['shell', 'Shell'],
-            'BP': ['bp', 'BP'],
-            'Total': ['total', 'Total', 'TotalEnergies'],
-            'Esso': ['esso', 'Esso'],
-            'Petrol Ofisi': ['petrol ofisi', 'po', 'Petrol Ofisi'],
-            'Opet': ['opet', 'Opet'],
-            'Lukoil': ['lukoil', 'Lukoil'],
-            'OMV': ['omv', 'OMV'],
-            'Aral': ['aral', 'Aral'],
-            'Q8': ['q8', 'Q8'],
-            'Other': []
-        }
+        # Sabitler constants.py dosyasından alınıyor
+        self.european_countries = constants.EUROPEAN_COUNTRIES
+        self.fuel_brands = constants.FUEL_BRANDS
     
     def identify_fuel_brand(self, station_name: str) -> str:
         """İstasyon adından marka belirle"""
         station_name_lower = station_name.lower()
         
         for brand, keywords in self.fuel_brands.items():
-            if brand == 'Other':
+            if brand == constants.UNKNOWN_BRAND:
                 continue
             for keyword in keywords:
                 if keyword.lower() in station_name_lower:
                     return brand
         
-        return 'Other'
+        return constants.UNKNOWN_BRAND
     
-    def collect_stations_by_country(self, country_code: str, max_stations: int = 50) -> List[Dict[str, Any]]:
+    def collect_stations_by_country(self, country_code: str, max_stations: int = constants.MAX_STATIONS_PER_COUNTRY) -> List[Dict[str, Any]]:
         """Ülke bazında benzin istasyonları topla"""
-        logger.info(f"🌍 {country_code} ülkesi için istasyon toplama başlıyor...")
+        logger.info(constants.LOG_MSG_COUNTRY_STATION_COLLECTION_START.format(country=country_code))
         
         country_info = self.european_countries.get(country_code)
         if not country_info:
-            logger.error(f"❌ Bilinmeyen ülke kodu: {country_code}")
+            logger.error(constants.LOG_MSG_UNKNOWN_COUNTRY_CODE.format(country_code=country_code))
             return []
         
         # Başkent merkezli arama yap
@@ -93,14 +63,14 @@ class EnhancedDataCollector:
         collected_stations = []
         
         # Başkent çevresinde farklı yarıçaplarda arama
-        search_radii = [5000, 10000, 25000, 50000]  # 5km, 10km, 25km, 50km
+        search_radii = constants.SEARCH_RADII
         collected_station_ids = set()
         
         for radius in search_radii:
             if len(collected_stations) >= max_stations:
                 break
                 
-            logger.info(f"📍 {country_info['name']} başkenti çevresinde {radius/1000}km yarıçapta arama...")
+            logger.info(constants.LOG_MSG_RADIUS_SEARCH.format(country_name=country_info['name'], radius=radius/1000))
             
             nearby_stations = self.places_client.search_nearby(
                 latitude=capital['lat'],
@@ -123,14 +93,14 @@ class EnhancedDataCollector:
             
             time.sleep(2)  # Rate limiting
         
-        logger.info(f"✅ {country_code} için {len(collected_stations)} istasyon toplandı")
+        logger.info(constants.LOG_MSG_COUNTRY_STATION_COLLECTION_END.format(country_code=country_code, count=len(collected_stations)))
         return collected_stations
     
     def enhance_station_data(self, station: Dict[str, Any], country_code: str) -> Optional[Dict[str, Any]]:
         """İstasyon verisini gelişmiş bilgilerle zenginleştir"""
         try:
             display_name = station.get('displayName', {})
-            name = display_name.get('text', 'Unknown') if display_name else 'Unknown'
+            name = display_name.get('text', constants.UNKNOWN_NAME) if display_name else constants.UNKNOWN_NAME
             
             location = station.get('location', {})
             if not location.get('latitude') or not location.get('longitude'):
@@ -150,33 +120,33 @@ class EnhancedDataCollector:
                 'latitude': location.get('latitude'),
                 'longitude': location.get('longitude'),
                 'address': station.get('formattedAddress', ''),
-                'rating': station.get('rating', 0.0),
-                'review_count': station.get('userRatingCount', 0),
-                'business_status': station.get('businessStatus', 'OPERATIONAL'),
+                'rating': station.get('rating', constants.DEFAULT_RATING),
+                'review_count': station.get('userRatingCount', constants.DEFAULT_REVIEW_COUNT),
+                'business_status': station.get('businessStatus', constants.BUSINESS_STATUS_OPERATIONAL),
                 'fuel_types': self.generate_fuel_types(brand),
                 'services': self.generate_services(),
                 'operating_hours': self.generate_operating_hours(),
                 'price_data': self.generate_price_data(country_code),
                 'facilities': self.generate_facilities(),
                 'last_updated': datetime.now(timezone.utc).isoformat(),
-                'data_source': 'Google Places API',
+                'data_source': constants.DATA_SOURCE_GOOGLE,
                 'collection_timestamp': datetime.now(timezone.utc).isoformat()
             }
             
             return enhanced_data
             
         except Exception as e:
-            logger.error(f"❌ İstasyon verisi zenginleştirme hatası: {e}")
+            logger.error(constants.LOG_MSG_ENRICHMENT_ERROR.format(error=e))
             return None
     
     def generate_fuel_types(self, brand: str) -> List[str]:
         """Marka bazında yakıt türleri üret"""
-        base_types = ['Gasoline', 'Diesel']
+        base_types = constants.BASE_FUEL_TYPES.copy()
         
-        if brand in ['Shell', 'BP', 'Total']:
+        if brand in constants.PREMIUM_FUEL_BRANDS:
             base_types.extend(['Premium Gasoline', 'AdBlue'])
         
-        if brand in ['Shell', 'Total']:
+        if brand in constants.LPG_BRANDS:
             base_types.append('LPG')
         
         # E10/E85 yakıtları (tablolardaki gibi)
@@ -190,10 +160,7 @@ class EnhancedDataCollector:
     
     def generate_services(self) -> List[str]:
         """İstasyon hizmetleri üret"""
-        possible_services = [
-            'Car Wash', 'Shop', 'ATM', 'Parking', 'Toilet', 
-            'Cafe', 'Restaurant', 'WiFi', 'Air Pump', 'Vacuum'
-        ]
+        possible_services = constants.POSSIBLE_SERVICES
         
         # Rastgele 3-6 hizmet seç
         num_services = np.random.randint(3, 7)
@@ -214,18 +181,9 @@ class EnhancedDataCollector:
     def generate_price_data(self, country_code: str) -> Dict[str, float]:
         """Ülke bazında yakıt fiyatları üret"""
         # Ortalama fiyatlar (EUR/L)
-        base_prices = {
-            'TR': {'gasoline': 1.2, 'diesel': 1.1},
-            'DE': {'gasoline': 1.6, 'diesel': 1.4},
-            'FR': {'gasoline': 1.7, 'diesel': 1.5},
-            'ES': {'gasoline': 1.5, 'diesel': 1.3},
-            'IT': {'gasoline': 1.8, 'diesel': 1.6},
-            'UK': {'gasoline': 1.9, 'diesel': 1.7},
-            'PL': {'gasoline': 1.3, 'diesel': 1.2},
-            'NL': {'gasoline': 2.0, 'diesel': 1.7}
-        }
+        base_prices = constants.BASE_PRICES
         
-        default_prices = {'gasoline': 1.5, 'diesel': 1.4}
+        default_prices = constants.DEFAULT_PRICES
         prices = base_prices.get(country_code, default_prices)
         
         # Fiyatlara %±5 rastgele varyasyon ekle
@@ -233,7 +191,7 @@ class EnhancedDataCollector:
             'gasoline': round(prices['gasoline'] * np.random.uniform(0.95, 1.05), 3),
             'diesel': round(prices['diesel'] * np.random.uniform(0.95, 1.05), 3),
             'premium_gasoline': round(prices['gasoline'] * 1.1 * np.random.uniform(0.95, 1.05), 3),
-            'currency': 'EUR'
+            'currency': constants.PRICE_CURRENCY
         }
     
     def generate_facilities(self) -> Dict[str, Any]:
@@ -243,23 +201,23 @@ class EnhancedDataCollector:
             'accessibility': np.random.choice([True, False], p=[0.8, 0.2]),
             'ev_charging': np.random.choice([True, False], p=[0.3, 0.7]),
             'truck_friendly': np.random.choice([True, False], p=[0.4, 0.6]),
-            'payment_methods': ['Card', 'Cash', 'Mobile'],
+            'payment_methods': constants.PAYMENT_METHODS,
             'loyalty_program': np.random.choice([True, False], p=[0.6, 0.4])
         }
     
     def collect_comprehensive_data(self):
         """Kapsamlı veri toplama - Tüm Avrupa ülkeleri"""
-        logger.info("🚀 Kapsamlı Avrupa benzin istasyonu verisi toplama başlıyor...")
+        logger.info(constants.LOG_MSG_COMPREHENSIVE_COLLECTION_START)
         
         all_stations = []
         country_summaries = {}
         
         for country_code, country_info in self.european_countries.items():
             try:
-                logger.info(f"🌍 {country_info['name']} için veri toplama...")
+                logger.info(constants.LOG_MSG_COUNTRY_DATA_COLLECTION_INFO.format(country_name=country_info['name']))
                 
                 # Ülke başına maksimum 30 istasyon topla
-                stations = self.collect_stations_by_country(country_code, max_stations=30)
+                stations = self.collect_stations_by_country(country_code, max_stations=constants.MAX_STATIONS_PER_COUNTRY)
                 
                 if stations:
                     all_stations.extend(stations)
@@ -273,9 +231,9 @@ class EnhancedDataCollector:
                         'collection_time': datetime.now(timezone.utc).isoformat()
                     }
                     
-                    logger.info(f"✅ {country_info['name']}: {len(stations)} istasyon toplandı")
+                    logger.info(constants.LOG_MSG_COUNTRY_STATION_COLLECTION_END.format(country_code=country_info['name'], count=len(stations)))
                 else:
-                    logger.warning(f"⚠️ {country_info['name']}: Hiç istasyon bulunamadı")
+                    logger.warning(constants.LOG_MSG_NO_STATIONS_FOUND.format(country_name=country_info['name']))
                 
                 # Veritabanına kaydet
                 for station in stations:
@@ -301,7 +259,7 @@ class EnhancedDataCollector:
                 time.sleep(3)  # Ülkeler arası bekleme
                 
             except Exception as e:
-                logger.error(f"❌ {country_info['name']} veri toplama hatası: {e}")
+                logger.error(constants.LOG_MSG_COUNTRY_COLLECTION_ERROR.format(country_name=country_info['name'], error=e))
                 continue
         
         # Özet rapor
@@ -330,17 +288,17 @@ class EnhancedDataCollector:
         }
         
         # JSON dosyasına kaydet
-        output_file = f"comprehensive_fuel_data_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+        output_file = f"{constants.COMPREHENSIVE_FUEL_DATA_FILENAME_PREFIX}{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
         with open(output_file, 'w', encoding='utf-8') as f:
             json.dump(output_data, f, indent=2, ensure_ascii=False)
         
         # Excel dosyasına da kaydet
-        self.export_to_excel(all_stations, f"fuel_stations_data_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx")
+        self.export_to_excel(all_stations, f"{constants.FUEL_STATIONS_DATA_FILENAME_PREFIX}{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx")
         
-        logger.info(f"📊 TOPLAMA TAMAMLANDI!")
-        logger.info(f"   📁 JSON: {output_file}")
-        logger.info(f"   🗃️  Database: db/fuel2go_data.db")
-        logger.info(f"   📈 Toplam: {len(all_stations)} istasyon, {len(country_summaries)} ülke")
+        logger.info(constants.LOG_MSG_COLLECTION_COMPLETE)
+        logger.info(constants.LOG_MSG_JSON_OUTPUT.format(file=output_file))
+        logger.info(constants.LOG_MSG_DB_OUTPUT.format(db_path=constants.DB_PATH))
+        logger.info(constants.LOG_MSG_TOTALS.format(stations=len(all_stations), countries=len(country_summaries)))
         
         return output_data
     
@@ -378,7 +336,7 @@ class EnhancedDataCollector:
             },
             'fuel_type_distribution': fuel_type_counts,
             'total_stations': len(stations),
-            'active_stations': len([s for s in stations if s.get('business_status') == 'OPERATIONAL']),
+            'active_stations': len([s for s in stations if s.get('business_status') == constants.BUSINESS_STATUS_OPERATIONAL]),
             'average_services_per_station': np.mean([len(s.get('services', [])) for s in stations])
         }
     
@@ -397,7 +355,7 @@ class EnhancedDataCollector:
                     'gasoline_price': prices.get('gasoline', 0),
                     'diesel_price': prices.get('diesel', 0),
                     'premium_gasoline_price': prices.get('premium_gasoline', 0),
-                    'currency': prices.get('currency', 'EUR')
+                    'currency': prices.get('currency', constants.PRICE_CURRENCY)
                 }
                 price_data.append(price_row)
             
@@ -413,10 +371,10 @@ class EnhancedDataCollector:
                 df_summary = pd.DataFrame([summary_data])
                 df_summary.to_excel(writer, sheet_name='Summary', index=False)
             
-            logger.info(f"📊 Excel dosyası kaydedildi: {filename}")
+            logger.info(constants.LOG_MSG_EXCEL_EXPORT_SUCCESS.format(filename=filename))
             
         except Exception as e:
-            logger.error(f"❌ Excel export hatası: {e}")
+            logger.error(constants.LOG_MSG_EXCEL_EXPORT_ERROR.format(error=e))
 
 def main():
     """Ana fonksiyon"""

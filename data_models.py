@@ -12,6 +12,7 @@ from datetime import datetime
 import json
 import sqlite3
 from pathlib import Path
+from config import constants
 
 @dataclass
 class FuelStationData:
@@ -96,7 +97,7 @@ class RouteData:
 class DataWarehouse:
     """Veri ambarı sınıfı - SQLite tabanlı"""
     
-    def __init__(self, db_path: str = "fuel2go_data.db"):
+    def __init__(self, db_path: str = constants.DB_PATH):
         self.db_path = db_path
         self.init_database()
     
@@ -105,80 +106,11 @@ class DataWarehouse:
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
-        # Fuel stations tablosu
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS fuel_stations (
-                station_id TEXT PRIMARY KEY,
-                name TEXT,
-                brand TEXT,
-                country TEXT,
-                region TEXT,
-                latitude REAL,
-                longitude REAL,
-                address TEXT,
-                fuel_types TEXT,
-                services TEXT,
-                rating REAL,
-                review_count INTEGER,
-                operating_hours TEXT,
-                price_data TEXT,
-                last_updated TEXT
-            )
-        ''')
-        
-        # Routes tablosu
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS routes (
-                route_id TEXT PRIMARY KEY,
-                origin_lat REAL,
-                origin_lng REAL,
-                dest_lat REAL,
-                dest_lng REAL,
-                distance_km REAL,
-                duration_minutes REAL,
-                traffic_delay_minutes REAL,
-                fuel_consumption_liters REAL,
-                carbon_emission_kg REAL,
-                weather_conditions TEXT,
-                traffic_conditions TEXT,
-                road_conditions TEXT,
-                vehicle_type TEXT,
-                fuel_stations_en_route TEXT,
-                cost_analysis TEXT,
-                created_at TEXT
-            )
-        ''')
-        
-        # Traffic data tablosu
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS traffic_data (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                route_id TEXT,
-                timestamp TEXT,
-                traffic_level TEXT,
-                average_speed REAL,
-                congestion_factor REAL,
-                incidents TEXT,
-                weather_impact REAL,
-                FOREIGN KEY (route_id) REFERENCES routes (route_id)
-            )
-        ''')
-        
-        # Carbon emissions tablosu
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS carbon_emissions (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                route_id TEXT,
-                vehicle_type TEXT,
-                emission_factor REAL,
-                total_emission_kg REAL,
-                emission_per_km REAL,
-                fuel_type TEXT,
-                calculation_method TEXT,
-                timestamp TEXT,
-                FOREIGN KEY (route_id) REFERENCES routes (route_id)
-            )
-        ''')
+        # Tablolar constants dosyasından gelen sorgularla oluşturuluyor
+        cursor.execute(constants.CREATE_TABLE_FUEL_STATIONS)
+        cursor.execute(constants.CREATE_TABLE_ROUTES)
+        cursor.execute(constants.CREATE_TABLE_TRAFFIC_DATA)
+        cursor.execute(constants.CREATE_TABLE_CARBON_EMISSIONS)
         
         conn.commit()
         conn.close()
@@ -192,10 +124,12 @@ class DataWarehouse:
         placeholders = ', '.join(['?' for _ in data])
         columns = ', '.join(data.keys())
         
-        cursor.execute(f'''
-            INSERT OR REPLACE INTO fuel_stations ({columns})
-            VALUES ({placeholders})
-        ''', list(data.values()))
+        query = constants.SQL_INSERT_OR_REPLACE.format(
+            table=constants.TABLE_FUEL_STATIONS,
+            columns=columns,
+            placeholders=placeholders
+        )
+        cursor.execute(query, list(data.values()))
         
         conn.commit()
         conn.close()
@@ -209,10 +143,12 @@ class DataWarehouse:
         placeholders = ', '.join(['?' for _ in data])
         columns = ', '.join(data.keys())
         
-        cursor.execute(f'''
-            INSERT OR REPLACE INTO routes ({columns})
-            VALUES ({placeholders})
-        ''', list(data.values()))
+        query = constants.SQL_INSERT_OR_REPLACE.format(
+            table=constants.TABLE_ROUTES,
+            columns=columns,
+            placeholders=placeholders
+        )
+        cursor.execute(query, list(data.values()))
         
         conn.commit()
         conn.close()
@@ -221,7 +157,7 @@ class DataWarehouse:
         """Ülkeye göre istasyonları getir"""
         conn = sqlite3.connect(self.db_path)
         df = pd.read_sql_query(
-            "SELECT * FROM fuel_stations WHERE country = ?",
+            constants.SQL_SELECT_STATIONS_BY_COUNTRY,
             conn, params=[country]
         )
         conn.close()
@@ -231,7 +167,7 @@ class DataWarehouse:
         """Tarih aralığına göre rotaları getir"""
         conn = sqlite3.connect(self.db_path)
         df = pd.read_sql_query(
-            "SELECT * FROM routes WHERE created_at BETWEEN ? AND ?",
+            constants.SQL_SELECT_ROUTES_BY_DATE,
             conn, params=[start_date, end_date]
         )
         conn.close()
@@ -243,24 +179,24 @@ class DataWarehouse:
         cursor = conn.cursor()
         
         # Temel istatistikler
-        cursor.execute("SELECT COUNT(*) FROM fuel_stations")
+        cursor.execute(constants.SQL_COUNT_FUEL_STATIONS)
         total_stations = cursor.fetchone()[0]
         
-        cursor.execute("SELECT COUNT(*) FROM routes")
+        cursor.execute(constants.SQL_COUNT_ROUTES)
         total_routes = cursor.fetchone()[0]
         
-        cursor.execute("SELECT AVG(carbon_emission_kg) FROM routes")
+        cursor.execute(constants.SQL_AVG_CARBON_EMISSION)
         avg_carbon = cursor.fetchone()[0] or 0
         
-        cursor.execute("SELECT AVG(fuel_consumption_liters) FROM routes")
+        cursor.execute(constants.SQL_AVG_FUEL_CONSUMPTION)
         avg_fuel = cursor.fetchone()[0] or 0
         
         # Ülke bazında istasyon sayıları
-        cursor.execute("SELECT country, COUNT(*) FROM fuel_stations GROUP BY country")
+        cursor.execute(constants.SQL_STATIONS_BY_COUNTRY_GROUP)
         country_stats = dict(cursor.fetchall())
         
         # Araç tipi bazında emisyon ortalamaları
-        cursor.execute("SELECT vehicle_type, AVG(carbon_emission_kg) FROM routes GROUP BY vehicle_type")
+        cursor.execute(constants.SQL_EMISSIONS_BY_VEHICLE_GROUP)
         vehicle_emissions = dict(cursor.fetchall())
         
         conn.close()
@@ -301,7 +237,7 @@ class RealTimeDataCollector:
         # Google Traffic API veya Mapbox Traffic API kullanılabilir
         # Şimdilik mock data
         return {
-            "traffic_level": np.random.choice(["low", "moderate", "high", "severe"]),
+            "traffic_level": np.random.choice(constants.TRAFFIC_LEVELS),
             "average_speed": np.random.normal(60, 20),
             "congestion_factor": np.random.uniform(1.0, 3.0),
             "incidents": [],
@@ -312,33 +248,23 @@ class RealTimeDataCollector:
                                  traffic_factor: float = 1.0) -> float:
         """Yakıt tüketimi hesapla"""
         # Araç tipi bazında yakıt tüketimi (L/100km)
-        consumption_rates = {
-            "gasoline_car": 7.5,
-            "diesel_car": 6.2,
-            "electric_car": 0.0,  # kWh/100km olarak 20 kWh
-            "hybrid_car": 4.8
-        }
+        consumption_rates = constants.FUEL_CONSUMPTION_RATES
         
-        base_consumption = consumption_rates.get(vehicle_type, 7.5)
+        base_consumption = consumption_rates.get(vehicle_type, constants.DEFAULT_FUEL_CONSUMPTION_RATE)
         return (distance_km / 100) * base_consumption * traffic_factor
     
     def calculate_carbon_emission_ipcc(self, fuel_consumption: float, 
                                      vehicle_type: str) -> float:
         """IPCC yöntemleriyle karbon emisyon hesaplama"""
         # IPCC 2006 rehberi emission factors (kg CO2/L)
-        emission_factors = {
-            "gasoline_car": 2.31,  # kg CO2/L benzin
-            "diesel_car": 2.68,    # kg CO2/L dizel
-            "electric_car": 0.067, # kg CO2/kWh (elektrik karışımına bağlı)
-            "hybrid_car": 2.31     # Benzin bazlı hibrit
-        }
+        emission_factors = constants.CARBON_EMISSION_FACTORS_IPCC
         
-        factor = emission_factors.get(vehicle_type, 2.31)
+        factor = emission_factors.get(vehicle_type, constants.DEFAULT_EMISSION_FACTOR)
         return fuel_consumption * factor
     
     def collect_comprehensive_route_data(self, origin: Dict[str, float], 
                                        destination: Dict[str, float],
-                                       vehicle_type: str = "gasoline_car") -> RouteData:
+                                       vehicle_type: str = constants.DEFAULT_VEHICLE_TYPE) -> RouteData:
         """Kapsamlı rota verisi topla"""
         
         # Google Routes API'dan temel rota bilgisi
@@ -355,12 +281,9 @@ class RealTimeDataCollector:
         traffic = self.collect_traffic_data("mock_polyline")
         
         # Trafik faktörü
-        traffic_factor = {
-            "low": 1.0,
-            "moderate": 1.2,
-            "high": 1.5,
-            "severe": 2.0
-        }.get(traffic["traffic_level"], 1.0)
+        traffic_factor = constants.TRAFFIC_FACTORS.get(
+            traffic["traffic_level"], constants.DEFAULT_TRAFFIC_FACTOR
+        )
         
         # Yakıt tüketimi
         fuel_consumption = self.calculate_fuel_consumption(
@@ -373,19 +296,16 @@ class RealTimeDataCollector:
         )
         
         # Maliyet analizi
-        fuel_prices = {
-            "gasoline_car": 25.5,  # TL/L
-            "diesel_car": 24.8,
-            "electric_car": 2.5,   # TL/kWh
-            "hybrid_car": 25.5
-        }
+        fuel_prices = constants.MOCK_FUEL_PRICES_TL
         
-        fuel_cost = fuel_consumption * fuel_prices.get(vehicle_type, 25.5)
+        fuel_cost = fuel_consumption * fuel_prices.get(vehicle_type, constants.DEFAULT_MOCK_FUEL_PRICE)
+        
+        toll_cost = distance_km * constants.MOCK_TOLL_COST_PER_KM
         
         cost_analysis = {
             "fuel_cost": fuel_cost,
-            "toll_cost": distance_km * 0.15,  # Ortalama köprü ücreti
-            "total_cost": fuel_cost + (distance_km * 0.15)
+            "toll_cost": toll_cost,
+            "total_cost": fuel_cost + toll_cost
         }
         
         return RouteData(
@@ -409,6 +329,6 @@ class RealTimeDataCollector:
         )
 
 class FuelDB:
-    def __init__(self, db_path: str = "db/fuel2go_data.db"):
+    def __init__(self, db_path: str = constants.DB_PATH):
         self.db_path = db_path
         self.conn = None
