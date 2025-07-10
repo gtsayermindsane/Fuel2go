@@ -38,7 +38,7 @@ class DataCollector:
     def __init__(self):
         self.routes_client = GoogleRoutesClient()
         self.places_client = GooglePlacesClient()
-        self.data_file = 'fuel_stations_data.json'
+        self.data_file = 'db/fuel_stations_data.json'
         
         # Popüler rotalar - Avrupa genelinde daha kapsamlı
         self.routes_to_collect = [

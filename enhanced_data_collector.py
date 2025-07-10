@@ -339,7 +339,7 @@ class EnhancedDataCollector:
         
         logger.info(f"📊 TOPLAMA TAMAMLANDI!")
         logger.info(f"   📁 JSON: {output_file}")
-        logger.info(f"   🗃️  Database: fuel2go_data.db")
+        logger.info(f"   🗃️  Database: db/fuel2go_data.db")
         logger.info(f"   📈 Toplam: {len(all_stations)} istasyon, {len(country_summaries)} ülke")
         
         return output_data
@@ -431,6 +431,11 @@ def main():
     print(f"   💾 Toplam İstasyon: {db_summary['total_stations']}")
     print(f"   🗺️ Toplam Rota: {db_summary['total_routes']}")
     print(f"   🌍 Ülke Dağılımı: {db_summary['stations_by_country']}")
+
+def get_final_data_from_db(db_path="db/fuel2go_data.db"):
+    """Veritabanından son işlenmiş veriyi çeker."""
+    conn = sqlite3.connect(db_path)
+    # ... existing code ...
 
 if __name__ == "__main__":
     main()

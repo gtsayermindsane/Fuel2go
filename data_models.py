@@ -407,3 +407,8 @@ class RealTimeDataCollector:
             cost_analysis=cost_analysis,
             created_at=datetime.now()
         )
+
+class FuelDB:
+    def __init__(self, db_path: str = "db/fuel2go_data.db"):
+        self.db_path = db_path
+        self.conn = None
