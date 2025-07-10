@@ -8,4 +8,5 @@ folium
 streamlit-folium
 numpy
 openpyxl
-sqlite3
+scikit-learn
+psycopg2-binary

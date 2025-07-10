@@ -262,6 +262,9 @@ TABLE_FUEL_STATIONS = "fuel_stations"
 TABLE_ROUTES = "routes"
 TABLE_TRAFFIC_DATA = "traffic_data"
 TABLE_CARBON_EMISSIONS = "carbon_emissions"
+TABLE_TRUCK_SERVICES = "truck_services"
+TABLE_DRIVER_AMENITIES = "driver_amenities"
+TABLE_EMERGENCY_SERVICES = "emergency_services"
 
 # Veritabanı Şemaları (CREATE TABLE sorguları)
 CREATE_TABLE_FUEL_STATIONS = f'''
@@ -332,6 +335,68 @@ CREATE_TABLE_CARBON_EMISSIONS = f'''
         calculation_method TEXT,
         timestamp TEXT,
         FOREIGN KEY (route_id) REFERENCES {TABLE_ROUTES} (route_id)
+    )
+'''
+
+CREATE_TABLE_TRUCK_SERVICES = f'''
+    CREATE TABLE IF NOT EXISTS {TABLE_TRUCK_SERVICES} (
+        service_id TEXT PRIMARY KEY,
+        name TEXT NOT NULL,
+        service_type TEXT NOT NULL,
+        latitude REAL NOT NULL,
+        longitude REAL NOT NULL,
+        address TEXT,
+        truck_parking_spaces INTEGER,
+        has_adblue BOOLEAN,
+        has_truck_repair BOOLEAN,
+        has_shower BOOLEAN,
+        has_restaurant BOOLEAN,
+        has_wifi BOOLEAN,
+        operating_hours TEXT,
+        payment_methods TEXT,
+        services_offered TEXT,
+        rating REAL,
+        last_updated TEXT
+    )
+'''
+
+CREATE_TABLE_DRIVER_AMENITIES = f'''
+    CREATE TABLE IF NOT EXISTS {TABLE_DRIVER_AMENITIES} (
+        amenity_id TEXT PRIMARY KEY,
+        name TEXT NOT NULL,
+        amenity_type TEXT NOT NULL,
+        latitude REAL NOT NULL,
+        longitude REAL NOT NULL,
+        address TEXT,
+        has_parking BOOLEAN,
+        has_shower BOOLEAN,
+        has_laundry BOOLEAN,
+        has_wifi BOOLEAN,
+        has_tv BOOLEAN,
+        room_count INTEGER,
+        price_range TEXT,
+        meal_types TEXT,
+        driver_discount BOOLEAN,
+        rating REAL,
+        review_count INTEGER,
+        last_updated TEXT
+    )
+'''
+
+CREATE_TABLE_EMERGENCY_SERVICES = f'''
+    CREATE TABLE IF NOT EXISTS {TABLE_EMERGENCY_SERVICES} (
+        emergency_id TEXT PRIMARY KEY,
+        name TEXT NOT NULL,
+        service_type TEXT NOT NULL,
+        latitude REAL NOT NULL,
+        longitude REAL NOT NULL,
+        address TEXT,
+        phone_number TEXT,
+        is_24h BOOLEAN,
+        emergency_services TEXT,
+        vehicle_assistance BOOLEAN,
+        language_support TEXT,
+        last_updated TEXT
     )
 '''
 

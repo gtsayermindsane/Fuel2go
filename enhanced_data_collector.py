@@ -12,12 +12,13 @@ import time
 import logging
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass
-import sqlite3
+import psycopg2
 from pathlib import Path
 
 from api.routes_client import GoogleRoutesClient
 from api.places_client import GooglePlacesClient
-from data_models import DataWarehouse, FuelStationData, RouteData, RealTimeDataCollector
+from data_models import FuelStationData, RouteData, RealTimeDataCollector
+from db.postgresql_data_warehouse import PostgreSQLDataWarehouse
 from config import constants
 
 logging.basicConfig(level=logging.INFO)
@@ -30,7 +31,7 @@ class EnhancedDataCollector:
     Bu sınıf, Google Places API'sini kullanarak belirtilen ülkelerin başkentleri
     çevresindeki benzin istasyonlarını toplar, bu verileri zenginleştirir (marka tanıma,
     mock fiyat ve hizmet verileri ekleme) ve hem JSON hem de Excel formatında
-    dışa aktarır. Ayrıca toplanan verileri bir SQLite veritabanına kaydeder.
+    dışa aktarır. Ayrıca toplanan verileri bir PostgreSQL veritabanına kaydeder.
     """
     
     def __init__(self):
@@ -42,7 +43,7 @@ class EnhancedDataCollector:
         """
         self.routes_client = GoogleRoutesClient()
         self.places_client = GooglePlacesClient()
-        self.warehouse = DataWarehouse()
+        self.warehouse = PostgreSQLDataWarehouse()
         self.real_time_collector = RealTimeDataCollector(self.warehouse)
         
         # Sabitler constants.py dosyasından alınıyor
@@ -536,10 +537,11 @@ def get_final_data_from_db(db_path="db/fuel2go_data.db"):
     Not: Bu fonksiyonun içi henüz tam olarak doldurulmamıştır.
     
     Args:
-        db_path (str, optional): SQLite veritabanı dosyasının yolu. 
-                                 Varsayılan olarak "db/fuel2go_data.db".
+        db_path (str, optional): PostgreSQL veritabanı bağlantısı için kullanılmayacak. 
+                                 Varsayılan olarak PostgreSQL kullanılır.
     """
-    conn = sqlite3.connect(db_path)
+    # PostgreSQL kullanıldığı için bu fonksiyon güncellenmeli
+    pass
     # ... existing code ...
 
 if __name__ == "__main__":

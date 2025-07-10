@@ -149,6 +149,186 @@ class RouteData:
             'created_at': self.created_at.isoformat()
         }
 
+@dataclass
+class TruckServiceData:
+    """
+    Kamyon ve şoför hizmetlerini temsil eden veri sınıfı.
+    
+    Attributes:
+        service_id (str): Hizmetin benzersiz kimliği.
+        name (str): Hizmet adı.
+        service_type (str): Hizmet türü (truck_stop, rest_stop, etc.).
+        latitude (float): Enlem.
+        longitude (float): Boylam.
+        address (str): Tam adres.
+        truck_parking_spaces (int): Kamyon park yeri sayısı.
+        has_adblue (bool): AdBlue servisi var mı.
+        has_truck_repair (bool): Kamyon tamiri var mı.
+        has_shower (bool): Duş imkanı var mı.
+        has_restaurant (bool): Restoran var mı.
+        has_wifi (bool): WiFi var mı.
+        operating_hours (Dict[str, str]): Çalışma saatleri.
+        payment_methods (List[str]): Kabul edilen ödeme yöntemleri.
+        services_offered (List[str]): Sunulan hizmetler listesi.
+        rating (float): Kullanıcı puanı.
+        last_updated (datetime): Son güncelleme zamanı.
+    """
+    service_id: str
+    name: str
+    service_type: str
+    latitude: float
+    longitude: float
+    address: str
+    truck_parking_spaces: int
+    has_adblue: bool
+    has_truck_repair: bool
+    has_shower: bool
+    has_restaurant: bool
+    has_wifi: bool
+    operating_hours: Dict[str, str]
+    payment_methods: List[str]
+    services_offered: List[str]
+    rating: float
+    last_updated: datetime
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """TruckServiceData nesnesini veritabanı formatına dönüştürür."""
+        return {
+            'service_id': self.service_id,
+            'name': self.name,
+            'service_type': self.service_type,
+            'latitude': self.latitude,
+            'longitude': self.longitude,
+            'address': self.address,
+            'truck_parking_spaces': self.truck_parking_spaces,
+            'has_adblue': self.has_adblue,
+            'has_truck_repair': self.has_truck_repair,
+            'has_shower': self.has_shower,
+            'has_restaurant': self.has_restaurant,
+            'has_wifi': self.has_wifi,
+            'operating_hours': json.dumps(self.operating_hours),
+            'payment_methods': ','.join(self.payment_methods),
+            'services_offered': ','.join(self.services_offered),
+            'rating': self.rating,
+            'last_updated': self.last_updated.isoformat()
+        }
+
+@dataclass
+class DriverAmenityData:
+    """
+    Şoför konfor hizmetlerini temsil eden veri sınıfı.
+    
+    Attributes:
+        amenity_id (str): Hizmetin benzersiz kimliği.
+        name (str): Hizmet adı.
+        amenity_type (str): Hizmet türü (motel, restaurant, etc.).
+        latitude (float): Enlem.
+        longitude (float): Boylam.
+        address (str): Tam adres.
+        has_parking (bool): Park yeri var mı.
+        has_shower (bool): Duş imkanı var mı.
+        has_laundry (bool): Çamaşırhane var mı.
+        has_wifi (bool): WiFi var mı.
+        has_tv (bool): TV var mı.
+        room_count (Optional[int]): Oda sayısı (konaklama için).
+        price_range (str): Fiyat aralığı (low, medium, high).
+        meal_types (List[str]): Sunulan yemek türleri.
+        driver_discount (bool): Şoför indirimi var mı.
+        rating (float): Kullanıcı puanı.
+        review_count (int): Yorum sayısı.
+        last_updated (datetime): Son güncelleme zamanı.
+    """
+    amenity_id: str
+    name: str
+    amenity_type: str
+    latitude: float
+    longitude: float
+    address: str
+    has_parking: bool
+    has_shower: bool
+    has_laundry: bool
+    has_wifi: bool
+    has_tv: bool
+    room_count: Optional[int]
+    price_range: str
+    meal_types: List[str]
+    driver_discount: bool
+    rating: float
+    review_count: int
+    last_updated: datetime
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """DriverAmenityData nesnesini veritabanı formatına dönüştürür."""
+        return {
+            'amenity_id': self.amenity_id,
+            'name': self.name,
+            'amenity_type': self.amenity_type,
+            'latitude': self.latitude,
+            'longitude': self.longitude,
+            'address': self.address,
+            'has_parking': self.has_parking,
+            'has_shower': self.has_shower,
+            'has_laundry': self.has_laundry,
+            'has_wifi': self.has_wifi,
+            'has_tv': self.has_tv,
+            'room_count': self.room_count,
+            'price_range': self.price_range,
+            'meal_types': ','.join(self.meal_types),
+            'driver_discount': self.driver_discount,
+            'rating': self.rating,
+            'review_count': self.review_count,
+            'last_updated': self.last_updated.isoformat()
+        }
+
+@dataclass
+class EmergencyServiceData:
+    """
+    Acil durum hizmetlerini temsil eden veri sınıfı.
+    
+    Attributes:
+        emergency_id (str): Hizmetin benzersiz kimliği.
+        name (str): Hizmet adı.
+        service_type (str): Hizmet türü (hospital, police, fire_station, etc.).
+        latitude (float): Enlem.
+        longitude (float): Boylam.
+        address (str): Tam adres.
+        phone_number (str): Telefon numarası.
+        is_24h (bool): 24 saat hizmet veriyor mu.
+        emergency_services (List[str]): Sunulan acil durum hizmetleri.
+        vehicle_assistance (bool): Araç yardımı var mı.
+        language_support (List[str]): Desteklenen diller.
+        last_updated (datetime): Son güncelleme zamanı.
+    """
+    emergency_id: str
+    name: str
+    service_type: str
+    latitude: float
+    longitude: float
+    address: str
+    phone_number: str
+    is_24h: bool
+    emergency_services: List[str]
+    vehicle_assistance: bool
+    language_support: List[str]
+    last_updated: datetime
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """EmergencyServiceData nesnesini veritabanı formatına dönüştürür."""
+        return {
+            'emergency_id': self.emergency_id,
+            'name': self.name,
+            'service_type': self.service_type,
+            'latitude': self.latitude,
+            'longitude': self.longitude,
+            'address': self.address,
+            'phone_number': self.phone_number,
+            'is_24h': self.is_24h,
+            'emergency_services': ','.join(self.emergency_services),
+            'vehicle_assistance': self.vehicle_assistance,
+            'language_support': ','.join(self.language_support),
+            'last_updated': self.last_updated.isoformat()
+        }
+
 class DataWarehouse:
     """
     SQLite tabanlı veri ambarı yönetimi sınıfı.
@@ -183,6 +363,11 @@ class DataWarehouse:
         cursor.execute(constants.CREATE_TABLE_ROUTES)
         cursor.execute(constants.CREATE_TABLE_TRAFFIC_DATA)
         cursor.execute(constants.CREATE_TABLE_CARBON_EMISSIONS)
+        
+        # Şoför hizmetleri için yeni tablolar
+        cursor.execute(constants.CREATE_TABLE_TRUCK_SERVICES)
+        cursor.execute(constants.CREATE_TABLE_DRIVER_AMENITIES)
+        cursor.execute(constants.CREATE_TABLE_EMERGENCY_SERVICES)
         
         conn.commit()
         conn.close()
@@ -230,6 +415,78 @@ class DataWarehouse:
         
         query = constants.SQL_INSERT_OR_REPLACE.format(
             table=constants.TABLE_ROUTES,
+            columns=columns,
+            placeholders=placeholders
+        )
+        cursor.execute(query, list(data.values()))
+        
+        conn.commit()
+        conn.close()
+    
+    def insert_truck_service(self, service: TruckServiceData):
+        """
+        Veritabanına bir kamyon hizmeti kaydı ekler veya mevcut kaydı günceller.
+        
+        Args:
+            service (TruckServiceData): Eklenecek kamyon hizmeti verilerini içeren nesne.
+        """
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        data = service.to_dict()
+        placeholders = ', '.join(['?' for _ in data])
+        columns = ', '.join(data.keys())
+        
+        query = constants.SQL_INSERT_OR_REPLACE.format(
+            table=constants.TABLE_TRUCK_SERVICES,
+            columns=columns,
+            placeholders=placeholders
+        )
+        cursor.execute(query, list(data.values()))
+        
+        conn.commit()
+        conn.close()
+    
+    def insert_driver_amenity(self, amenity: DriverAmenityData):
+        """
+        Veritabanına bir şoför konfor hizmeti kaydı ekler veya mevcut kaydı günceller.
+        
+        Args:
+            amenity (DriverAmenityData): Eklenecek şoför konfor hizmeti verilerini içeren nesne.
+        """
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        data = amenity.to_dict()
+        placeholders = ', '.join(['?' for _ in data])
+        columns = ', '.join(data.keys())
+        
+        query = constants.SQL_INSERT_OR_REPLACE.format(
+            table=constants.TABLE_DRIVER_AMENITIES,
+            columns=columns,
+            placeholders=placeholders
+        )
+        cursor.execute(query, list(data.values()))
+        
+        conn.commit()
+        conn.close()
+    
+    def insert_emergency_service(self, emergency: EmergencyServiceData):
+        """
+        Veritabanına bir acil durum hizmeti kaydı ekler veya mevcut kaydı günceller.
+        
+        Args:
+            emergency (EmergencyServiceData): Eklenecek acil durum hizmeti verilerini içeren nesne.
+        """
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        data = emergency.to_dict()
+        placeholders = ', '.join(['?' for _ in data])
+        columns = ', '.join(data.keys())
+        
+        query = constants.SQL_INSERT_OR_REPLACE.format(
+            table=constants.TABLE_EMERGENCY_SERVICES,
             columns=columns,
             placeholders=placeholders
         )
