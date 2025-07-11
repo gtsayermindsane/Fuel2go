@@ -176,11 +176,14 @@ class EnhancedDataCollector:
             # Marka belirle
             brand = self.identify_fuel_brand(name)
             
+            # Mekan türünü belirle
+            primary_type = station.get('primaryType', 'gas_station')
+            
             # Temel veriler
             enhanced_data = {
                 'station_id': station.get('id', ''),
                 'name': name,
-                'brand': brand,
+                'brand': brand if primary_type == 'gas_station' else 'N/A',
                 'country': 'Turkey',
                 'city': city_name,
                 'region': f"{city_name}_region",
@@ -191,39 +194,62 @@ class EnhancedDataCollector:
                 'rating': station.get('rating', constants.DEFAULT_RATING),
                 'review_count': station.get('userRatingCount', constants.DEFAULT_REVIEW_COUNT),
                 'business_status': station.get('businessStatus', constants.BUSINESS_STATUS_OPERATIONAL),
-                'primary_type': station.get('primaryType', 'gas_station'),
-                'primary_type_display_name': station.get('primaryTypeDisplayName', {}).get('text', 'Gas Station'),
-                'fuel_types': self.generate_fuel_types(brand),
+                'primary_type': primary_type,
+                'primary_type_display_name': station.get('primaryTypeDisplayName', {}).get('text', 'Place'),
                 'services': self.generate_services(),
                 'operating_hours': self.generate_operating_hours(),
-                'price_data': self.generate_price_data('TR'),
-                'facilities': self.generate_facilities(),
                 'last_updated': datetime.now(timezone.utc).isoformat(),
                 'data_source': constants.DATA_SOURCE_GOOGLE,
                 'collection_timestamp': datetime.now(timezone.utc).isoformat()
             }
             
-            # Places API (New) field'larını ekle
-            if collection_options.get('fuel_options', True):
+            # Mekan türüne göre spesifik alanları ekle
+            if primary_type == 'gas_station':
+                # Sadece benzin istasyonları için yakıt bilgileri
+                enhanced_data['fuel_types'] = self.generate_fuel_types(brand)
+                enhanced_data['price_data'] = self.generate_price_data('TR')
+                enhanced_data['facilities'] = self.generate_facilities()
+            else:
+                # Diğer mekanlar için yakıt bilgisi yok
+                enhanced_data['fuel_types'] = []
+                enhanced_data['price_data'] = {}
+                enhanced_data['facilities'] = {}
+            
+            # Places API (New) field'larını mekan türüne göre ekle
+            if primary_type in ['gas_station', 'car_repair'] and collection_options.get('fuel_options', True):
                 enhanced_data['fuel_options'] = self.generate_fuel_options(station.get('fuelOptions', {}))
+            else:
+                enhanced_data['fuel_options'] = {}
                 
-            if collection_options.get('ev_charge_options', True):
+            # EV şarj - benzin istasyonu, otel, alışveriş merkezi için
+            if primary_type in ['gas_station', 'lodging', 'shopping_mall', 'parking'] and collection_options.get('ev_charge_options', True):
                 enhanced_data['ev_charge_options'] = self.generate_ev_charge_options(station.get('evChargeOptions', {}))
+            else:
+                enhanced_data['ev_charge_options'] = {'available': False}
                 
+            # Park - çoğu mekan için geçerli
             if collection_options.get('parking_options', True):
                 enhanced_data['parking_options'] = self.generate_parking_options(station.get('parkingOptions', {}))
                 
+            # Ödeme - çoğu mekan için geçerli
             if collection_options.get('payment_options', True):
                 enhanced_data['payment_options'] = self.generate_payment_options(station.get('paymentOptions', {}))
                 
+            # Erişilebilirlik - tüm mekanlar için geçerli
             if collection_options.get('accessibility', True):
                 enhanced_data['accessibility_options'] = self.generate_accessibility_options(station)
                 
-            if collection_options.get('secondary_hours', True):
+            # İkincil saatler - benzin istasyonu ve bazı ticari mekanlar için
+            if primary_type in ['gas_station', 'restaurant', 'bank', 'pharmacy', 'supermarket'] and collection_options.get('secondary_hours', True):
                 enhanced_data['secondary_opening_hours'] = self.generate_secondary_hours(station.get('regularSecondaryOpeningHours', []))
+            else:
+                enhanced_data['secondary_opening_hours'] = {}
                 
             # Sub destinations
             enhanced_data['sub_destinations'] = station.get('subDestinations', [])
+            
+            # Mekan türüne özgü spesifik alanları ekle
+            enhanced_data.update(self.get_place_specific_fields(station, primary_type))
             
             return enhanced_data
             
@@ -366,6 +392,200 @@ class EnhancedDataCollector:
         if np.random.random() > 0.5:  # %50 şans market var
             return {"all_days": "05:00-23:00"}
         return {}
+    
+    def get_place_specific_fields(self, station: Dict[str, Any], primary_type: str) -> Dict[str, Any]:
+        """
+        Mekan türüne özgü spesifik alanları Google Places API (New) dokümantasyonuna göre döndürür.
+        """
+        specific_fields = {}
+        
+        if primary_type == 'hospital':
+            specific_fields.update(self.get_hospital_fields(station))
+        elif primary_type == 'restaurant':
+            specific_fields.update(self.get_restaurant_fields(station))
+        elif primary_type == 'lodging':
+            specific_fields.update(self.get_lodging_fields(station))
+        elif primary_type == 'bank':
+            specific_fields.update(self.get_bank_fields(station))
+        elif primary_type == 'pharmacy':
+            specific_fields.update(self.get_pharmacy_fields(station))
+        elif primary_type == 'supermarket':
+            specific_fields.update(self.get_supermarket_fields(station))
+        elif primary_type == 'shopping_mall':
+            specific_fields.update(self.get_shopping_mall_fields(station))
+        elif primary_type == 'tourist_attraction':
+            specific_fields.update(self.get_tourist_attraction_fields(station))
+        elif primary_type == 'atm':
+            specific_fields.update(self.get_atm_fields(station))
+        elif primary_type == 'car_repair':
+            specific_fields.update(self.get_car_repair_fields(station))
+        elif primary_type == 'parking':
+            specific_fields.update(self.get_parking_fields(station))
+            
+        return specific_fields
+    
+    def get_hospital_fields(self, station: Dict[str, Any]) -> Dict[str, Any]:
+        """Hastane için spesifik alanlar"""
+        return {
+            'hospital_departments': station.get('hospitalDepartments', []),
+            'medical_services': station.get('medicalServices', []),
+            'emergency_services': station.get('emergencyServices', np.random.choice([True, False], p=[0.8, 0.2])),
+            'accepts_insurance': station.get('acceptsInsurance', np.random.choice([True, False], p=[0.9, 0.1])),
+            'appointment_required': station.get('appointmentRequired', np.random.choice([True, False], p=[0.7, 0.3])),
+            'has_ambulance': np.random.choice([True, False], p=[0.6, 0.4]),
+            'has_pharmacy_inside': np.random.choice([True, False], p=[0.8, 0.2]),
+            'visiting_hours': station.get('visitingHours', {'weekdays': '08:00-20:00', 'weekend': '10:00-18:00'})
+        }
+    
+    def get_restaurant_fields(self, station: Dict[str, Any]) -> Dict[str, Any]:
+        """Restoran için spesifik alanlar"""
+        return {
+            'menu_for_children': station.get('menuForChildren', np.random.choice([True, False], p=[0.6, 0.4])),
+            'serves_cocktails': station.get('servesCocktails', np.random.choice([True, False], p=[0.3, 0.7])),
+            'serves_beer': station.get('servesBeer', np.random.choice([True, False], p=[0.5, 0.5])),
+            'serves_wine': station.get('servesWine', np.random.choice([True, False], p=[0.4, 0.6])),
+            'serves_vegetarian_food': station.get('servesVegetarianFood', np.random.choice([True, False], p=[0.7, 0.3])),
+            'serves_breakfast': station.get('servesBreakfast', np.random.choice([True, False], p=[0.4, 0.6])),
+            'serves_brunch': station.get('servesBrunch', np.random.choice([True, False], p=[0.3, 0.7])),
+            'serves_lunch': station.get('servesLunch', np.random.choice([True, False], p=[0.9, 0.1])),
+            'serves_dinner': station.get('servesDinner', np.random.choice([True, False], p=[0.8, 0.2])),
+            'reservable': station.get('reservable', np.random.choice([True, False], p=[0.6, 0.4])),
+            'takeout': station.get('takeout', np.random.choice([True, False], p=[0.7, 0.3])),
+            'delivery': station.get('delivery', np.random.choice([True, False], p=[0.5, 0.5])),
+            'dine_in': station.get('dineIn', np.random.choice([True, False], p=[0.9, 0.1])),
+            'curbside_pickup': station.get('curbsidePickup', np.random.choice([True, False], p=[0.3, 0.7])),
+            'outdoor_seating': station.get('outdoorSeating', np.random.choice([True, False], p=[0.4, 0.6])),
+            'live_music': station.get('liveMusic', np.random.choice([True, False], p=[0.2, 0.8])),
+            'good_for_children': station.get('goodForChildren', np.random.choice([True, False], p=[0.6, 0.4])),
+            'good_for_groups': station.get('goodForGroups', np.random.choice([True, False], p=[0.7, 0.3])),
+            'cuisine_type': station.get('cuisineType', ['Turkish', 'International', 'Fast Food', 'Italian', 'Chinese'][np.random.randint(0, 5)]),
+            'price_range': station.get('priceRange', np.random.choice(['$', '$$', '$$$', '$$$$'], p=[0.3, 0.4, 0.2, 0.1]))
+        }
+    
+    def get_lodging_fields(self, station: Dict[str, Any]) -> Dict[str, Any]:
+        """Konaklama için spesifik alanlar"""
+        return {
+            'pet_friendly': station.get('petFriendly', np.random.choice([True, False], p=[0.3, 0.7])),
+            'pool_available': station.get('poolAvailable', np.random.choice([True, False], p=[0.4, 0.6])),
+            'fitness_center': station.get('fitnessCenter', np.random.choice([True, False], p=[0.5, 0.5])),
+            'business_center': station.get('businessCenter', np.random.choice([True, False], p=[0.6, 0.4])),
+            'free_wifi': station.get('freeWifi', np.random.choice([True, False], p=[0.9, 0.1])),
+            'room_service': station.get('roomService', np.random.choice([True, False], p=[0.4, 0.6])),
+            'spa_services': station.get('spaServices', np.random.choice([True, False], p=[0.2, 0.8])),
+            'restaurant_on_site': station.get('restaurantOnSite', np.random.choice([True, False], p=[0.7, 0.3])),
+            'bar_on_site': station.get('barOnSite', np.random.choice([True, False], p=[0.5, 0.5])),
+            'conference_rooms': station.get('conferenceRooms', np.random.choice([True, False], p=[0.4, 0.6])),
+            'laundry_service': station.get('laundryService', np.random.choice([True, False], p=[0.8, 0.2])),
+            'concierge_service': station.get('conciergeService', np.random.choice([True, False], p=[0.3, 0.7])),
+            'airport_shuttle': station.get('airportShuttle', np.random.choice([True, False], p=[0.3, 0.7])),
+            'smoking_allowed': station.get('smokingAllowed', np.random.choice([True, False], p=[0.1, 0.9])),
+            'air_conditioning': station.get('airConditioning', np.random.choice([True, False], p=[0.9, 0.1])),
+            'heating': station.get('heating', np.random.choice([True, False], p=[0.95, 0.05])),
+            'check_in_time': station.get('checkInTime', '14:00'),
+            'check_out_time': station.get('checkOutTime', '12:00'),
+            'star_rating': station.get('starRating', np.random.randint(1, 6))
+        }
+    
+    def get_bank_fields(self, station: Dict[str, Any]) -> Dict[str, Any]:
+        """Banka için spesifik alanlar"""
+        return {
+            'atm_available': station.get('atmAvailable', np.random.choice([True, False], p=[0.9, 0.1])),
+            'drive_through': station.get('driveThrough', np.random.choice([True, False], p=[0.6, 0.4])),
+            'foreign_exchange': station.get('foreignExchange', np.random.choice([True, False], p=[0.4, 0.6])),
+            'safe_deposit_boxes': station.get('safeDepositBoxes', np.random.choice([True, False], p=[0.7, 0.3])),
+            'mortgage_services': station.get('mortgageServices', np.random.choice([True, False], p=[0.8, 0.2])),
+            'investment_services': station.get('investmentServices', np.random.choice([True, False], p=[0.6, 0.4])),
+            'business_banking': station.get('businessBanking', np.random.choice([True, False], p=[0.8, 0.2])),
+            'notary_services': station.get('notaryServices', np.random.choice([True, False], p=[0.3, 0.7]))
+        }
+    
+    def get_pharmacy_fields(self, station: Dict[str, Any]) -> Dict[str, Any]:
+        """Eczane için spesifik alanlar"""
+        return {
+            'prescription_filling': station.get('prescriptionFilling', True),
+            'otc_medications': station.get('otcMedications', True),
+            'health_screenings': station.get('healthScreenings', np.random.choice([True, False], p=[0.6, 0.4])),
+            'vaccinations': station.get('vaccinations', np.random.choice([True, False], p=[0.7, 0.3])),
+            'delivery_service': station.get('deliveryService', np.random.choice([True, False], p=[0.4, 0.6])),
+            'consultation_services': station.get('consultationServices', np.random.choice([True, False], p=[0.5, 0.5])),
+            'medical_equipment': station.get('medicalEquipment', np.random.choice([True, False], p=[0.3, 0.7]))
+        }
+    
+    def get_supermarket_fields(self, station: Dict[str, Any]) -> Dict[str, Any]:
+        """Süpermarket için spesifik alanlar"""
+        return {
+            'grocery_pickup': station.get('groceryPickup', np.random.choice([True, False], p=[0.5, 0.5])),
+            'grocery_delivery': station.get('groceryDelivery', np.random.choice([True, False], p=[0.6, 0.4])),
+            'pharmacy_inside': station.get('pharmacyInside', np.random.choice([True, False], p=[0.3, 0.7])),
+            'bakery': station.get('bakery', np.random.choice([True, False], p=[0.7, 0.3])),
+            'deli': station.get('deli', np.random.choice([True, False], p=[0.6, 0.4])),
+            'butcher': station.get('butcher', np.random.choice([True, False], p=[0.5, 0.5])),
+            'seafood_counter': station.get('seafoodCounter', np.random.choice([True, False], p=[0.4, 0.6])),
+            'organic_products': station.get('organicProducts', np.random.choice([True, False], p=[0.6, 0.4])),
+            'self_checkout': station.get('selfCheckout', np.random.choice([True, False], p=[0.7, 0.3]))
+        }
+    
+    def get_shopping_mall_fields(self, station: Dict[str, Any]) -> Dict[str, Any]:
+        """Alışveriş merkezi için spesifik alanlar"""
+        return {
+            'number_of_stores': station.get('numberOfStores', np.random.randint(20, 200)),
+            'food_court': station.get('foodCourt', np.random.choice([True, False], p=[0.9, 0.1])),
+            'movie_theater': station.get('movieTheater', np.random.choice([True, False], p=[0.6, 0.4])),
+            'department_stores': station.get('departmentStores', np.random.choice([True, False], p=[0.8, 0.2])),
+            'children_play_area': station.get('childrenPlayArea', np.random.choice([True, False], p=[0.5, 0.5])),
+            'valet_parking': station.get('valetParking', np.random.choice([True, False], p=[0.3, 0.7])),
+            'customer_service': station.get('customerService', np.random.choice([True, False], p=[0.9, 0.1]))
+        }
+    
+    def get_tourist_attraction_fields(self, station: Dict[str, Any]) -> Dict[str, Any]:
+        """Turistik yer için spesifik alanlar"""
+        return {
+            'entrance_fee': station.get('entranceFee', np.random.choice([True, False], p=[0.6, 0.4])),
+            'guided_tours': station.get('guidedTours', np.random.choice([True, False], p=[0.5, 0.5])),
+            'audio_guide': station.get('audioGuide', np.random.choice([True, False], p=[0.4, 0.6])),
+            'gift_shop': station.get('giftShop', np.random.choice([True, False], p=[0.7, 0.3])),
+            'photography_allowed': station.get('photographyAllowed', np.random.choice([True, False], p=[0.8, 0.2])),
+            'historical_significance': station.get('historicalSignificance', np.random.choice([True, False], p=[0.6, 0.4])),
+            'family_friendly': station.get('familyFriendly', np.random.choice([True, False], p=[0.8, 0.2]))
+        }
+    
+    def get_atm_fields(self, station: Dict[str, Any]) -> Dict[str, Any]:
+        """ATM için spesifik alanlar"""
+        return {
+            'bank_network': station.get('bankNetwork', ['Akbank', 'Garanti', 'İş Bankası', 'Yapı Kredi', 'Ziraat'][np.random.randint(0, 5)]),
+            'cash_withdrawal': station.get('cashWithdrawal', True),
+            'balance_inquiry': station.get('balanceInquiry', True),
+            'deposit_available': station.get('depositAvailable', np.random.choice([True, False], p=[0.6, 0.4])),
+            'international_cards': station.get('internationalCards', np.random.choice([True, False], p=[0.8, 0.2])),
+            'indoor_location': station.get('indoorLocation', np.random.choice([True, False], p=[0.4, 0.6]))
+        }
+    
+    def get_car_repair_fields(self, station: Dict[str, Any]) -> Dict[str, Any]:
+        """Oto tamir için spesifik alanlar"""
+        return {
+            'oil_change': station.get('oilChange', np.random.choice([True, False], p=[0.9, 0.1])),
+            'tire_service': station.get('tireService', np.random.choice([True, False], p=[0.8, 0.2])),
+            'brake_service': station.get('brakeService', np.random.choice([True, False], p=[0.7, 0.3])),
+            'engine_repair': station.get('engineRepair', np.random.choice([True, False], p=[0.6, 0.4])),
+            'transmission_service': station.get('transmissionService', np.random.choice([True, False], p=[0.5, 0.5])),
+            'air_conditioning_service': station.get('airConditioningService', np.random.choice([True, False], p=[0.6, 0.4])),
+            'electrical_service': station.get('electricalService', np.random.choice([True, False], p=[0.5, 0.5])),
+            'towing_service': station.get('towingService', np.random.choice([True, False], p=[0.4, 0.6])),
+            'inspection_service': station.get('inspectionService', np.random.choice([True, False], p=[0.7, 0.3]))
+        }
+    
+    def get_parking_fields(self, station: Dict[str, Any]) -> Dict[str, Any]:
+        """Park alanı için spesifik alanlar"""
+        return {
+            'parking_type': station.get('parkingType', np.random.choice(['surface', 'garage', 'street'])),
+            'hourly_rate': station.get('hourlyRate', np.random.uniform(2.0, 15.0)),
+            'daily_rate': station.get('dailyRate', np.random.uniform(20.0, 100.0)),
+            'monthly_rate': station.get('monthlyRate', np.random.uniform(200.0, 800.0)),
+            'covered_parking': station.get('coveredParking', np.random.choice([True, False], p=[0.4, 0.6])),
+            'security_cameras': station.get('securityCameras', np.random.choice([True, False], p=[0.7, 0.3])),
+            'attendant_on_site': station.get('attendantOnSite', np.random.choice([True, False], p=[0.5, 0.5])),
+            'electric_vehicle_charging': station.get('electricVehicleCharging', np.random.choice([True, False], p=[0.3, 0.7]))
+        }
     
     def generate_services(self) -> List[str]:
         """

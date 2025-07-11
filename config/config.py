@@ -36,12 +36,13 @@ class Config:
         self.requests_per_minute = 60
         self.requests_per_day = 25000
     
-    def _get_config_value(self, key: str) -> Optional[str]:
+    def _get_config_value(self, key: str, default: Optional[str] = None) -> Optional[str]:
         """
         Önce environment variable'dan oku, yoksa Streamlit secrets'den oku.
         
         Args:
             key (str): Config anahtarı
+            default (str, optional): Varsayılan değer
             
         Returns:
             Optional[str]: Config değeri veya None
@@ -55,13 +56,25 @@ class Config:
         # Eğer Streamlit mevcutsa ve secrets var ise oradan dene
         if STREAMLIT_AVAILABLE:
             try:
-                if hasattr(st, 'secrets') and key in st.secrets:
-                    return st.secrets[key]
-            except Exception:
-                # Secrets erişimi başarısız olursa geç
+                # Farklı erişim yöntemlerini dene
+                if hasattr(st, 'secrets'):
+                    # Method 1: Key notation
+                    if key in st.secrets:
+                        return str(st.secrets[key])
+                    # Method 2: Attribute notation
+                    if hasattr(st.secrets, key):
+                        return str(getattr(st.secrets, key))
+                    # Method 3: Check if secrets is loaded at all
+                    secrets_dict = dict(st.secrets) if st.secrets else {}
+                    if key in secrets_dict:
+                        return str(secrets_dict[key])
+            except Exception as e:
+                # Debug için error logla
+                if hasattr(st, 'error'):
+                    st.error(f"Secrets erişim hatası {key}: {e}")
                 pass
         
-        return None
+        return default
         
     def validate_api_keys(self) -> bool:
         """Validate that required API keys are present"""

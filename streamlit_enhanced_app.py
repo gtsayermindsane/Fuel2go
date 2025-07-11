@@ -11,11 +11,16 @@ import plotly.graph_objects as go
 from datetime import datetime, timezone
 import json
 import os
+import logging
 from typing import Dict, List, Optional
 import folium
 from streamlit_folium import st_folium
 import psycopg2
 import numpy as np
+
+# Setup logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Import our modules
 from api.routes_client import GoogleRoutesClient
@@ -24,10 +29,23 @@ from api.geocoding_client import GeocodingClient
 from config.config import config
 from data_models import FuelStationData, RouteData
 from db.postgresql_data_warehouse import PostgreSQLDataWarehouse
-from db.cache_manager import (
-    cache_manager, cached_stations_by_country, cached_routes_by_date, 
-    cached_analytics_summary, cached_truck_services_by_type, cached_services_near_location
-)
+
+# Cache manager import - optional
+try:
+    from db.cache_manager import (
+        cache_manager, cached_stations_by_country, cached_routes_by_date, 
+        cached_analytics_summary, cached_truck_services_by_type, cached_services_near_location
+    )
+    CACHE_AVAILABLE = True
+except ImportError as e:
+    logger.warning(f"Cache manager import failed: {e}")
+    CACHE_AVAILABLE = False
+    # Fallback functions
+    def cached_stations_by_country(country): return pd.DataFrame()
+    def cached_routes_by_date(start, end): return pd.DataFrame()
+    def cached_analytics_summary(): return {}
+    def cached_truck_services_by_type(service_type, limit=50): return pd.DataFrame()
+    def cached_services_near_location(lat, lng, radius=50, service_type=None): return pd.DataFrame()
 from enhanced_data_collector import EnhancedDataCollector
 from config import constants
 from utils.polyline_decoder import decode_polyline
@@ -236,7 +254,7 @@ def display_data_collection_dashboard():
             selected_cities = st.multiselect(
                 "Şehirler Seçin",
                 city_names,
-                default=["Istanbul", "Ankara", "Izmir", "Bursa", "Antalya"],
+                default=["Istanbul"],
                 help="Veri toplanacak şehirleri seçin",
                 key="city_selection"
             )
@@ -245,8 +263,8 @@ def display_data_collection_dashboard():
                 st.session_state.city_selection = city_names[:10]
                 st.rerun()
     else:
-        selected_cities = ["Istanbul", "Ankara", "Izmir", "Bursa", "Antalya"]
-        st.info("Geocoding servisi kullanılamıyor, varsayılan şehirler kullanılacak")
+        selected_cities = ["Istanbul"]
+        st.info("Geocoding servisi kullanılamıyor, varsayılan şehir kullanılacak")
     
     st.info(f"🏙️ {len(selected_cities)} şehir seçildi: {', '.join(selected_cities)}")
     
@@ -365,6 +383,37 @@ def display_data_collection_dashboard():
             except Exception as e:
                 st.error(f"❌ {constants.ERROR_DB_SUMMARY}: {str(e)}")
     
+    # Debug: Secrets durumunu kontrol et
+    if st.checkbox("🔍 Secrets Debug", help="API key'lerin yüklenip yüklenmediğini kontrol et"):
+        st.subheader("🔧 Config Debug")
+        
+        # Environment variables
+        st.write("**Environment Variables:**")
+        st.write(f"GOOGLE_ROUTES_API_KEY: {'✅ Var' if os.getenv('GOOGLE_ROUTES_API_KEY') else '❌ Yok'}")
+        st.write(f"POSTGRES_HOST: {'✅ Var' if os.getenv('POSTGRES_HOST') else '❌ Yok'}")
+        
+        # Streamlit secrets
+        if hasattr(st, 'secrets'):
+            st.write("**Streamlit Secrets:**")
+            try:
+                secrets_keys = list(st.secrets.keys()) if st.secrets else []
+                st.write(f"Toplam secret: {len(secrets_keys)}")
+                st.write(f"Keys: {secrets_keys}")
+                st.write(f"GOOGLE_ROUTES_API_KEY: {'✅ Var' if 'GOOGLE_ROUTES_API_KEY' in secrets_keys else '❌ Yok'}")
+            except Exception as e:
+                st.error(f"Secrets okuma hatası: {e}")
+        else:
+            st.write("**Streamlit Secrets:** ❌ Erişilemez")
+        
+        # Config values
+        st.write("**Final Config Values:**")
+        try:
+            from config.config import config
+            st.write(f"google_routes_api_key: {'✅ Var' if config.google_routes_api_key else '❌ Yok'}")
+            st.write(f"google_places_api_key: {'✅ Var' if config.google_places_api_key else '❌ Yok'}")
+        except Exception as e:
+            st.error(f"Config okuma hatası: {e}")
+    
     # Toplanan veriyi göster
     if 'collected_data' in st.session_state and st.session_state.collected_data:
         st.markdown("---")
@@ -442,17 +491,65 @@ def display_data_collection_dashboard():
                     col1, col2 = st.columns(2)
                     
                     with col1:
+                        primary_type = station.get('primary_type', 'gas_station')
+                        st.write(f"**Tür:** {station.get('primary_type_display_name', primary_type.title())}")
                         st.write(f"**Marka:** {station.get('brand', 'N/A')}")
                         st.write(f"**Adres:** {station.get('address', 'N/A')}")
                         st.write(f"**Puan:** {station.get('rating', 'N/A')}")
-                        st.write(f"**Yakıt Türleri:** {', '.join(station.get('fuel_types', []))}")
+                        
+                        # Yakıt türlerini sadece benzin istasyonu için göster
+                        if primary_type == 'gas_station' and station.get('fuel_types'):
+                            st.write(f"**Yakıt Türleri:** {', '.join(station.get('fuel_types', []))}")
+                        elif primary_type == 'restaurant' and station.get('cuisine_type'):
+                            st.write(f"**Mutfak Türü:** {station.get('cuisine_type', 'N/A')}")
+                        elif primary_type == 'lodging' and station.get('star_rating'):
+                            st.write(f"**Yıldız:** {'⭐' * station.get('star_rating', 0)}")
+                        elif primary_type == 'hospital' and station.get('emergency_services'):
+                            st.write(f"**Acil Servis:** {'✅' if station.get('emergency_services') else '❌'}")
+                        elif primary_type == 'bank' and station.get('atm_available'):
+                            st.write(f"**ATM:** {'✅' if station.get('atm_available') else '❌'}")
+                        elif primary_type == 'pharmacy' and station.get('prescription_filling'):
+                            st.write(f"**Reçete:** {'✅' if station.get('prescription_filling') else '❌'}")
                     
                     with col2:
-                        if station.get('fuel_options'):
-                            st.write(f"**EV Şarj:** {'✅' if station.get('ev_charge_options', {}).get('available') else '❌'}")
-                            st.write(f"**Ücretsiz Park:** {'✅' if station.get('parking_options', {}).get('free_parking_lot') else '❌'}")
-                            st.write(f"**Engelli Erişimi:** {'✅' if station.get('accessibility_options', {}).get('wheelchair_accessible_entrance') else '❌'}")
-                            st.write(f"**Kredi Kartı:** {'✅' if station.get('payment_options', {}).get('accepts_credit_cards') else '❌'}")
+                        # Genel özellikler
+                        ev_available = station.get('ev_charge_options', {}).get('available', False)
+                        parking_available = (station.get('parking_options', {}).get('free_parking_lot', False) or 
+                                           station.get('parking_options', {}).get('paid_parking_lot', False))
+                        wheelchair_accessible = station.get('accessibility_options', {}).get('wheelchair_accessible_entrance', False)
+                        accepts_cards = station.get('payment_options', {}).get('accepts_credit_cards', False)
+                        
+                        # EV şarj - sadece destekleyen mekanlar için
+                        if primary_type in ['gas_station', 'lodging', 'shopping_mall', 'parking']:
+                            st.write(f"**EV Şarj:** {'✅' if ev_available else '❌'}")
+                        
+                        # Park - çoğu mekan için
+                        st.write(f"**Park İmkanı:** {'✅' if parking_available else '❌'}")
+                        
+                        # Erişilebilirlik - tüm mekanlar için
+                        st.write(f"**Engelli Erişimi:** {'✅' if wheelchair_accessible else '❌'}")
+                        
+                        # Ödeme - çoğu mekan için
+                        if primary_type not in ['tourist_attraction', 'parking']:
+                            st.write(f"**Kredi Kartı:** {'✅' if accepts_cards else '❌'}")
+                        
+                        # Mekan türüne özgü ek bilgiler
+                        if primary_type == 'restaurant':
+                            if station.get('takeout'):
+                                st.write(f"**Paket Servis:** {'✅' if station.get('takeout') else '❌'}")
+                            if station.get('delivery'):
+                                st.write(f"**Teslimat:** {'✅' if station.get('delivery') else '❌'}")
+                        elif primary_type == 'lodging':
+                            if station.get('free_wifi'):
+                                st.write(f"**Ücretsiz WiFi:** {'✅' if station.get('free_wifi') else '❌'}")
+                            if station.get('pool_available'):
+                                st.write(f"**Havuz:** {'✅' if station.get('pool_available') else '❌'}")
+                        elif primary_type == 'hospital':
+                            if station.get('has_pharmacy_inside'):
+                                st.write(f"**İçinde Eczane:** {'✅' if station.get('has_pharmacy_inside') else '❌'}")
+                        elif primary_type == 'supermarket':
+                            if station.get('grocery_delivery'):
+                                st.write(f"**Market Teslimat:** {'✅' if station.get('grocery_delivery') else '❌'}")
         
         if st.button("🗑️ Toplanan Veriyi Temizle"):
             del st.session_state.collected_data
