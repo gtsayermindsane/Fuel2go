@@ -492,26 +492,34 @@ class EnhancedDataCollector:
                 else:
                     logger.warning(f"⚠️ {city_name} şehri için istasyon bulunamadı")
                 
-                # Veritabanına kaydet
+                # Veritabanına kaydet - tüm yeni field'larla birlikte
+                logger.info(f"🗄️ {city_name} şehri verilerini veritabanına kaydediliyor...")
                 for station in stations:
-                    station_data = FuelStationData(
-                        station_id=station['station_id'],
-                        name=station['name'],
-                        brand=station['brand'],
-                        country=station['country'],
-                        region=station['region'],
-                        latitude=station['latitude'],
-                        longitude=station['longitude'],
-                        address=station['address'],
-                        fuel_types=station['fuel_types'],
-                        services=station['services'],
-                        rating=station['rating'],
-                        review_count=station['review_count'],
-                        operating_hours=station['operating_hours'],
-                        price_data=station['price_data'],
-                        last_updated=datetime.now(timezone.utc)
-                    )
-                    self.warehouse.insert_fuel_station(station_data)
+                    try:
+                        station_data = FuelStationData(
+                            station_id=station['station_id'],
+                            name=station['name'],
+                            brand=station['brand'],
+                            country=station['country'],
+                            region=station['region'],
+                            latitude=station['latitude'],
+                            longitude=station['longitude'],
+                            address=station['address'],
+                            fuel_types=station['fuel_types'],
+                            services=station['services'],
+                            rating=station['rating'],
+                            review_count=station['review_count'],
+                            operating_hours=station['operating_hours'],
+                            price_data=station['price_data'],
+                            last_updated=datetime.now(timezone.utc)
+                        )
+                        success = self.warehouse.insert_fuel_station(station_data)
+                        if not success:
+                            logger.warning(f"⚠️ İstasyon veritabanına kaydedilemedi: {station['name']}")
+                    except Exception as e:
+                        logger.error(f"❌ İstasyon kaydetme hatası: {e}")
+                
+                logger.info(f"✅ {city_name} şehri verileri veritabanına kaydedildi")
                 
                 time.sleep(3)  # Şehirler arası bekleme
                 
@@ -546,37 +554,11 @@ class EnhancedDataCollector:
             }
         }
         
-        # JSON dosyasına kaydet - numpy bool'ları çevir
-        def convert_numpy_types(obj):
-            if isinstance(obj, np.bool_):
-                return bool(obj)
-            elif isinstance(obj, np.integer):
-                return int(obj)
-            elif isinstance(obj, np.floating):
-                return float(obj)
-            elif isinstance(obj, np.ndarray):
-                return obj.tolist()
-            return obj
-        
-        def clean_for_json(data):
-            if isinstance(data, dict):
-                return {k: clean_for_json(v) for k, v in data.items()}
-            elif isinstance(data, list):
-                return [clean_for_json(item) for item in data]
-            else:
-                return convert_numpy_types(data)
-        
-        cleaned_data = clean_for_json(output_data)
-        
-        output_file = f"turkey_fuel_stations_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-        with open(output_file, 'w', encoding='utf-8') as f:
-            json.dump(cleaned_data, f, indent=2, ensure_ascii=False)
-        
-        # Excel dosyasına da kaydet
-        self.export_to_excel(all_stations, f"turkey_stations_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx")
+        # JSON ve Excel dosya çıktısı kaldırıldı - sadece veritabanına kayıt
+        logger.info("📊 Tüm veriler veritabanına kaydedildi")
         
         logger.info("🎉 Türkiye veri toplama işlemi tamamlandı!")
-        logger.info(f"📄 JSON çıktı: {output_file}")
+        logger.info(f"🗄️ Veritabanı güncellendi")
         logger.info(f"📊 Toplam istasyon: {len(all_stations)}, Şehir: {len(city_summaries)}")
         
         return output_data

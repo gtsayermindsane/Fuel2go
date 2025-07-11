@@ -475,6 +475,95 @@ class PostgreSQLDataWarehouse:
             result = self.config.execute_query(count_query)
             analytics['total_emergency_services'] = result[0]['count'] if result else 0
             
+            # Places API (New) field'ları için analizler
+            # EV şarj istasyonları
+            ev_query = """
+            SELECT COUNT(*) FROM fuel_stations 
+            WHERE ev_charge_options->>'available' = 'true';
+            """
+            result = self.config.execute_query(ev_query)
+            analytics['ev_charging_stations'] = result[0]['count'] if result else 0
+            
+            # Erişilebilir istasyonlar
+            accessible_query = """
+            SELECT COUNT(*) FROM fuel_stations 
+            WHERE accessibility_options->>'wheelchair_accessible_entrance' = 'true';
+            """
+            result = self.config.execute_query(accessible_query)
+            analytics['accessible_stations'] = result[0]['count'] if result else 0
+            
+            # Park imkanı olan istasyonlar
+            parking_query = """
+            SELECT COUNT(*) FROM fuel_stations 
+            WHERE parking_options->>'free_parking_lot' = 'true' 
+               OR parking_options->>'paid_parking_lot' = 'true';
+            """
+            result = self.config.execute_query(parking_query)
+            analytics['stations_with_parking'] = result[0]['count'] if result else 0
+            
+            # Şehir dağılımı
+            city_query = """
+            SELECT country, COUNT(*) as count
+            FROM fuel_stations
+            GROUP BY country
+            ORDER BY count DESC;
+            """
+            result = self.config.execute_query(city_query)
+            analytics['city_distribution'] = {row['country']: row['count'] for row in result} if result else {}
+            
+            # Marka dağılımı
+            brand_query = """
+            SELECT 
+                CASE 
+                    WHEN name ILIKE '%shell%' THEN 'Shell'
+                    WHEN name ILIKE '%bp%' THEN 'BP'
+                    WHEN name ILIKE '%total%' THEN 'Total'
+                    WHEN name ILIKE '%opet%' THEN 'Opet'
+                    WHEN name ILIKE '%petrol ofisi%' OR name ILIKE '%po%' THEN 'Petrol Ofisi'
+                    WHEN name ILIKE '%türkiye petrolleri%' OR name ILIKE '%tp%' THEN 'TP'
+                    ELSE 'Diğer'
+                END as brand,
+                COUNT(*) as count
+            FROM fuel_stations
+            GROUP BY 1
+            ORDER BY count DESC;
+            """
+            result = self.config.execute_query(brand_query)
+            analytics['brand_distribution'] = {row['brand']: row['count'] for row in result} if result else {}
+            
+            # EV şarj türleri dağılımı
+            ev_dist_query = """
+            SELECT 
+                CASE 
+                    WHEN ev_charge_options->>'fast_charging' = 'true' THEN 'Hızlı Şarj'
+                    WHEN ev_charge_options->>'available' = 'true' THEN 'Normal Şarj'
+                    ELSE 'Şarj Yok'
+                END as ev_type,
+                COUNT(*) as count
+            FROM fuel_stations
+            WHERE ev_charge_options IS NOT NULL
+            GROUP BY 1;
+            """
+            result = self.config.execute_query(ev_dist_query)
+            analytics['ev_charging_distribution'] = {row['ev_type']: row['count'] for row in result} if result else {}
+            
+            # Ödeme yöntemleri dağılımı
+            payment_query = """
+            SELECT 
+                'Kredi Kartı' as payment_type,
+                COUNT(*) as count
+            FROM fuel_stations 
+            WHERE payment_options->>'accepts_credit_cards' = 'true'
+            UNION ALL
+            SELECT 
+                'NFC Ödeme' as payment_type,
+                COUNT(*) as count
+            FROM fuel_stations 
+            WHERE payment_options->>'accepts_nfc' = 'true';
+            """
+            result = self.config.execute_query(payment_query)
+            analytics['payment_methods_distribution'] = {row['payment_type']: row['count'] for row in result} if result else {}
+            
             # Services by type
             services_query = """
             SELECT service_type, COUNT(*) as count
@@ -499,6 +588,13 @@ class PostgreSQLDataWarehouse:
                 'total_truck_services': 0,
                 'total_driver_amenities': 0,
                 'total_emergency_services': 0,
+                'ev_charging_stations': 0,
+                'accessible_stations': 0,
+                'stations_with_parking': 0,
+                'city_distribution': {},
+                'brand_distribution': {},
+                'ev_charging_distribution': {},
+                'payment_methods_distribution': {},
                 'services_by_type': {},
                 'last_updated': datetime.now().isoformat()
             }
