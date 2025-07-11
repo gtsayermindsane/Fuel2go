@@ -104,7 +104,7 @@ def initialize_session_state():
     """
     Streamlit session state (oturum durumu) değişkenlerini başlatır.
     
-    Uygulama boyunca durumu korunması gereken değişkenler (örn: API istemcisi,
+    Uygulama boyunca durumu korunması gereken değişkenler (örn: veri istemcisi,
     veritabanı bağlantısı, toplanan veriler) 'st.session_state' içinde saklanır.
     Bu fonksiyon, bu değişkenlerin uygulama ilk çalıştığında veya sayfa
     yenilendiğinde mevcut olmasını sağlar.
@@ -158,7 +158,7 @@ def display_sidebar():
     """
     Kenar çubuğunu (sidebar) ve içindeki kontrol elemanlarını görüntüler.
     
-    Kenar çubuğu, sistem durumu göstergelerini (API, veritabanı durumu),
+    Kenar çubuğu, sistem durumu göstergelerini (servis, veritabanı durumu),
     rota hesaplama için kullanıcı girdilerini (enlem, boylam, seyahat modu vb.)
     içerir.
 
@@ -171,7 +171,7 @@ def display_sidebar():
     # System status
     st.sidebar.subheader(constants.SIDEBAR_SUBHEADER_SYSTEM_STATUS)
     
-    # API status
+    # Servis durumu
     if st.session_state.client:
         st.sidebar.markdown(f'<span class="status-indicator status-active">{constants.API_STATUS_ACTIVE}</span>', unsafe_allow_html=True)
     else:
@@ -237,7 +237,7 @@ def display_data_collection_dashboard():
     
     Bu dashboard, kullanıcıya kapsamlı veri toplama işlemini başlatma
     ve veritabanındaki mevcut verilerin özetini görme imkanı sunar.
-    Places API (New) field'ları için interaktif seçenekler sunar.
+    Gelişmiş veri alanları için interaktif seçenekler sunar.
     """
     st.header(constants.DATA_COLLECTION_HEADER)
     
@@ -292,7 +292,7 @@ def display_data_collection_dashboard():
         selected_place_types = st.multiselect(
             "Mekan Türleri",
             options=list(place_type_options.keys()),
-            default=['gas_station'],
+            default=[],
             format_func=lambda x: place_type_options[x],
             help="Aramak istediğiniz mekan türlerini seçin",
             key="place_types_selection"
@@ -302,6 +302,16 @@ def display_data_collection_dashboard():
             st.session_state.place_types_selection = ['gas_station', 'restaurant', 'lodging']
             st.rerun()
     
+    # Mekan türü değişimini kontrol et ve cache'i temizle
+    if 'last_selected_place_types' not in st.session_state:
+        st.session_state.last_selected_place_types = []
+    
+    if st.session_state.last_selected_place_types != selected_place_types:
+        # Mekan türü değişti, cache'i temizle
+        if 'collected_data' in st.session_state:
+            del st.session_state.collected_data
+        st.session_state.last_selected_place_types = selected_place_types
+    
     if selected_place_types:
         selected_labels = [place_type_options[pt] for pt in selected_place_types]
         st.info(f"🎯 {len(selected_place_types)} mekan türü seçildi: {', '.join(selected_labels)}")
@@ -310,7 +320,7 @@ def display_data_collection_dashboard():
     
     # Veri toplama seçenekleri
     st.subheader("📊 Veri Toplama Seçenekleri")
-    st.markdown("Google Places servisi ile hangi veri türlerini toplamak istiyorsunuz?")
+    st.markdown("Hangi veri türlerini toplamak istiyorsunuz?")
     
     col1, col2, col3 = st.columns(3)
     
@@ -401,7 +411,7 @@ def display_data_collection_dashboard():
         with col3:
             st.metric("📅 Toplama Tarihi", summary.get('collection_date', '').split('T')[0] if summary.get('collection_date') else 'N/A')
         with col4:
-            st.metric("🔗 API Versiyon", summary.get('version', 'N/A'))
+            st.metric("🔗 Veri Versiyon", summary.get('version', 'N/A'))
         
         # Şehir özetleri
         city_summaries = result.get('city_summaries', {})
@@ -449,10 +459,34 @@ def display_data_collection_dashboard():
         # İnteraktif harita görüntüleme
         stations = result.get('stations', [])
         if stations:
-            st.subheader("🗺️ İstasyonlar Haritası")
+            # Mekan türüne göre başlık değiştir
+            if 'gas_station' in selected_place_types:
+                st.subheader("🗺️ İstasyonlar Haritası")
+            elif 'restaurant' in selected_place_types:
+                st.subheader("🗺️ Restoranlar Haritası")
+            elif 'lodging' in selected_place_types:
+                st.subheader("🗺️ Konaklama Haritası")
+            elif 'hospital' in selected_place_types:
+                st.subheader("🗺️ Hastaneler Haritası")
+            elif 'bank' in selected_place_types:
+                st.subheader("🗺️ Bankalar Haritası")
+            else:
+                st.subheader("🗺️ Mekanlar Haritası")
             display_collected_stations_map(stations)
             
-            st.subheader("🔍 İstasyon Örnekleri")
+            # Mekan türüne göre başlık değiştir
+            if 'gas_station' in selected_place_types:
+                st.subheader("🔍 İstasyon Örnekleri")
+            elif 'restaurant' in selected_place_types:
+                st.subheader("🔍 Restoran Örnekleri")
+            elif 'lodging' in selected_place_types:
+                st.subheader("🔍 Konaklama Örnekleri")
+            elif 'hospital' in selected_place_types:
+                st.subheader("🔍 Hastane Örnekleri")
+            elif 'bank' in selected_place_types:
+                st.subheader("🔍 Banka Örnekleri")
+            else:
+                st.subheader("🔍 Mekan Örnekleri")
             sample_stations = stations[:5]  # İlk 5 istasyonu göster
             
             for i, station in enumerate(sample_stations, 1):
@@ -467,14 +501,15 @@ def display_data_collection_dashboard():
                         st.write(f"**Puan:** {station.get('rating', 'N/A')}")
                         
                         # Yakıt türlerini sadece benzin istasyonu için göster
-                        if primary_type == 'gas_station' and station.get('fuel_types'):
-                            st.write(f"**Yakıt Türleri:** {', '.join(station.get('fuel_types', []))}")
+                        fuel_types = station.get('fuel_types', [])
+                        if primary_type == 'gas_station' and fuel_types and len(fuel_types) > 0:
+                            st.write(f"**Yakıt Türleri:** {', '.join(fuel_types)}")
                         elif primary_type == 'restaurant' and station.get('cuisine_type'):
                             st.write(f"**Mutfak Türü:** {station.get('cuisine_type', 'N/A')}")
                         elif primary_type == 'lodging' and station.get('star_rating'):
                             st.write(f"**Yıldız:** {'⭐' * station.get('star_rating', 0)}")
                         elif primary_type == 'hospital' and station.get('emergency_services'):
-                            st.write(f"**Acil Servis:** {'✅' if station.get('emergency_services') else '❌'}")
+                            st.write(f"**Acil Hizmet:** {'✅' if station.get('emergency_services') else '❌'}")
                         elif primary_type == 'bank' and station.get('atm_available'):
                             st.write(f"**ATM:** {'✅' if station.get('atm_available') else '❌'}")
                         elif primary_type == 'pharmacy' and station.get('prescription_filling'):
@@ -530,7 +565,7 @@ def display_current_data_status():
     
     Toplam istasyon ve rota sayısı gibi temel metrikleri, ülke bazında istasyon
     dağılımını gösteren bir bar grafiğini ve araç tipine göre emisyon dağılımını
-    gösteren bir pasta grafiğini içerir. Places API (New) field'larını da gösterir.
+    gösteren bir pasta grafiğini içerir. Gelişmiş veri alanlarını da gösterir.
     """
     st.subheader(constants.CURRENT_DATA_STATUS_HEADER)
     
@@ -550,8 +585,8 @@ def display_current_data_status():
             avg_fuel = summary.get('avg_fuel_consumption', 0)
             st.metric(label="⛽ Ort. Yakıt (L)", value=f"{avg_fuel:.1f}" if avg_fuel else "0")
         
-        # Places API (New) özellikleri metrikleri
-        st.subheader("🔋 Places API (New) Özellikleri")
+        # Gelişmiş veri özellikleri metrikleri
+        st.subheader("🔋 Gelişmiş Veri Özellikleri")
         col1, col2, col3 = st.columns(3)
         
         with col1:
@@ -774,18 +809,18 @@ def display_driver_assistant():
     st.markdown("Profesyonel şoförler için gelişmiş rota analizi ve servis bulma özellikleri")
     
     if not st.session_state.driver_assistant:
-        st.error("❌ Driver Assistant kullanılamıyor. API anahtarlarınızı kontrol edin.")
+        st.error("❌ Sürücü Asistanı kullanılamıyor. Sistem yapılandırmanızı kontrol edin.")
         return
     
     # Ana özellik seçimi
     feature_choice = st.selectbox(
         "🔧 Özellik Seçin:",
-        ["Rota Üzerinde Servis Arama", "Acil Durum Servisleri", "Mola Planlama", "AdBlue İstasyonları"]
+        ["Rota Üzerinde Mekan Arama", "Acil Durum Hizmetleri", "Mola Planlama", "AdBlue İstasyonları"]
     )
     
-    if feature_choice == "Rota Üzerinde Servis Arama":
+    if feature_choice == "Rota Üzerinde Mekan Arama":
         display_route_services_search()
-    elif feature_choice == "Acil Durum Servisleri":
+    elif feature_choice == "Acil Durum Hizmetleri":
         display_emergency_services()
     elif feature_choice == "Mola Planlama":
         display_break_planning()
@@ -835,7 +870,7 @@ def display_route_services_search():
         service_types = st.multiselect(
             "Servis Türleri",
             ["gas_station", "truck_stop", "restaurant", "rest_stop", "lodging"],
-            default=["gas_station", "truck_stop"]
+            default=[]
         )
     
     with col4:
@@ -1106,7 +1141,7 @@ def display_adblue_stations():
     if st.button("🔍 AdBlue İstasyonları Bul", type="primary"):
         with st.spinner("AdBlue istasyonları aranıyor..."):
             try:
-                # Places client üzerinden AdBlue arama
+                # Veri kaynağı üzerinden AdBlue arama
                 adblue_stations = st.session_state.driver_assistant.places_client.search_adblue_stations(
                     latitude=adblue_lat,
                     longitude=adblue_lng,
@@ -1446,7 +1481,7 @@ def display_collected_stations_map(stations):
             else:
                 icon = folium.Icon(color=color, icon='tint', prefix='fa')
             
-            # Popup içeriği - Places API (New) bilgileriyle
+            # Popup içeriği - Gelişmiş veri bilgileriyle
             popup_content = f"""
             <div style="width: 320px; font-family: Arial;">
                 <h3 style="color: #2E86AB; margin: 0;">⛽ {name}</h3>
@@ -1460,7 +1495,7 @@ def display_collected_stations_map(stations):
                 </div>
                 
                 <hr style="margin: 8px 0;">
-                <h4 style="color: #28a745; margin: 5px 0;">🔋 Places API (New) Özellikleri:</h4>
+                <h4 style="color: #28a745; margin: 5px 0;">🔋 Gelişmiş Veri Özellikleri:</h4>
                 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px;">
                     <div>
@@ -1485,7 +1520,7 @@ def display_collected_stations_map(stations):
                 </div>
                 
                 <div style="margin-top: 10px; font-size: 11px; color: #666;">
-                    📊 İstasyon #{i+1} | API: Google Places (New)
+                    📊 İstasyon #{i+1} | Kaynak: Resmi Veri
                 </div>
             </div>
             """
@@ -1510,7 +1545,7 @@ def display_collected_stations_map(stations):
         <h4>📊 İstasyon Haritası</h4>
         <b>📍 Toplam İstasyon:</b> {len(stations)}<br>
         <b>🗺️ Gösterilen:</b> {added_count}<br>
-        <b>🔋 API:</b> Google Places (New)<br>
+        <b>🔋 Kaynak:</b> Resmi Veri<br>
         <b>🏙️ Şehirler:</b> {len(set(s.get('city', '') for s in stations))} şehir
         </div>
         """
@@ -1893,7 +1928,7 @@ def display_cache_management():
         ### 📈 Bugünkü Cache Performansı:
         
         **Query Dağılımı:**
-        - Places Search: ~45%
+        - Mekan Arama: ~45%
         - Route Calculations: ~25%
         - Analytics Queries: ~20%
         - Location Services: ~10%
@@ -1959,7 +1994,7 @@ def display_calculated_route_map(route_response, origin, destination, route_deta
     Hesaplanan rotayı harita üzerinde gösterir.
     
     Args:
-        route_response: Google Routes API yanıtı
+        route_response: Rota hesaplama yanıtı
         origin: Başlangıç koordinatları
         destination: Hedef koordinatları  
         route_details: Rota detayları

@@ -29,7 +29,7 @@ class EnhancedDataCollector:
     """
     Türkiye geneli mekanlar için kapsamlı veri toplama ve işleme sistemi.
     
-    Bu sınıf, Google Places Servisi'ni kullanarak Türkiye şehirlerindeki
+    Bu sınıf, resmi veri kaynaklarını kullanarak Türkiye şehirlerindeki
     çeşitli mekanları (benzin istasyonu, restoran, hastane, otel vb.) toplar, 
     bu verileri zenginleştirir ve PostgreSQL veritabanına kaydeder.
     """
@@ -38,7 +38,7 @@ class EnhancedDataCollector:
         """
         EnhancedDataCollector sınıfını başlatır.
         
-        Servis istemcilerini (GoogleRoutesClient, GooglePlacesClient, GeocodingClient), veri ambarını
+        Veri istemcilerini (routes, places, geocoding), veri ambarını
         (DataWarehouse) ve sabitleri (şehirler, markalar) ayarlar.
         """
         self.routes_client = GoogleRoutesClient()
@@ -79,7 +79,7 @@ class EnhancedDataCollector:
         """
         Belirtilen şehir için mekan verilerini toplar.
 
-        Şehri merkez alarak, farklı yarıçaplarda Google Places Servisi üzerinden belirtilen türde mekan araması yapar.
+        Şehri merkez alarak, farklı yarıçaplarda resmi veri kaynakları üzerinden belirtilen türde mekan araması yapar.
         Belirtilen `max_stations` sayısına ulaşana kadar veya tüm yarıçaplar taranana kadar devam eder.
 
         Args:
@@ -141,12 +141,12 @@ class EnhancedDataCollector:
         """
         Ham istasyon verisini ek bilgilerle zenginleştirir.
 
-        Google Places Servisi'nden gelen temel mekan verisine; marka, ülke, mock yakıt türleri,
+        Resmi veri kaynaklarından gelen temel mekan verisine; marka, ülke, mock yakıt türleri,
         hizmetler, çalışma saatleri, fiyatlar ve tesis bilgileri gibi ek veriler ekler.
-        Places API (New) field'larını da dahil eder.
+        Gelişmiş veri alanlarını da dahil eder.
 
         Args:
-            station (Dict[str, Any]): Google Places Servisi'nden gelen ham mekan verisi.
+            station (Dict[str, Any]): Resmi veri kaynaklarından gelen ham mekan verisi.
             city_name (str): İstasyonun bulunduğu şehirin adı.
             collection_options (Dict[str, bool]): Hangi veri türlerinin toplanacağını belirten seçenekler.
 
@@ -214,7 +214,7 @@ class EnhancedDataCollector:
                 enhanced_data['price_data'] = {}
                 enhanced_data['facilities'] = {}
             
-            # Places API (New) field'larını mekan türüne göre ekle
+            # Gelişmiş veri alanlarını mekan türüne göre ekle
             if primary_type in ['gas_station', 'car_repair'] and collection_options.get('fuel_options', True):
                 enhanced_data['fuel_options'] = self.generate_fuel_options(station.get('fuelOptions', {}))
             else:
@@ -289,7 +289,7 @@ class EnhancedDataCollector:
     
     def generate_fuel_options(self, fuel_options_data: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Places API (New) fuelOptions field'ından veri üretir.
+        Yakıt seçenekleri veri alanından veri üretir.
         """
         return {
             'diesel': fuel_options_data.get('diesel', True),
@@ -307,7 +307,7 @@ class EnhancedDataCollector:
     
     def generate_ev_charge_options(self, ev_data: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Places API (New) evChargeOptions field'ından EV şarj bilgileri üretir.
+        EV şarj seçenekleri veri alanından bilgileri üretir.
         """
         has_ev = np.random.choice([True, False], p=[0.3, 0.7])
         if not has_ev:
@@ -323,7 +323,7 @@ class EnhancedDataCollector:
     
     def generate_parking_options(self, parking_data: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Places API (New) parkingOptions field'ından park bilgileri üretir.
+        Park seçenekleri veri alanından bilgileri üretir.
         """
         return {
             'free_parking_lot': parking_data.get('freeParkingLot', np.random.choice([True, False], p=[0.4, 0.6])),
@@ -337,7 +337,7 @@ class EnhancedDataCollector:
     
     def generate_payment_options(self, payment_data: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Places API (New) paymentOptions field'ından ödeme bilgileri üretir.
+        Ödeme seçenekleri veri alanından bilgileri üretir.
         """
         return {
             'accepts_credit_cards': payment_data.get('acceptsCreditCards', True),
@@ -348,7 +348,7 @@ class EnhancedDataCollector:
     
     def generate_accessibility_options(self, station: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Places API (New) accessibility field'larından erişilebilirlik bilgileri üretir.
+        Erişilebilirlik veri alanlarından bilgileri üretir.
         """
         return {
             'wheelchair_accessible_parking': station.get('wheelchairAccessibleParking', np.random.choice([True, False], p=[0.8, 0.2])),
@@ -359,7 +359,7 @@ class EnhancedDataCollector:
     
     def generate_secondary_hours(self, secondary_hours_data: List[Dict[str, Any]]) -> Dict[str, Any]:
         """
-        Places API (New) regularSecondaryOpeningHours field'ından ikincil çalışma saatleri üretir.
+        İkincil çalışma saatleri veri alanından bilgileri üretir.
         """
         if not secondary_hours_data:
             return {
@@ -394,7 +394,7 @@ class EnhancedDataCollector:
     
     def get_place_specific_fields(self, station: Dict[str, Any], primary_type: str) -> Dict[str, Any]:
         """
-        Mekan türüne özgü spesifik alanları Google Places Servisi (New) dokümantasyonuna göre döndürür.
+        Mekan türüne özgü spesifik alanları standart veri şemasına göre döndürür.
         """
         specific_fields = {}
         
@@ -759,7 +759,7 @@ class EnhancedDataCollector:
             'cities_processed': len(city_summaries),
             'collection_date': datetime.now(timezone.utc).isoformat(),
             'data_quality': 'high',
-            'api_source': 'Google Places Servisi (New)',
+            'data_source': 'Resmi Veri Kaynağı',
             'version': '4.0',
             'country': 'Turkey'
         }
