@@ -76,22 +76,27 @@ class EnhancedDataCollector:
         
         return constants.UNKNOWN_BRAND
     
-    def collect_stations_by_city(self, city_name: str, max_stations: int = 50, collection_options: Dict[str, bool] = None) -> List[Dict[str, Any]]:
+    def collect_stations_by_city(self, city_name: str, max_stations: int = 50, collection_options: Dict[str, bool] = None, place_types: List[str] = None) -> List[Dict[str, Any]]:
         """
-        Belirtilen şehir için benzin istasyonu verilerini toplar.
+        Belirtilen şehir için mekan verilerini toplar.
 
-        Şehri merkez alarak, farklı yarıçaplarda Google Places API üzerinden 'gas_station' araması yapar.
+        Şehri merkez alarak, farklı yarıçaplarda Google Places API üzerinden belirtilen türde mekan araması yapar.
         Belirtilen `max_stations` sayısına ulaşana kadar veya tüm yarıçaplar taranana kadar devam eder.
 
         Args:
             city_name (str): Veri toplanacak şehirin adı (örn: 'Istanbul', 'Ankara').
-            max_stations (int, optional): Şehir başına toplanacak maksimum istasyon sayısı.
+            max_stations (int, optional): Şehir başına toplanacak maksimum mekan sayısı.
             collection_options (Dict[str, bool]): Hangi veri türlerinin toplanacağını belirten seçenekler.
+            place_types (List[str], optional): Aranacak mekan türleri (örn: ['gas_station', 'restaurant']).
 
         Returns:
-            List[Dict[str, Any]]: Toplanan ve zenginleştirilmiş istasyon verilerinin listesi.
+            List[Dict[str, Any]]: Toplanan ve zenginleştirilmiş mekan verilerinin listesi.
         """
-        logger.info(f"🏙️ {city_name} şehri için istasyon verisi toplama başlatılıyor...")
+        # Varsayılan mekan türü
+        if place_types is None:
+            place_types = ['gas_station']
+            
+        logger.info(f"🏙️ {city_name} şehri için {', '.join(place_types)} verisi toplama başlatılıyor...")
         
         # Şehir koordinatlarını bul
         city_info = self.geocoding_client.find_city_by_name(city_name)
@@ -107,13 +112,13 @@ class EnhancedDataCollector:
             if len(collected_stations) >= max_stations:
                 break
                 
-            logger.info(f"📍 {city_name} çevresinde {radius/1000:.0f}km yarıçapında arama yapılıyor...")
+            logger.info(f"📍 {city_name} çevresinde {radius/1000:.0f}km yarıçapında {', '.join(place_types)} arama yapılıyor...")
             
             nearby_stations = self.places_client.search_nearby(
                 latitude=city_info['latitude'],
                 longitude=city_info['longitude'],
                 radius_meters=radius,
-                place_types=['gas_station']
+                place_types=place_types
             )
             
             for station in nearby_stations:
@@ -443,21 +448,22 @@ class EnhancedDataCollector:
             'loyalty_program': np.random.choice([True, False], p=[0.6, 0.4])
         }
     
-    def collect_comprehensive_data(self, selected_cities: List[str] = None, collection_options: Dict[str, bool] = None):
+    def collect_comprehensive_data(self, selected_cities: List[str] = None, collection_options: Dict[str, bool] = None, place_types: List[str] = None):
         """
         Seçilen Türkiye şehirleri için kapsamlı veri toplama işlemini başlatır ve yönetir.
 
         Belirtilen şehirler için `collect_stations_by_city` fonksiyonunu çağırır. 
         Toplanan tüm verileri bir araya getirir, özet istatistikler oluşturur, 
-        veritabanına kaydeder ve sonuçları JSON ve Excel dosyalarına yazar.
+        veritabanına kaydeder ve sonuçları döndürür.
 
         Args:
-            collection_options (Dict[str, bool]): Hangi veri türlerinin toplanacağını belirten seçenekler.
             selected_cities (List[str]): Veri toplanacak şehirler listesi.
+            collection_options (Dict[str, bool]): Hangi veri türlerinin toplanacağını belirten seçenekler.
+            place_types (List[str]): Aranacak mekan türleri.
 
         Returns:
             Dict[str, Any]: Toplama işleminin özetini, şehir bazında özetleri,
-                            tüm istasyon verilerini ve analitik bilgileri içeren
+                            tüm mekan verilerini ve analitik bilgileri içeren
                             kapsamlı bir sözlük.
         """
         logger.info("🚀 Türkiye şehirleri için kapsamlı veri toplama başlatılıyor...")
@@ -473,8 +479,8 @@ class EnhancedDataCollector:
             try:
                 logger.info(f"🏙️ {city_name} şehri için veri toplama başlatılıyor...")
                 
-                # Şehir başına maksimum 50 istasyon topla
-                stations = self.collect_stations_by_city(city_name, max_stations=50, collection_options=collection_options)
+                # Şehir başına maksimum 50 mekan topla
+                stations = self.collect_stations_by_city(city_name, max_stations=50, collection_options=collection_options, place_types=place_types)
                 
                 if stations:
                     all_stations.extend(stations)

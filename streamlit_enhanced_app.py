@@ -237,17 +237,58 @@ def display_data_collection_dashboard():
                 "Şehirler Seçin",
                 city_names,
                 default=["Istanbul", "Ankara", "Izmir", "Bursa", "Antalya"],
-                help="Veri toplanacak şehirleri seçin"
+                help="Veri toplanacak şehirleri seçin",
+                key="city_selection"
             )
         with col2:
             if st.button("🔄 Tüm Büyük Şehirler", help="İlk 10 büyük şehri seç"):
-                selected_cities = city_names[:10]
+                st.session_state.city_selection = city_names[:10]
                 st.rerun()
     else:
         selected_cities = ["Istanbul", "Ankara", "Izmir", "Bursa", "Antalya"]
         st.info("Geocoding servisi kullanılamıyor, varsayılan şehirler kullanılacak")
     
     st.info(f"🏙️ {len(selected_cities)} şehir seçildi: {', '.join(selected_cities)}")
+    
+    # Mekan türü seçimi
+    st.subheader("🏢 Mekan Türü Seçimi")
+    st.markdown("Hangi tür mekanları arayalım?")
+    
+    place_type_options = {
+        'gas_station': '⛽ Benzin İstasyonları',
+        'restaurant': '🍽️ Restoranlar',
+        'lodging': '🏨 Konaklama (Otel/Motel)',
+        'tourist_attraction': '🗿 Turistik Yerler',
+        'shopping_mall': '🛒 Alışveriş Merkezleri',
+        'hospital': '🏥 Hastaneler',
+        'bank': '🏦 Bankalar',
+        'atm': '💳 ATM\'ler',
+        'pharmacy': '💊 Eczaneler',
+        'supermarket': '🛍️ Süpermarketler',
+        'car_repair': '🔧 Oto Tamirhaneleri',
+        'parking': '🅿️ Park Alanları'
+    }
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        selected_place_types = st.multiselect(
+            "Mekan Türleri",
+            options=list(place_type_options.keys()),
+            default=['gas_station'],
+            format_func=lambda x: place_type_options[x],
+            help="Aramak istediğiniz mekan türlerini seçin",
+            key="place_types_selection"
+        )
+    with col2:
+        if st.button("🎯 Yaygın Mekanlar", help="Benzin istasyonu, restoran, otel seç"):
+            st.session_state.place_types_selection = ['gas_station', 'restaurant', 'lodging']
+            st.rerun()
+    
+    if selected_place_types:
+        selected_labels = [place_type_options[pt] for pt in selected_place_types]
+        st.info(f"🎯 {len(selected_place_types)} mekan türü seçildi: {', '.join(selected_labels)}")
+    else:
+        st.warning("⚠️ En az bir mekan türü seçin!")
     
     # Veri toplama seçenekleri
     st.subheader("📊 Veri Toplama Seçenekleri")
@@ -293,6 +334,8 @@ def display_data_collection_dashboard():
                 st.warning("⚠️ En az bir veri türü seçin!")
             elif len(selected_cities) == 0:
                 st.warning("⚠️ En az bir şehir seçin!")
+            elif len(selected_place_types) == 0:
+                st.warning("⚠️ En az bir mekan türü seçin!")
             else:
                 with st.spinner("Kapsamlı veri toplama başlatılıyor..."):
                     try:
@@ -302,7 +345,8 @@ def display_data_collection_dashboard():
                         
                         result = st.session_state.data_collector.collect_comprehensive_data(
                             selected_cities=selected_cities,
-                            collection_options=collection_options
+                            collection_options=collection_options,
+                            place_types=selected_place_types
                         )
                         st.success("✅ Veri toplama tamamlandı!")
                         st.balloons()
@@ -384,9 +428,12 @@ def display_data_collection_dashboard():
                                 title="Şehirlere Göre İstasyon Sayısı")
                     st.plotly_chart(fig, use_container_width=True)
         
-        # İstasyon örnekleri
+        # İnteraktif harita görüntüleme
         stations = result.get('stations', [])
         if stations:
+            st.subheader("🗺️ İstasyonlar Haritası")
+            display_collected_stations_map(stations)
+            
             st.subheader("🔍 İstasyon Örnekleri")
             sample_stations = stations[:5]  # İlk 5 istasyonu göster
             
@@ -1228,6 +1275,229 @@ def display_route_services_map(services_result, origin_lat, origin_lng, dest_lat
                     st.write(f"**{name}**")
                 with col3:
                     st.write(f"📏 {distance:.1f} km")
+        
+    except Exception as e:
+        st.error(f"❌ Harita görüntülenirken hata: {str(e)}")
+        import traceback
+        st.error(traceback.format_exc())
+
+def display_collected_stations_map(stations):
+    """
+    Toplanan istasyonları harita üzerinde görüntüler.
+    Marka, EV şarj, erişilebilirlik gibi özelliklere göre renklendirilmiş marker'lar.
+    
+    Args:
+        stations (List[Dict]): Toplanan istasyon verileri
+    """
+    try:
+        if not stations:
+            st.info("Gösterilecek istasyon bulunamadı.")
+            return
+        
+        # Harita merkezi - tüm istasyonların ortalaması
+        lats = [s.get('latitude') for s in stations if s.get('latitude')]
+        lngs = [s.get('longitude') for s in stations if s.get('longitude')]
+        
+        if not lats or not lngs:
+            st.error("İstasyon koordinat bilgileri eksik.")
+            return
+        
+        center_lat = sum(lats) / len(lats)
+        center_lng = sum(lngs) / len(lngs)
+        
+        # Harita oluştur
+        m = folium.Map(location=[center_lat, center_lng], zoom_start=8)
+        
+        # Marka renkleri - constants.py'deki gibi
+        brand_colors = {
+            'Shell': 'red',
+            'BP': 'green', 
+            'Total': 'blue',
+            'Opet': 'orange',
+            'Petrol Ofisi': 'purple',
+            'TP': 'darkblue',
+            'Other': 'gray'
+        }
+        
+        # Harita filtreleme seçenekleri
+        col1, col2, col3, col4 = st.columns(4)
+        
+        with col1:
+            show_ev = st.checkbox("🔋 EV Şarj İstasyonları", value=True, help="EV şarj imkanı olan istasyonları göster")
+        with col2:
+            show_accessible = st.checkbox("♿ Erişilebilir İstasyonlar", value=True, help="Engelli erişimi olan istasyonları göster")
+        with col3:
+            show_parking = st.checkbox("🅿️ Park İmkanı", value=True, help="Park imkanı olan istasyonları göster")
+        with col4:
+            show_all = st.checkbox("📍 Tüm İstasyonlar", value=True, help="Filtrelenmemiş tüm istasyonları göster")
+        
+        # İstasyonları ekle
+        added_count = 0
+        for i, station in enumerate(stations):
+            lat = station.get('latitude')
+            lng = station.get('longitude')
+            
+            if not lat or not lng:
+                continue
+            
+            name = station.get('name', 'Bilinmeyen İstasyon')
+            brand = station.get('brand', 'Other')
+            city = station.get('city', 'N/A')
+            rating = station.get('rating', 0)
+            address = station.get('address', 'Adres bulunamadı')
+            
+            # Özellikler
+            has_ev = station.get('ev_charge_options', {}).get('available', False)
+            has_accessibility = station.get('accessibility_options', {}).get('wheelchair_accessible_entrance', False)
+            has_parking = (station.get('parking_options', {}).get('free_parking_lot', False) or 
+                          station.get('parking_options', {}).get('paid_parking_lot', False))
+            has_credit_card = station.get('payment_options', {}).get('accepts_credit_cards', False)
+            
+            # Filtreleme kontrolü
+            should_show = False
+            if show_all:
+                should_show = True
+            if show_ev and has_ev:
+                should_show = True
+            if show_accessible and has_accessibility:
+                should_show = True
+            if show_parking and has_parking:
+                should_show = True
+            
+            if not should_show:
+                continue
+            
+            # Marker rengi ve ikonu
+            color = brand_colors.get(brand, 'gray')
+            
+            # Özel marker - EV şarj varsa elektrik ikonu
+            if has_ev:
+                icon = folium.Icon(color='darkgreen', icon='bolt', prefix='fa')
+            elif has_accessibility:
+                icon = folium.Icon(color='blue', icon='wheelchair', prefix='fa')
+            elif has_parking:
+                icon = folium.Icon(color=color, icon='car', prefix='fa')
+            else:
+                icon = folium.Icon(color=color, icon='tint', prefix='fa')
+            
+            # Popup içeriği - Places API (New) bilgileriyle
+            popup_content = f"""
+            <div style="width: 320px; font-family: Arial;">
+                <h3 style="color: #2E86AB; margin: 0;">⛽ {name}</h3>
+                <hr style="margin: 5px 0;">
+                
+                <div style="margin: 8px 0;">
+                    <strong>🏷️ Marka:</strong> {brand}<br>
+                    <strong>🏙️ Şehir:</strong> {city}<br>
+                    <strong>⭐ Puan:</strong> {rating if rating else 'Belirtilmemiş'}<br>
+                    <strong>📍 Adres:</strong> {address[:60]}...
+                </div>
+                
+                <hr style="margin: 8px 0;">
+                <h4 style="color: #28a745; margin: 5px 0;">🔋 Places API (New) Özellikleri:</h4>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px;">
+                    <div>
+                        <strong>⚡ EV Şarj:</strong><br>
+                        {'<span style="color: green;">✅ Mevcut</span>' if has_ev else '<span style="color: red;">❌ Yok</span>'}
+                    </div>
+                    
+                    <div>
+                        <strong>♿ Erişilebilirlik:</strong><br>
+                        {'<span style="color: green;">✅ Uygun</span>' if has_accessibility else '<span style="color: red;">❌ Yok</span>'}
+                    </div>
+                    
+                    <div>
+                        <strong>🅿️ Park İmkanı:</strong><br>
+                        {'<span style="color: green;">✅ Var</span>' if has_parking else '<span style="color: red;">❌ Yok</span>'}
+                    </div>
+                    
+                    <div>
+                        <strong>💳 Kredi Kartı:</strong><br>
+                        {'<span style="color: green;">✅ Kabul</span>' if has_credit_card else '<span style="color: red;">❌ Yok</span>'}
+                    </div>
+                </div>
+                
+                <div style="margin-top: 10px; font-size: 11px; color: #666;">
+                    📊 İstasyon #{i+1} | API: Google Places (New)
+                </div>
+            </div>
+            """
+            
+            # Marker ekle
+            folium.Marker(
+                [lat, lng],
+                popup=folium.Popup(popup_content, max_width=350),
+                icon=icon,
+                tooltip=f"{name} ({brand})"
+            ).add_to(m)
+            
+            added_count += 1
+        
+        # Bilgi kutusu
+        info_html = f"""
+        <div style="position: fixed; 
+                    top: 10px; left: 50px; width: 280px; height: 110px; 
+                    background-color: white; border: 2px solid #2E86AB;
+                    z-index:9999; font-size:14px; padding: 10px;
+                    border-radius: 5px; box-shadow: 0 0 15px rgba(0,0,0,0.2)">
+        <h4>📊 İstasyon Haritası</h4>
+        <b>📍 Toplam İstasyon:</b> {len(stations)}<br>
+        <b>🗺️ Gösterilen:</b> {added_count}<br>
+        <b>🔋 API:</b> Google Places (New)<br>
+        <b>🏙️ Şehirler:</b> {len(set(s.get('city', '') for s in stations))} şehir
+        </div>
+        """
+        
+        m.get_root().html.add_child(folium.Element(info_html))
+        
+        
+        # Haritayı göster
+        st_folium(m, width=700, height=500, returned_objects=["last_object_clicked"])
+        
+        # Harita altında lejant
+        st.markdown("### 🗺️ Harita Lejantı")
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.markdown("""
+            **🏷️ İstasyon Türleri:**
+            - <span style="color: darkgreen;">⚡</span> EV Şarj İstasyonu
+            - <span style="color: blue;">♿</span> Erişilebilir İstasyon  
+            - <span style="color: orange;">🚗</span> Park İmkanı
+            """, unsafe_allow_html=True)
+            
+        with col2:
+            st.markdown("""
+            **🎨 Marka Renkleri:**
+            - <span style="color: red;">📍</span> Shell İstasyonu
+            - <span style="color: green;">📍</span> BP İstasyonu
+            - <span style="color: blue;">📍</span> Total İstasyonu
+            - <span style="color: gray;">📍</span> Diğer Markalar
+            """, unsafe_allow_html=True)
+        
+        # Harita altında özet
+        st.markdown("### 📊 İstasyon Özeti")
+        col1, col2, col3, col4 = st.columns(4)
+        
+        with col1:
+            ev_count = sum(1 for s in stations if s.get('ev_charge_options', {}).get('available', False))
+            st.metric("⚡ EV Şarj", ev_count)
+            
+        with col2:
+            accessible_count = sum(1 for s in stations if s.get('accessibility_options', {}).get('wheelchair_accessible_entrance', False))
+            st.metric("♿ Erişilebilir", accessible_count)
+            
+        with col3:
+            parking_count = sum(1 for s in stations if 
+                              s.get('parking_options', {}).get('free_parking_lot', False) or 
+                              s.get('parking_options', {}).get('paid_parking_lot', False))
+            st.metric("🅿️ Park İmkanı", parking_count)
+            
+        with col4:
+            credit_count = sum(1 for s in stations if s.get('payment_options', {}).get('accepts_credit_cards', False))
+            st.metric("💳 Kredi Kartı", credit_count)
         
     except Exception as e:
         st.error(f"❌ Harita görüntülenirken hata: {str(e)}")

@@ -13,6 +13,13 @@ import os
 from contextlib import contextmanager
 from dotenv import load_dotenv
 
+# Streamlit imports (sadece gerekli olduğunda)
+try:
+    import streamlit as st
+    STREAMLIT_AVAILABLE = True
+except ImportError:
+    STREAMLIT_AVAILABLE = False
+
 # Load environment variables
 load_dotenv()
 
@@ -28,13 +35,13 @@ class PostgreSQLConfig:
         """
         PostgreSQL konfigürasyonu başlatır.
         """
-        # Veritabanı bağlantı bilgileri (.env dosyasından)
+        # Veritabanı bağlantı bilgileri (önce env, yoksa Streamlit secrets)
         self.connection_params = {
-            'host': os.getenv('POSTGRES_HOST', 'localhost'),
-            'port': int(os.getenv('POSTGRES_PORT', '5432')),
-            'database': os.getenv('POSTGRES_DATABASE', 'fueltwogo'),
-            'user': os.getenv('POSTGRES_USER', 'fuel_user'),
-            'password': os.getenv('POSTGRES_PASSWORD', '')
+            'host': self._get_config_value('POSTGRES_HOST', 'localhost'),
+            'port': int(self._get_config_value('POSTGRES_PORT', '5432')),
+            'database': self._get_config_value('POSTGRES_DATABASE', 'fueltwogo'),
+            'user': self._get_config_value('POSTGRES_USER', 'fuel_user'),
+            'password': self._get_config_value('POSTGRES_PASSWORD', '')
         }
         
         # Bağlantı havuzu ayarları
@@ -46,6 +53,34 @@ class PostgreSQLConfig:
         }
         
         self._connection = None
+        
+    def _get_config_value(self, key: str, default: str = '') -> str:
+        """
+        Önce environment variable'dan oku, yoksa Streamlit secrets'den oku.
+        
+        Args:
+            key (str): Config anahtarı
+            default (str): Varsayılan değer
+            
+        Returns:
+            str: Config değeri veya varsayılan değer
+        """
+        # Önce environment variable'dan dene
+        value = os.getenv(key)
+        
+        if value:
+            return value
+            
+        # Eğer Streamlit mevcutsa ve secrets var ise oradan dene
+        if STREAMLIT_AVAILABLE:
+            try:
+                if hasattr(st, 'secrets') and key in st.secrets:
+                    return st.secrets[key]
+            except Exception:
+                # Secrets erişimi başarısız olursa geç
+                pass
+        
+        return default
         
     def get_connection_string(self) -> str:
         """
