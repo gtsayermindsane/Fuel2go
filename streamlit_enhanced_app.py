@@ -1614,8 +1614,8 @@ def main():
     
     params = display_sidebar()
     
-    tab_titles = constants.TAB_TITLES + ["🚛 Şoför Asistanı", "⚡ Cache Yönetimi"]
-    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(tab_titles)
+    tab_titles = [constants.TAB_TITLES[0], constants.TAB_TITLES[1]] + ["🚛 Şoför Asistanı", "⚡ Cache Yönetimi"]
+    tab1, tab2, tab3, tab4 = st.tabs(tab_titles)
     
     with tab1:
         st.header(tab_titles[0])
@@ -1660,15 +1660,9 @@ def main():
         display_data_collection_dashboard()
     
     with tab3:
-        display_detailed_station_analysis()
-    
-    with tab4:
-        display_export_options()
-    
-    with tab5:
         display_driver_assistant()
     
-    with tab6:
+    with tab4:
         display_cache_management()
     
     st.markdown("---")
