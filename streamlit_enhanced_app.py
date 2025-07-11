@@ -219,48 +219,197 @@ def display_data_collection_dashboard():
     
     Bu dashboard, kullanıcıya kapsamlı veri toplama işlemini başlatma
     ve veritabanındaki mevcut verilerin özetini görme imkanı sunar.
+    Places API (New) field'ları için interaktif seçenekler sunar.
     """
     st.header(constants.DATA_COLLECTION_HEADER)
     
-    col1, col2, col3 = st.columns([2, 1, 1])
+    # Şehir seçimi
+    st.subheader("🏙️ Şehir Seçimi")
+    st.markdown("Hangi Türkiye şehirlerinden veri toplamak istiyorsunuz?")
+    
+    if st.session_state.geocoding_client:
+        all_cities = st.session_state.geocoding_client.get_predefined_turkish_cities()
+        city_names = [city['city_name'] for city in all_cities]
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            selected_cities = st.multiselect(
+                "Şehirler Seçin",
+                city_names,
+                default=["Istanbul", "Ankara", "Izmir", "Bursa", "Antalya"],
+                help="Veri toplanacak şehirleri seçin"
+            )
+        with col2:
+            if st.button("🔄 Tüm Büyük Şehirler", help="İlk 10 büyük şehri seç"):
+                selected_cities = city_names[:10]
+                st.rerun()
+    else:
+        selected_cities = ["Istanbul", "Ankara", "Izmir", "Bursa", "Antalya"]
+        st.info("Geocoding servisi kullanılamıyor, varsayılan şehirler kullanılacak")
+    
+    st.info(f"🏙️ {len(selected_cities)} şehir seçildi: {', '.join(selected_cities)}")
+    
+    # Veri toplama seçenekleri
+    st.subheader("📊 Veri Toplama Seçenekleri")
+    st.markdown("Places API (New) ile hangi veri türlerini toplamak istiyorsunuz?")
+    
+    col1, col2, col3 = st.columns(3)
     
     with col1:
-        st.markdown(f"""
-        <div class="data-collection-card">
-            <h4>{constants.DATA_COLLECTION_CARD_TITLE}</h4>
-            <p>{constants.DATA_COLLECTION_CARD_TEXT}</p>
-            <ul>
-                <li>✅ Google Places API entegrasyonu</li>
-                <li>✅ Marka bazında kategorilendirme</li>
-                <li>✅ Fiyat ve hizmet bilgileri</li>
-                <li>✅ PostgreSQL veri ambarı</li>
-                <li>✅ Excel export özelliği</li>
-            </ul>
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown("**🔋 Yakıt & Enerji**")
+        fuel_options = st.checkbox("Yakıt Seçenekleri", value=True, help="Dizel, benzin, premium, LPG, E85, biodiesel vb.")
+        ev_options = st.checkbox("EV Şarj İstasyonları", value=True, help="Elektrikli araç şarj noktaları ve güç seviyeleri")
+        
+    with col2:
+        st.markdown("**🅿️ Park & Ödeme**")
+        parking_options = st.checkbox("Park Seçenekleri", value=True, help="Ücretsiz/ücretli park, valet, garaj vb.")
+        payment_options = st.checkbox("Ödeme Yöntemleri", value=True, help="Kredi kartı, nakit, NFC ödeme vb.")
+        
+    with col3:
+        st.markdown("**♿ Erişim & Hizmetler**")
+        accessibility_options = st.checkbox("Erişilebilirlik", value=True, help="Engelli erişimi, rampa, tuvalet vb.")
+        secondary_hours = st.checkbox("İkincil Çalışma Saatleri", value=True, help="Drive-through, car wash, market saatleri")
+    
+    # Toplama seçeneklerini dict'e çevir
+    collection_options = {
+        'fuel_options': fuel_options,
+        'ev_charge_options': ev_options,
+        'parking_options': parking_options,
+        'payment_options': payment_options,
+        'accessibility': accessibility_options,
+        'secondary_hours': secondary_hours
+    }
+    
+    # Seçilen seçeneklerin özeti
+    selected_count = sum(collection_options.values())
+    st.info(f"📈 {selected_count}/6 veri türü seçildi")
+    
+    # Veri toplama butonu
+    col1, col2 = st.columns([1, 1])
+    
+    with col1:
+        if st.button("🚀 Veri Toplamayı Başlat", type="primary", use_container_width=True):
+            if selected_count == 0:
+                st.warning("⚠️ En az bir veri türü seçin!")
+            elif len(selected_cities) == 0:
+                st.warning("⚠️ En az bir şehir seçin!")
+            else:
+                with st.spinner("Kapsamlı veri toplama başlatılıyor..."):
+                    try:
+                        # Force reload the data collector
+                        from enhanced_data_collector import EnhancedDataCollector
+                        st.session_state.data_collector = EnhancedDataCollector()
+                        
+                        result = st.session_state.data_collector.collect_comprehensive_data(
+                            selected_cities=selected_cities,
+                            collection_options=collection_options
+                        )
+                        st.success("✅ Veri toplama tamamlandı!")
+                        st.balloons()
+                        
+                        # Toplanan veriyi session state'e kaydet
+                        st.session_state.collected_data = result
+                        st.rerun()
+                    except Exception as e:
+                        st.error(f"❌ {constants.ERROR_DATA_COLLECTION}: {str(e)}")
     
     with col2:
-        if st.button(constants.DATA_COLLECTION_BUTTON_TEXT, type="primary", use_container_width=True):
-            with st.spinner("Kapsamlı veri toplama başlatılıyor..."):
-                try:
-                    result = st.session_state.data_collector.collect_comprehensive_data()
-                    st.success("✅ Veri toplama tamamlandı!")
-                    st.balloons()
-                    st.json(result.get('summary', {}))
-                    st.rerun()
-                except Exception as e:
-                    st.error(f"❌ {constants.ERROR_DATA_COLLECTION}: {str(e)}")
-    
-    with col3:
-        if st.button(constants.DB_SUMMARY_BUTTON_TEXT, use_container_width=True):
+        if st.button("🗄️ Veritabanı Özeti", use_container_width=True):
             try:
                 summary = st.session_state.warehouse.get_analytics_summary()
                 st.json(summary)
             except Exception as e:
                 st.error(f"❌ {constants.ERROR_DB_SUMMARY}: {str(e)}")
     
-    st.markdown("---")
-    display_current_data_status()
+    # Toplanan veriyi göster
+    if 'collected_data' in st.session_state and st.session_state.collected_data:
+        st.markdown("---")
+        st.subheader("📊 Toplanan Veriler")
+        
+        result = st.session_state.collected_data
+        
+        # Özet kartları
+        col1, col2, col3, col4 = st.columns(4)
+        
+        summary = result.get('summary', {})
+        with col1:
+            st.metric("🏙️ İşlenen Şehir", summary.get('cities_processed', 0))
+        with col2:
+            st.metric("⛽ Toplanan İstasyon", summary.get('total_stations_collected', 0))
+        with col3:
+            st.metric("📅 Toplama Tarihi", summary.get('collection_date', '').split('T')[0] if summary.get('collection_date') else 'N/A')
+        with col4:
+            st.metric("🔗 API Versiyon", summary.get('version', 'N/A'))
+        
+        # Şehir özetleri
+        city_summaries = result.get('city_summaries', {})
+        if city_summaries:
+            st.subheader("🏙️ Şehir Bazında Özet")
+            
+            city_data = []
+            for city, data in city_summaries.items():
+                city_data.append({
+                    'Şehir': city,
+                    'İstasyon Sayısı': data.get('total_stations', 0),
+                    'Ortalama Puan': f"{data.get('avg_rating', 0):.1f}",
+                    'Bulunan Markalar': len(data.get('brands', [])),
+                    'Toplama Zamanı': data.get('collection_time', '').split('T')[1][:8] if data.get('collection_time') else 'N/A'
+                })
+            
+            df_cities = pd.DataFrame(city_data)
+            st.dataframe(df_cities, use_container_width=True)
+        
+        # Analytics
+        analytics = result.get('analytics', {})
+        if analytics:
+            st.subheader("📈 Analitik Veriler")
+            
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                # Marka dağılımı
+                brand_dist = analytics.get('brand_distribution', {})
+                if brand_dist:
+                    st.markdown("**🏷️ Marka Dağılımı**")
+                    fig = px.pie(values=list(brand_dist.values()), names=list(brand_dist.keys()),
+                                title="Bulunan Markalar")
+                    st.plotly_chart(fig, use_container_width=True)
+            
+            with col2:
+                # Şehir dağılımı
+                city_dist = analytics.get('city_distribution', {})
+                if city_dist:
+                    st.markdown("**🏙️ Şehir Dağılımı**")
+                    fig = px.bar(x=list(city_dist.keys()), y=list(city_dist.values()),
+                                title="Şehirlere Göre İstasyon Sayısı")
+                    st.plotly_chart(fig, use_container_width=True)
+        
+        # İstasyon örnekleri
+        stations = result.get('stations', [])
+        if stations:
+            st.subheader("🔍 İstasyon Örnekleri")
+            sample_stations = stations[:5]  # İlk 5 istasyonu göster
+            
+            for i, station in enumerate(sample_stations, 1):
+                with st.expander(f"{i}. {station.get('name', 'N/A')} - {station.get('city', 'N/A')}"):
+                    col1, col2 = st.columns(2)
+                    
+                    with col1:
+                        st.write(f"**Marka:** {station.get('brand', 'N/A')}")
+                        st.write(f"**Adres:** {station.get('address', 'N/A')}")
+                        st.write(f"**Puan:** {station.get('rating', 'N/A')}")
+                        st.write(f"**Yakıt Türleri:** {', '.join(station.get('fuel_types', []))}")
+                    
+                    with col2:
+                        if station.get('fuel_options'):
+                            st.write(f"**EV Şarj:** {'✅' if station.get('ev_charge_options', {}).get('available') else '❌'}")
+                            st.write(f"**Ücretsiz Park:** {'✅' if station.get('parking_options', {}).get('free_parking_lot') else '❌'}")
+                            st.write(f"**Engelli Erişimi:** {'✅' if station.get('accessibility_options', {}).get('wheelchair_accessible_entrance') else '❌'}")
+                            st.write(f"**Kredi Kartı:** {'✅' if station.get('payment_options', {}).get('accepts_credit_cards') else '❌'}")
+        
+        if st.button("🗑️ Toplanan Veriyi Temizle"):
+            del st.session_state.collected_data
+            st.rerun()
 
 def display_current_data_status():
     """
@@ -268,7 +417,7 @@ def display_current_data_status():
     
     Toplam istasyon ve rota sayısı gibi temel metrikleri, ülke bazında istasyon
     dağılımını gösteren bir bar grafiğini ve araç tipine göre emisyon dağılımını
-    gösteren bir pasta grafiğini içerir.
+    gösteren bir pasta grafiğini içerir. Places API (New) field'larını da gösterir.
     """
     st.subheader(constants.CURRENT_DATA_STATUS_HEADER)
     
@@ -288,11 +437,46 @@ def display_current_data_status():
             avg_fuel = summary.get('avg_fuel_consumption', 0)
             st.metric(label="⛽ Ort. Yakıt (L)", value=f"{avg_fuel:.1f}" if avg_fuel else "0")
         
-        if summary.get('stations_by_country'):
-            st.subheader(constants.STATION_DISTRIBUTION_HEADER)
-            country_data = summary['stations_by_country']
-            fig = px.bar(x=list(country_data.keys()), y=list(country_data.values()),
-                         title="Ülke Bazında İstasyon Sayıları", labels={"x": "Ülke", "y": "İstasyon Sayısı"})
+        # Places API (New) özellikleri metrikleri
+        st.subheader("🔋 Places API (New) Özellikleri")
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            st.markdown("**⚡ EV Şarj İstasyonları**")
+            ev_count = summary.get('ev_charging_stations', 0)
+            st.metric(label="EV Şarj Noktası", value=ev_count)
+            
+        with col2:
+            st.markdown("**🅿️ Park Seçenekleri**")
+            parking_count = summary.get('stations_with_parking', 0)
+            st.metric(label="Park İmkanı", value=parking_count)
+            
+        with col3:
+            st.markdown("**♿ Erişilebilirlik**")
+            accessible_count = summary.get('accessible_stations', 0)
+            st.metric(label="Engelli Erişimi", value=accessible_count)
+        
+        if summary.get('city_distribution'):
+            st.subheader("🏙️ Şehir Bazında İstasyon Dağılımı")
+            city_data = summary['city_distribution']
+            fig = px.bar(x=list(city_data.keys()), y=list(city_data.values()),
+                         title="Şehir Bazında İstasyon Sayıları", labels={"x": "Şehir", "y": "İstasyon Sayısı"})
+            st.plotly_chart(fig, use_container_width=True)
+        
+        # EV şarj analizi
+        if summary.get('ev_charging_distribution'):
+            st.subheader("⚡ EV Şarj İstasyonları Dağılımı")
+            ev_data = summary['ev_charging_distribution']
+            fig = px.pie(values=list(ev_data.values()), names=list(ev_data.keys()),
+                         title="EV Şarj Türleri")
+            st.plotly_chart(fig, use_container_width=True)
+        
+        # Ödeme yöntemleri analizi
+        if summary.get('payment_methods_distribution'):
+            st.subheader("💳 Ödeme Yöntemleri")
+            payment_data = summary['payment_methods_distribution']
+            fig = px.bar(x=list(payment_data.keys()), y=list(payment_data.values()),
+                         title="Desteklenen Ödeme Yöntemleri", labels={"x": "Ödeme Türü", "y": "İstasyon Sayısı"})
             st.plotly_chart(fig, use_container_width=True)
         
         if summary.get('emissions_by_vehicle'):

@@ -69,9 +69,19 @@ class TableCreator:
             place_id VARCHAR(255) UNIQUE NOT NULL,
             name VARCHAR(255) NOT NULL,
             address TEXT,
+            short_formatted_address TEXT,
             latitude DECIMAL(10, 8) NOT NULL,
             longitude DECIMAL(11, 8) NOT NULL,
+            primary_type VARCHAR(100),
+            primary_type_display_name VARCHAR(255),
             fuel_types JSONB,
+            fuel_options JSONB,
+            ev_charge_options JSONB,
+            parking_options JSONB,
+            payment_options JSONB,
+            accessibility_options JSONB,
+            secondary_opening_hours JSONB,
+            sub_destinations JSONB,
             amenities JSONB,
             opening_hours JSONB,
             phone_number VARCHAR(50),
@@ -104,9 +114,19 @@ class TableCreator:
                 place_id VARCHAR(255) UNIQUE NOT NULL,
                 name VARCHAR(255) NOT NULL,
                 address TEXT,
+                short_formatted_address TEXT,
                 latitude DECIMAL(10, 8) NOT NULL,
                 longitude DECIMAL(11, 8) NOT NULL,
+                primary_type VARCHAR(100),
+                primary_type_display_name VARCHAR(255),
                 fuel_types JSONB,
+                fuel_options JSONB,
+                ev_charge_options JSONB,
+                parking_options JSONB,
+                payment_options JSONB,
+                accessibility_options JSONB,
+                secondary_opening_hours JSONB,
+                sub_destinations JSONB,
                 amenities JSONB,
                 opening_hours JSONB,
                 phone_number VARCHAR(50),
@@ -127,6 +147,15 @@ class TableCreator:
             
             CREATE INDEX IF NOT EXISTS idx_fuel_stations_name 
             ON fuel_stations (name);
+            
+            CREATE INDEX IF NOT EXISTS idx_fuel_stations_ev_charge 
+            ON fuel_stations USING GIN (ev_charge_options) WHERE ev_charge_options->>'available' = 'true';
+            
+            CREATE INDEX IF NOT EXISTS idx_fuel_stations_accessibility 
+            ON fuel_stations USING GIN (accessibility_options);
+            
+            CREATE INDEX IF NOT EXISTS idx_fuel_stations_fuel_options 
+            ON fuel_stations USING GIN (fuel_options);
             """
             
             self.config.execute_query(create_table_sql)

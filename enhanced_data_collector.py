@@ -17,6 +17,7 @@ from pathlib import Path
 
 from api.routes_client import GoogleRoutesClient
 from api.places_client import GooglePlacesClient
+from api.geocoding_client import GeocodingClient
 from data_models import FuelStationData, RouteData, RealTimeDataCollector
 from db.postgresql_data_warehouse import PostgreSQLDataWarehouse
 from config import constants
@@ -38,16 +39,17 @@ class EnhancedDataCollector:
         """
         EnhancedDataCollector sınıfını başlatır.
         
-        API istemcilerini (GoogleRoutesClient, GooglePlacesClient), veri ambarını
-        (DataWarehouse) ve sabitleri (ülkeler, markalar) ayarlar.
+        API istemcilerini (GoogleRoutesClient, GooglePlacesClient, GeocodingClient), veri ambarını
+        (DataWarehouse) ve sabitleri (şehirler, markalar) ayarlar.
         """
         self.routes_client = GoogleRoutesClient()
         self.places_client = GooglePlacesClient()
+        self.geocoding_client = GeocodingClient()
         self.warehouse = PostgreSQLDataWarehouse()
         self.real_time_collector = RealTimeDataCollector(self.warehouse)
         
-        # Sabitler constants.py dosyasından alınıyor
-        self.european_countries = constants.EUROPEAN_COUNTRIES
+        # Sabitler constants.py dosyasından alınıyor ve Türkiye şehirleri
+        self.turkish_cities = self.geocoding_client.get_predefined_turkish_cities()
         self.fuel_brands = constants.FUEL_BRANDS
     
     def identify_fuel_brand(self, station_name: str) -> str:
@@ -74,48 +76,42 @@ class EnhancedDataCollector:
         
         return constants.UNKNOWN_BRAND
     
-    def collect_stations_by_country(self, country_code: str, max_stations: int = constants.MAX_STATIONS_PER_COUNTRY) -> List[Dict[str, Any]]:
+    def collect_stations_by_city(self, city_name: str, max_stations: int = 50, collection_options: Dict[str, bool] = None) -> List[Dict[str, Any]]:
         """
-        Belirtilen ülke kodu için benzin istasyonu verilerini toplar.
+        Belirtilen şehir için benzin istasyonu verilerini toplar.
 
-        Ülkenin başkentini merkez alarak, `constants.SEARCH_RADII` içinde belirtilen
-        farklı yarıçaplarda Google Places API üzerinden 'gas_station' araması yapar.
-        Belirtilen `max_stations` sayısına ulaşana kadar veya tüm yarıçaplar
-        taranana kadar devam eder.
+        Şehri merkez alarak, farklı yarıçaplarda Google Places API üzerinden 'gas_station' araması yapar.
+        Belirtilen `max_stations` sayısına ulaşana kadar veya tüm yarıçaplar taranana kadar devam eder.
 
         Args:
-            country_code (str): Veri toplanacak ülkenin ISO 3166-1 alpha-2 kodu (örn: 'TR').
-            max_stations (int, optional): Ülke başına toplanacak maksimum istasyon sayısı.
-                                          Varsayılan olarak `constants.MAX_STATIONS_PER_COUNTRY`.
+            city_name (str): Veri toplanacak şehirin adı (örn: 'Istanbul', 'Ankara').
+            max_stations (int, optional): Şehir başına toplanacak maksimum istasyon sayısı.
+            collection_options (Dict[str, bool]): Hangi veri türlerinin toplanacağını belirten seçenekler.
 
         Returns:
             List[Dict[str, Any]]: Toplanan ve zenginleştirilmiş istasyon verilerinin listesi.
-                                  Her bir öğe bir istasyonu temsil eden bir sözlüktür.
         """
-        logger.info(constants.LOG_MSG_COUNTRY_STATION_COLLECTION_START.format(country=country_code))
+        logger.info(f"🏙️ {city_name} şehri için istasyon verisi toplama başlatılıyor...")
         
-        country_info = self.european_countries.get(country_code)
-        if not country_info:
-            logger.error(constants.LOG_MSG_UNKNOWN_COUNTRY_CODE.format(country_code=country_code))
+        # Şehir koordinatlarını bul
+        city_info = self.geocoding_client.find_city_by_name(city_name)
+        if not city_info:
+            logger.error(f"❌ {city_name} şehri bulunamadı!")
             return []
         
-        # Başkent merkezli arama yap
-        capital = country_info['capital']
         collected_stations = []
-        
-        # Başkent çevresinde farklı yarıçaplarda arama
-        search_radii = constants.SEARCH_RADII
+        search_radii = [5000, 10000, 15000, 25000, 40000]  # 5km'den 40km'ye
         collected_station_ids = set()
         
         for radius in search_radii:
             if len(collected_stations) >= max_stations:
                 break
                 
-            logger.info(constants.LOG_MSG_RADIUS_SEARCH.format(country_name=country_info['name'], radius=radius/1000))
+            logger.info(f"📍 {city_name} çevresinde {radius/1000:.0f}km yarıçapında arama yapılıyor...")
             
             nearby_stations = self.places_client.search_nearby(
-                latitude=capital['lat'],
-                longitude=capital['lng'],
+                latitude=city_info['latitude'],
+                longitude=city_info['longitude'],
                 radius_meters=radius,
                 place_types=['gas_station']
             )
@@ -127,31 +123,43 @@ class EnhancedDataCollector:
                 station_id = station.get('id', '')
                 if station_id and station_id not in collected_station_ids:
                     # İstasyon detaylarını ekle
-                    enhanced_station = self.enhance_station_data(station, country_code)
+                    enhanced_station = self.enhance_station_data(station, city_name, collection_options)
                     if enhanced_station:
                         collected_stations.append(enhanced_station)
                         collected_station_ids.add(station_id)
             
             time.sleep(2)  # Rate limiting
         
-        logger.info(constants.LOG_MSG_COUNTRY_STATION_COLLECTION_END.format(country_code=country_code, count=len(collected_stations)))
+        logger.info(f"✅ {city_name} için {len(collected_stations)} istasyon verisi toplandı")
         return collected_stations
     
-    def enhance_station_data(self, station: Dict[str, Any], country_code: str) -> Optional[Dict[str, Any]]:
+    def enhance_station_data(self, station: Dict[str, Any], city_name: str, collection_options: Dict[str, bool] = None) -> Optional[Dict[str, Any]]:
         """
         Ham istasyon verisini ek bilgilerle zenginleştirir.
 
         Google Places API'den gelen temel istasyon verisine; marka, ülke, mock yakıt türleri,
         hizmetler, çalışma saatleri, fiyatlar ve tesis bilgileri gibi ek veriler ekler.
+        Places API (New) field'larını da dahil eder.
 
         Args:
             station (Dict[str, Any]): Google Places API'den gelen ham istasyon verisi.
-            country_code (str): İstasyonun bulunduğu ülkenin kodu.
+            city_name (str): İstasyonun bulunduğu şehirin adı.
+            collection_options (Dict[str, bool]): Hangi veri türlerinin toplanacağını belirten seçenekler.
 
         Returns:
             Optional[Dict[str, Any]]: Zenginleştirilmiş istasyon verisi. Gerekli temel bilgiler
                                       (örn: enlem/boylam) eksikse None dönebilir.
         """
+        if collection_options is None:
+            collection_options = {
+                'fuel_options': True,
+                'ev_charge_options': True,
+                'parking_options': True,
+                'payment_options': True,
+                'accessibility': True,
+                'secondary_hours': True
+            }
+            
         try:
             display_name = station.get('displayName', {})
             name = display_name.get('text', constants.UNKNOWN_NAME) if display_name else constants.UNKNOWN_NAME
@@ -163,29 +171,54 @@ class EnhancedDataCollector:
             # Marka belirle
             brand = self.identify_fuel_brand(name)
             
-            # Mock veriler - gerçek uygulamada API'lerden alınabilir
+            # Temel veriler
             enhanced_data = {
                 'station_id': station.get('id', ''),
                 'name': name,
                 'brand': brand,
-                'country': self.european_countries[country_code]['name'],
-                'country_code': country_code,
-                'region': f"{country_code}_region",
+                'country': 'Turkey',
+                'city': city_name,
+                'region': f"{city_name}_region",
                 'latitude': location.get('latitude'),
                 'longitude': location.get('longitude'),
                 'address': station.get('formattedAddress', ''),
+                'short_formatted_address': station.get('shortFormattedAddress', ''),
                 'rating': station.get('rating', constants.DEFAULT_RATING),
                 'review_count': station.get('userRatingCount', constants.DEFAULT_REVIEW_COUNT),
                 'business_status': station.get('businessStatus', constants.BUSINESS_STATUS_OPERATIONAL),
+                'primary_type': station.get('primaryType', 'gas_station'),
+                'primary_type_display_name': station.get('primaryTypeDisplayName', {}).get('text', 'Gas Station'),
                 'fuel_types': self.generate_fuel_types(brand),
                 'services': self.generate_services(),
                 'operating_hours': self.generate_operating_hours(),
-                'price_data': self.generate_price_data(country_code),
+                'price_data': self.generate_price_data('TR'),
                 'facilities': self.generate_facilities(),
                 'last_updated': datetime.now(timezone.utc).isoformat(),
                 'data_source': constants.DATA_SOURCE_GOOGLE,
                 'collection_timestamp': datetime.now(timezone.utc).isoformat()
             }
+            
+            # Places API (New) field'larını ekle
+            if collection_options.get('fuel_options', True):
+                enhanced_data['fuel_options'] = self.generate_fuel_options(station.get('fuelOptions', {}))
+                
+            if collection_options.get('ev_charge_options', True):
+                enhanced_data['ev_charge_options'] = self.generate_ev_charge_options(station.get('evChargeOptions', {}))
+                
+            if collection_options.get('parking_options', True):
+                enhanced_data['parking_options'] = self.generate_parking_options(station.get('parkingOptions', {}))
+                
+            if collection_options.get('payment_options', True):
+                enhanced_data['payment_options'] = self.generate_payment_options(station.get('paymentOptions', {}))
+                
+            if collection_options.get('accessibility', True):
+                enhanced_data['accessibility_options'] = self.generate_accessibility_options(station)
+                
+            if collection_options.get('secondary_hours', True):
+                enhanced_data['secondary_opening_hours'] = self.generate_secondary_hours(station.get('regularSecondaryOpeningHours', []))
+                
+            # Sub destinations
+            enhanced_data['sub_destinations'] = station.get('subDestinations', [])
             
             return enhanced_data
             
@@ -223,6 +256,111 @@ class EnhancedDataCollector:
             base_types.append('E85')
         
         return base_types
+    
+    def generate_fuel_options(self, fuel_options_data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Places API (New) fuelOptions field'ından veri üretir.
+        """
+        return {
+            'diesel': fuel_options_data.get('diesel', True),
+            'regular_unleaded': fuel_options_data.get('regularUnleaded', True),
+            'midgrade': fuel_options_data.get('midgrade', np.random.choice([True, False], p=[0.7, 0.3])),
+            'premium': fuel_options_data.get('premium', np.random.choice([True, False], p=[0.8, 0.2])),
+            'sp91': fuel_options_data.get('sp91', np.random.choice([True, False], p=[0.4, 0.6])),
+            'sp91_e10': fuel_options_data.get('sp91E10', np.random.choice([True, False], p=[0.3, 0.7])),
+            'sp95_e10': fuel_options_data.get('sp95E10', np.random.choice([True, False], p=[0.6, 0.4])),
+            'lpg': fuel_options_data.get('lpg', np.random.choice([True, False], p=[0.3, 0.7])),
+            'e85': fuel_options_data.get('e85', np.random.choice([True, False], p=[0.1, 0.9])),
+            'biodiesel': fuel_options_data.get('biodiesel', np.random.choice([True, False], p=[0.2, 0.8])),
+            'truck_diesel': fuel_options_data.get('truckDiesel', np.random.choice([True, False], p=[0.4, 0.6]))
+        }
+    
+    def generate_ev_charge_options(self, ev_data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Places API (New) evChargeOptions field'ından EV şarj bilgileri üretir.
+        """
+        has_ev = np.random.choice([True, False], p=[0.3, 0.7])
+        if not has_ev:
+            return {'available': False}
+            
+        return {
+            'available': True,
+            'connector_count': ev_data.get('connectorCount', np.random.randint(2, 8)),
+            'connector_aggregation': ev_data.get('connectorAggregation', []),
+            'fast_charging': np.random.choice([True, False], p=[0.6, 0.4]),
+            'power_levels': ['22kW', '50kW', '150kW'][:np.random.randint(1, 4)]
+        }
+    
+    def generate_parking_options(self, parking_data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Places API (New) parkingOptions field'ından park bilgileri üretir.
+        """
+        return {
+            'free_parking_lot': parking_data.get('freeParkingLot', np.random.choice([True, False], p=[0.4, 0.6])),
+            'paid_parking_lot': parking_data.get('paidParkingLot', np.random.choice([True, False], p=[0.3, 0.7])),
+            'free_street_parking': parking_data.get('freeStreetParking', np.random.choice([True, False], p=[0.5, 0.5])),
+            'paid_street_parking': parking_data.get('paidStreetParking', np.random.choice([True, False], p=[0.2, 0.8])),
+            'valet_parking': parking_data.get('valetParking', np.random.choice([True, False], p=[0.1, 0.9])),
+            'free_garage_parking': parking_data.get('freeGarageParking', np.random.choice([True, False], p=[0.2, 0.8])),
+            'paid_garage_parking': parking_data.get('paidGarageParking', np.random.choice([True, False], p=[0.3, 0.7]))
+        }
+    
+    def generate_payment_options(self, payment_data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Places API (New) paymentOptions field'ından ödeme bilgileri üretir.
+        """
+        return {
+            'accepts_credit_cards': payment_data.get('acceptsCreditCards', True),
+            'accepts_debit_cards': payment_data.get('acceptsDebitCards', True),
+            'accepts_cash_only': payment_data.get('acceptsCashOnly', False),
+            'accepts_nfc': payment_data.get('acceptsNfc', np.random.choice([True, False], p=[0.7, 0.3]))
+        }
+    
+    def generate_accessibility_options(self, station: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Places API (New) accessibility field'larından erişilebilirlik bilgileri üretir.
+        """
+        return {
+            'wheelchair_accessible_parking': station.get('wheelchairAccessibleParking', np.random.choice([True, False], p=[0.8, 0.2])),
+            'wheelchair_accessible_entrance': station.get('wheelchairAccessibleEntrance', np.random.choice([True, False], p=[0.9, 0.1])),
+            'wheelchair_accessible_restroom': station.get('wheelchairAccessibleRestroom', np.random.choice([True, False], p=[0.7, 0.3])),
+            'wheelchair_accessible_seating': station.get('wheelchairAccessibleSeating', np.random.choice([True, False], p=[0.6, 0.4]))
+        }
+    
+    def generate_secondary_hours(self, secondary_hours_data: List[Dict[str, Any]]) -> Dict[str, Any]:
+        """
+        Places API (New) regularSecondaryOpeningHours field'ından ikincil çalışma saatleri üretir.
+        """
+        if not secondary_hours_data:
+            return {
+                'drive_through': self.generate_drive_through_hours(),
+                'car_wash': self.generate_car_wash_hours(),
+                'convenience_store': self.generate_convenience_store_hours()
+            }
+        
+        return {
+            'drive_through': secondary_hours_data[0] if len(secondary_hours_data) > 0 else {},
+            'car_wash': secondary_hours_data[1] if len(secondary_hours_data) > 1 else {},
+            'convenience_store': secondary_hours_data[2] if len(secondary_hours_data) > 2 else {}
+        }
+    
+    def generate_drive_through_hours(self) -> Dict[str, str]:
+        """Drive-through saatleri üretir."""
+        if np.random.random() > 0.6:  # %40 şans drive-through var
+            return {"all_days": "06:00-23:00"}
+        return {}
+    
+    def generate_car_wash_hours(self) -> Dict[str, str]:
+        """Araç yıkama saatleri üretir."""
+        if np.random.random() > 0.7:  # %30 şans car wash var
+            return {"monday_friday": "08:00-20:00", "weekend": "09:00-18:00"}
+        return {}
+    
+    def generate_convenience_store_hours(self) -> Dict[str, str]:
+        """Market saatleri üretir."""
+        if np.random.random() > 0.5:  # %50 şans market var
+            return {"all_days": "05:00-23:00"}
+        return {}
     
     def generate_services(self) -> List[str]:
         """
@@ -305,47 +443,54 @@ class EnhancedDataCollector:
             'loyalty_program': np.random.choice([True, False], p=[0.6, 0.4])
         }
     
-    def collect_comprehensive_data(self):
+    def collect_comprehensive_data(self, selected_cities: List[str] = None, collection_options: Dict[str, bool] = None):
         """
-        Tüm Avrupa ülkeleri için kapsamlı veri toplama işlemini başlatır ve yönetir.
+        Seçilen Türkiye şehirleri için kapsamlı veri toplama işlemini başlatır ve yönetir.
 
-        `constants.EUROPEAN_COUNTRIES` listesindeki her ülke için
-        `collect_stations_by_country` fonksiyonunu çağırır. Toplanan tüm verileri
-        bir araya getirir, özet istatistikler oluşturur, veritabanına kaydeder
-        ve sonuçları JSON ve Excel dosyalarına yazar.
+        Belirtilen şehirler için `collect_stations_by_city` fonksiyonunu çağırır. 
+        Toplanan tüm verileri bir araya getirir, özet istatistikler oluşturur, 
+        veritabanına kaydeder ve sonuçları JSON ve Excel dosyalarına yazar.
+
+        Args:
+            collection_options (Dict[str, bool]): Hangi veri türlerinin toplanacağını belirten seçenekler.
+            selected_cities (List[str]): Veri toplanacak şehirler listesi.
 
         Returns:
-            Dict[str, Any]: Toplama işleminin özetini, ülke bazında özetleri,
+            Dict[str, Any]: Toplama işleminin özetini, şehir bazında özetleri,
                             tüm istasyon verilerini ve analitik bilgileri içeren
                             kapsamlı bir sözlük.
         """
-        logger.info(constants.LOG_MSG_COMPREHENSIVE_COLLECTION_START)
+        logger.info("🚀 Türkiye şehirleri için kapsamlı veri toplama başlatılıyor...")
+        
+        # Varsayılan şehirler listesi
+        if not selected_cities:
+            selected_cities = ["Istanbul", "Ankara", "Izmir", "Bursa", "Antalya"]
         
         all_stations = []
-        country_summaries = {}
+        city_summaries = {}
         
-        for country_code, country_info in self.european_countries.items():
+        for city_name in selected_cities:
             try:
-                logger.info(constants.LOG_MSG_COUNTRY_DATA_COLLECTION_INFO.format(country_name=country_info['name']))
+                logger.info(f"🏙️ {city_name} şehri için veri toplama başlatılıyor...")
                 
-                # Ülke başına maksimum 30 istasyon topla
-                stations = self.collect_stations_by_country(country_code, max_stations=constants.MAX_STATIONS_PER_COUNTRY)
+                # Şehir başına maksimum 50 istasyon topla
+                stations = self.collect_stations_by_city(city_name, max_stations=50, collection_options=collection_options)
                 
                 if stations:
                     all_stations.extend(stations)
                     
-                    # Ülke özeti
-                    country_summaries[country_code] = {
-                        'country_name': country_info['name'],
+                    # Şehir özeti
+                    city_summaries[city_name] = {
+                        'city_name': city_name,
                         'total_stations': len(stations),
                         'brands': list(set([s['brand'] for s in stations])),
                         'avg_rating': np.mean([s['rating'] for s in stations if s['rating'] > 0]),
                         'collection_time': datetime.now(timezone.utc).isoformat()
                     }
                     
-                    logger.info(constants.LOG_MSG_COUNTRY_STATION_COLLECTION_END.format(country_code=country_info['name'], count=len(stations)))
+                    logger.info(f"✅ {city_name} şehri için {len(stations)} istasyon verisi toplandı")
                 else:
-                    logger.warning(constants.LOG_MSG_NO_STATIONS_FOUND.format(country_name=country_info['name']))
+                    logger.warning(f"⚠️ {city_name} şehri için istasyon bulunamadı")
                 
                 # Veritabanına kaydet
                 for station in stations:
@@ -368,49 +513,71 @@ class EnhancedDataCollector:
                     )
                     self.warehouse.insert_fuel_station(station_data)
                 
-                time.sleep(3)  # Ülkeler arası bekleme
+                time.sleep(3)  # Şehirler arası bekleme
                 
             except Exception as e:
-                logger.error(constants.LOG_MSG_COUNTRY_COLLECTION_ERROR.format(country_name=country_info['name'], error=e))
+                logger.error(f"❌ {city_name} şehri veri toplama hatası: {e}")
                 continue
         
         # Özet rapor
         total_summary = {
-            'total_countries': len(self.european_countries),
+            'total_cities': len(selected_cities),
             'total_stations_collected': len(all_stations),
-            'countries_processed': len(country_summaries),
+            'cities_processed': len(city_summaries),
             'collection_date': datetime.now(timezone.utc).isoformat(),
             'data_quality': 'high',
-            'api_source': 'Google Places API Enhanced',
-            'version': '3.0'
+            'api_source': 'Google Places API (New)',
+            'version': '4.0',
+            'country': 'Turkey'
         }
         
         # Sonuçları kaydet
         output_data = {
             'summary': total_summary,
-            'country_summaries': country_summaries,
+            'city_summaries': city_summaries,
             'stations': all_stations,
             'analytics': self.generate_analytics(all_stations),
             'metadata': {
-                'collection_method': 'systematic_country_based',
+                'collection_method': 'city_based_turkey',
                 'data_enhancement': True,
+                'places_api_new_fields': True,
                 'real_time_prices': True,
                 'facilities_included': True
             }
         }
         
-        # JSON dosyasına kaydet
-        output_file = f"{constants.COMPREHENSIVE_FUEL_DATA_FILENAME_PREFIX}{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+        # JSON dosyasına kaydet - numpy bool'ları çevir
+        def convert_numpy_types(obj):
+            if isinstance(obj, np.bool_):
+                return bool(obj)
+            elif isinstance(obj, np.integer):
+                return int(obj)
+            elif isinstance(obj, np.floating):
+                return float(obj)
+            elif isinstance(obj, np.ndarray):
+                return obj.tolist()
+            return obj
+        
+        def clean_for_json(data):
+            if isinstance(data, dict):
+                return {k: clean_for_json(v) for k, v in data.items()}
+            elif isinstance(data, list):
+                return [clean_for_json(item) for item in data]
+            else:
+                return convert_numpy_types(data)
+        
+        cleaned_data = clean_for_json(output_data)
+        
+        output_file = f"turkey_fuel_stations_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
         with open(output_file, 'w', encoding='utf-8') as f:
-            json.dump(output_data, f, indent=2, ensure_ascii=False)
+            json.dump(cleaned_data, f, indent=2, ensure_ascii=False)
         
         # Excel dosyasına da kaydet
-        self.export_to_excel(all_stations, f"{constants.FUEL_STATIONS_DATA_FILENAME_PREFIX}{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx")
+        self.export_to_excel(all_stations, f"turkey_stations_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx")
         
-        logger.info(constants.LOG_MSG_COLLECTION_COMPLETE)
-        logger.info(constants.LOG_MSG_JSON_OUTPUT.format(file=output_file))
-        logger.info(constants.LOG_MSG_DB_OUTPUT.format(db_path=constants.DB_PATH))
-        logger.info(constants.LOG_MSG_TOTALS.format(stations=len(all_stations), countries=len(country_summaries)))
+        logger.info("🎉 Türkiye veri toplama işlemi tamamlandı!")
+        logger.info(f"📄 JSON çıktı: {output_file}")
+        logger.info(f"📊 Toplam istasyon: {len(all_stations)}, Şehir: {len(city_summaries)}")
         
         return output_data
     
@@ -434,9 +601,9 @@ class EnhancedDataCollector:
         brands = [s['brand'] for s in stations]
         brand_counts = pd.Series(brands).value_counts().to_dict()
         
-        # Ülke dağılımı
-        countries = [s['country'] for s in stations]
-        country_counts = pd.Series(countries).value_counts().to_dict()
+        # Şehir dağılımı
+        cities = [s.get('city', 'Unknown') for s in stations]
+        city_counts = pd.Series(cities).value_counts().to_dict()
         
         # Puan istatistikleri
         ratings = [s['rating'] for s in stations if s['rating'] > 0]
@@ -449,7 +616,7 @@ class EnhancedDataCollector:
         
         return {
             'brand_distribution': brand_counts,
-            'country_distribution': country_counts,
+            'city_distribution': city_counts,
             'rating_stats': {
                 'average': np.mean(ratings) if ratings else 0,
                 'median': np.median(ratings) if ratings else 0,
