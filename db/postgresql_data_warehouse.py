@@ -501,15 +501,32 @@ class PostgreSQLDataWarehouse:
             result = self.config.execute_query(parking_query)
             analytics['stations_with_parking'] = result[0]['count'] if result else 0
             
-            # Şehir dağılımı
+            # Şehir dağılımı (address alanından şehir bilgisini çıkarma)
             city_query = """
-            SELECT country, COUNT(*) as count
+            SELECT 
+                CASE 
+                    WHEN address LIKE '%İstanbul%' THEN 'İstanbul'
+                    WHEN address LIKE '%Ankara%' THEN 'Ankara'
+                    WHEN address LIKE '%İzmir%' THEN 'İzmir'
+                    WHEN address LIKE '%Bursa%' THEN 'Bursa'
+                    WHEN address LIKE '%Antalya%' THEN 'Antalya'
+                    ELSE 'Diğer'
+                END as city,
+                COUNT(*) as count
             FROM fuel_stations
-            GROUP BY country
+            GROUP BY 
+                CASE 
+                    WHEN address LIKE '%İstanbul%' THEN 'İstanbul'
+                    WHEN address LIKE '%Ankara%' THEN 'Ankara'
+                    WHEN address LIKE '%İzmir%' THEN 'İzmir'
+                    WHEN address LIKE '%Bursa%' THEN 'Bursa'
+                    WHEN address LIKE '%Antalya%' THEN 'Antalya'
+                    ELSE 'Diğer'
+                END
             ORDER BY count DESC;
             """
             result = self.config.execute_query(city_query)
-            analytics['city_distribution'] = {row['country']: row['count'] for row in result} if result else {}
+            analytics['city_distribution'] = {row['city']: row['count'] for row in result} if result else {}
             
             # Marka dağılımı
             brand_query = """

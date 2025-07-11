@@ -310,7 +310,7 @@ def display_data_collection_dashboard():
     
     # Veri toplama seçenekleri
     st.subheader("📊 Veri Toplama Seçenekleri")
-    st.markdown("Places API (New) ile hangi veri türlerini toplamak istiyorsunuz?")
+    st.markdown("Google Places servisi ile hangi veri türlerini toplamak istiyorsunuz?")
     
     col1, col2, col3 = st.columns(3)
     
@@ -382,37 +382,6 @@ def display_data_collection_dashboard():
                 st.json(summary)
             except Exception as e:
                 st.error(f"❌ {constants.ERROR_DB_SUMMARY}: {str(e)}")
-    
-    # Debug: Secrets durumunu kontrol et
-    if st.checkbox("🔍 Secrets Debug", help="API key'lerin yüklenip yüklenmediğini kontrol et"):
-        st.subheader("🔧 Config Debug")
-        
-        # Environment variables
-        st.write("**Environment Variables:**")
-        st.write(f"GOOGLE_ROUTES_API_KEY: {'✅ Var' if os.getenv('GOOGLE_ROUTES_API_KEY') else '❌ Yok'}")
-        st.write(f"POSTGRES_HOST: {'✅ Var' if os.getenv('POSTGRES_HOST') else '❌ Yok'}")
-        
-        # Streamlit secrets
-        if hasattr(st, 'secrets'):
-            st.write("**Streamlit Secrets:**")
-            try:
-                secrets_keys = list(st.secrets.keys()) if st.secrets else []
-                st.write(f"Toplam secret: {len(secrets_keys)}")
-                st.write(f"Keys: {secrets_keys}")
-                st.write(f"GOOGLE_ROUTES_API_KEY: {'✅ Var' if 'GOOGLE_ROUTES_API_KEY' in secrets_keys else '❌ Yok'}")
-            except Exception as e:
-                st.error(f"Secrets okuma hatası: {e}")
-        else:
-            st.write("**Streamlit Secrets:** ❌ Erişilemez")
-        
-        # Config values
-        st.write("**Final Config Values:**")
-        try:
-            from config.config import config
-            st.write(f"google_routes_api_key: {'✅ Var' if config.google_routes_api_key else '❌ Yok'}")
-            st.write(f"google_places_api_key: {'✅ Var' if config.google_places_api_key else '❌ Yok'}")
-        except Exception as e:
-            st.error(f"Config okuma hatası: {e}")
     
     # Toplanan veriyi göster
     if 'collected_data' in st.session_state and st.session_state.collected_data:

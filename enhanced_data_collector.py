@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Enhanced Data Collection System
-Tablolardaki gibi kapsamlı benzin istasyonu verisi toplama sistemi
+Türkiye geneli kapsamlı mekan verisi toplama sistemi
 """
 
 import json
@@ -27,19 +27,18 @@ logger = logging.getLogger(__name__)
 
 class EnhancedDataCollector:
     """
-    Avrupa genelindeki benzin istasyonları için kapsamlı veri toplama ve işleme sistemi.
+    Türkiye geneli mekanlar için kapsamlı veri toplama ve işleme sistemi.
     
-    Bu sınıf, Google Places API'sini kullanarak belirtilen ülkelerin başkentleri
-    çevresindeki benzin istasyonlarını toplar, bu verileri zenginleştirir (marka tanıma,
-    mock fiyat ve hizmet verileri ekleme) ve hem JSON hem de Excel formatında
-    dışa aktarır. Ayrıca toplanan verileri bir PostgreSQL veritabanına kaydeder.
+    Bu sınıf, Google Places Servisi'ni kullanarak Türkiye şehirlerindeki
+    çeşitli mekanları (benzin istasyonu, restoran, hastane, otel vb.) toplar, 
+    bu verileri zenginleştirir ve PostgreSQL veritabanına kaydeder.
     """
     
     def __init__(self):
         """
         EnhancedDataCollector sınıfını başlatır.
         
-        API istemcilerini (GoogleRoutesClient, GooglePlacesClient, GeocodingClient), veri ambarını
+        Servis istemcilerini (GoogleRoutesClient, GooglePlacesClient, GeocodingClient), veri ambarını
         (DataWarehouse) ve sabitleri (şehirler, markalar) ayarlar.
         """
         self.routes_client = GoogleRoutesClient()
@@ -80,7 +79,7 @@ class EnhancedDataCollector:
         """
         Belirtilen şehir için mekan verilerini toplar.
 
-        Şehri merkez alarak, farklı yarıçaplarda Google Places API üzerinden belirtilen türde mekan araması yapar.
+        Şehri merkez alarak, farklı yarıçaplarda Google Places Servisi üzerinden belirtilen türde mekan araması yapar.
         Belirtilen `max_stations` sayısına ulaşana kadar veya tüm yarıçaplar taranana kadar devam eder.
 
         Args:
@@ -142,12 +141,12 @@ class EnhancedDataCollector:
         """
         Ham istasyon verisini ek bilgilerle zenginleştirir.
 
-        Google Places API'den gelen temel istasyon verisine; marka, ülke, mock yakıt türleri,
+        Google Places Servisi'nden gelen temel mekan verisine; marka, ülke, mock yakıt türleri,
         hizmetler, çalışma saatleri, fiyatlar ve tesis bilgileri gibi ek veriler ekler.
         Places API (New) field'larını da dahil eder.
 
         Args:
-            station (Dict[str, Any]): Google Places API'den gelen ham istasyon verisi.
+            station (Dict[str, Any]): Google Places Servisi'nden gelen ham mekan verisi.
             city_name (str): İstasyonun bulunduğu şehirin adı.
             collection_options (Dict[str, bool]): Hangi veri türlerinin toplanacağını belirten seçenekler.
 
@@ -395,7 +394,7 @@ class EnhancedDataCollector:
     
     def get_place_specific_fields(self, station: Dict[str, Any], primary_type: str) -> Dict[str, Any]:
         """
-        Mekan türüne özgü spesifik alanları Google Places API (New) dokümantasyonuna göre döndürür.
+        Mekan türüne özgü spesifik alanları Google Places Servisi (New) dokümantasyonuna göre döndürür.
         """
         specific_fields = {}
         
@@ -760,7 +759,7 @@ class EnhancedDataCollector:
             'cities_processed': len(city_summaries),
             'collection_date': datetime.now(timezone.utc).isoformat(),
             'data_quality': 'high',
-            'api_source': 'Google Places API (New)',
+            'api_source': 'Google Places Servisi (New)',
             'version': '4.0',
             'country': 'Turkey'
         }

@@ -14,14 +14,14 @@ APP_INITIAL_SIDEBAR_STATE = "expanded"
 # Başlık ve Alt Başlıklar
 HEADER_TITLE = "🚗 Fuel2go - Advanced Data Platform"
 HEADER_SUBTITLE = "Akıllı Rota Optimizasyonu ve Kapsamlı Veri Yönetimi"
-HEADER_TEXT = "Google Routes API + Avrupa Geneli Benzin İstasyonu Veri Platformu"
+HEADER_TEXT = "Türkiye Geneli Mekan Bilgi Servisi"
 
 # Sidebar
 SIDEBAR_HEADER = "🎛️ Kontrol Paneli"
 SIDEBAR_SUBHEADER_SYSTEM_STATUS = "📊 Sistem Durumu"
 SIDEBAR_SUBHEADER_ROUTE_SETTINGS = "📍 Rota Ayarları"
-API_STATUS_ACTIVE = "✅ API Aktif"
-API_STATUS_INACTIVE = "❌ API İnaktif"
+API_STATUS_ACTIVE = "✅ Servis Aktif"
+API_STATUS_INACTIVE = "❌ Servis İnaktif"
 DB_STATUS_ACTIVE = "✅ Veritabanı Aktif"
 DB_STATUS_INACTIVE = "❌ Veritabanı Hatası"
 
@@ -44,8 +44,8 @@ TAB_TITLES = [
 
 # Veri Toplama Paneli
 DATA_COLLECTION_HEADER = "📊 Kapsamlı Veri Toplama Merkezi"
-DATA_COLLECTION_CARD_TITLE = "🌍 Avrupa Geneli Benzin İstasyonu Verisi"
-DATA_COLLECTION_CARD_TEXT = "16 Avrupa ülkesinden kapsamlı benzin istasyonu verisi toplama sistemi"
+DATA_COLLECTION_CARD_TITLE = "🇹🇷 Türkiye Geneli Mekan Verisi"
+DATA_COLLECTION_CARD_TEXT = "Türkiye şehirlerinden kapsamlı mekan verisi toplama sistemi"
 DATA_COLLECTION_BUTTON_TEXT = "🚀 Veri Toplama Başlat"
 DB_SUMMARY_BUTTON_TEXT = "📈 Veritabanı Özet"
 
@@ -83,7 +83,7 @@ EXPORT_EXCEL_FILENAME_PREFIX = "fuel2go_export_"
 EXPORT_JSON_FILENAME_PREFIX = "fuel2go_summary_"
 
 # Hata Mesajları
-ERROR_API_CLIENT_INIT = "API istemcisi başlatılamadı"
+ERROR_API_CLIENT_INIT = "Servis istemcisi başlatılamadı"
 ERROR_DB_SUMMARY = "Özet alınamadı"
 ERROR_DATA_COLLECTION = "Veri toplama hatası"
 ERROR_DATA_STATUS = "Veri durumu gösterilemedi"
@@ -92,7 +92,7 @@ ERROR_MAP_DISPLAY = "Harita görüntülenemiyor"
 ERROR_EXCEL_EXPORT = "Excel export hatası"
 ERROR_JSON_EXPORT = "JSON export hatası"
 ERROR_ROUTE_COMPUTATION = "Rota hesaplama hatası"
-ERROR_API_CLIENT_NOT_AVAILABLE = "API istemcisi mevcut değil"
+ERROR_API_CLIENT_NOT_AVAILABLE = "Servis istemcisi mevcut değil"
 
 # Bilgi Mesajları
 INFO_NO_STATION_DATA = "📄 Henüz istasyon verisi yok. Veri toplama işlemini başlatın."
@@ -101,7 +101,7 @@ INFO_NO_STATIONS_TO_DISPLAY = "Gösterilecek istasyon yok"
 
 # Footer
 FOOTER_TEXT = "🌱 <strong>Fuel2go</strong> - Gelişmiş Veri Platformu"
-FOOTER_SUBTEXT = "Google Routes API + Avrupa Geneli Benzin İstasyonu Veritabanı"
+FOOTER_SUBTEXT = "Türkiye Geneli Mekan Bilgi Servisi Veritabanı"
 
 # Enhanced Data Collector Sabitleri
 EUROPEAN_COUNTRIES = {
@@ -142,7 +142,7 @@ MAX_STATIONS_PER_COUNTRY = 30
 DEFAULT_RATING = 0.0
 DEFAULT_REVIEW_COUNT = 0
 BUSINESS_STATUS_OPERATIONAL = 'OPERATIONAL'
-DATA_SOURCE_GOOGLE = 'Google Places API'
+DATA_SOURCE_GOOGLE = 'Google Places Servisi'
 UNKNOWN_BRAND = 'Other'
 UNKNOWN_NAME = 'Unknown'
 
@@ -174,7 +174,7 @@ LOG_MSG_UNKNOWN_COUNTRY_CODE = "❌ Bilinmeyen ülke kodu: {country_code}"
 LOG_MSG_RADIUS_SEARCH = "📍 {country_name} başkenti çevresinde {radius}km yarıçapta arama..."
 LOG_MSG_COUNTRY_STATION_COLLECTION_END = "✅ {country_code} için {count} istasyon toplandı"
 LOG_MSG_ENRICHMENT_ERROR = "❌ İstasyon verisi zenginleştirme hatası: {error}"
-LOG_MSG_COMPREHENSIVE_COLLECTION_START = "🚀 Kapsamlı Avrupa benzin istasyonu verisi toplama başlıyor..."
+LOG_MSG_COMPREHENSIVE_COLLECTION_START = "🚀 Kapsamlı Türkiye mekan verisi toplama başlıyor..."
 LOG_MSG_COUNTRY_DATA_COLLECTION_INFO = "🌍 {country_name} için veri toplama..."
 LOG_MSG_NO_STATIONS_FOUND = "⚠️ {country_name}: Hiç istasyon bulunamadı"
 LOG_MSG_COUNTRY_COLLECTION_ERROR = "❌ {country_name} veri toplama hatası: {error}"
@@ -252,7 +252,7 @@ LOG_MSG_CONTINUOUS_COLLECTION_START = "🔄 Sürekli veri toplama başladı (her
 LOG_MSG_WAITING = "⏰ {interval} dakika bekleniyor..."
 LOG_MSG_STOPPED = "⏹️ Veri toplama durduruldu"
 LOG_MSG_UNEXPECTED_ERROR = "❌ Beklenmeyen hata: {error}"
-METADATA_API_SOURCE = 'Google Routes API & Google Places API'
+METADATA_API_SOURCE = 'Google Places Servisi'
 METADATA_DATA_QUALITY = 'real_time'
 METADATA_VERSION = '2.0'
 
